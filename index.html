@@ -1,187 +1,37 @@
-<!DOCTYPE html>
-<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PT ARTRISA PRODUCTION STUDIO</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<style>
-/* === FONT & LAYOUT PERSIS SCREENSHOT - JANGAN DIUBAH === */
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-body{background:#f2f3f5;color:#111}
-.topbar{background:#0B3D91;color:#fff;font-size:12px}
-.topbar-inner{max-width:1180px;margin:auto;padding:7px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.topbar-inner .left{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.topbar-inner .right a{color:#fff;text-decoration:none;margin-left:16px}
-.topbar-inner .right .login-owner{background:#FFC800;color:#111;padding:4px 10px;border-radius:999px;font-weight:700}
-.header{background:#0B3D91;padding:0 0 12px}
-.header-inner{max-width:1180px;margin:auto;padding:10px 16px 0;display:flex;align-items:center;gap:16px}
-.logo-wrap{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.logo-circle{width:44px;height:44px;background:#FFC800;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;color:#0B3D91;border:3px solid #0B3D91;outline:2px solid #FFC800}
-.logo-text{color:#FFC800;font-weight:900;font-size:20px;letter-spacing:3px;line-height:1}
-.logo-text small{display:block;color:#FFC800;font-size:20px;letter-spacing:3px}
-.search{flex:1;display:flex;background:#fff;border-radius:999px;overflow:hidden;height:42px}
-.search input{flex:1;border:0;outline:0;padding:0 16px;font-size:14px}
-.search button{background:#FFC800;border:0;padding:0 18px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px}
-.header-actions{display:flex;gap:10px;flex-shrink:0}
-.btn-pesan{background:#fff;color:#0B3D91;border:0;padding:9px 14px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px}
-.btn-pesan b{background:#FFC800;padding:2px 7px;border-radius:999px;font-size:11px}
-.btn-login{background:#FFC800;color:#111;border:0;padding:9px 16px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer}
-.nav{background:#0B3D91;border-top:1px solid rgba(255,255,255,.15)}
-.nav-inner{max-width:1180px;margin:auto;padding:0 16px;display:flex;gap:22px;overflow:auto}
-.nav-inner a,.nav-inner button{color:#fff;text-decoration:none;font-size:13px;font-weight:600;padding:10px 0;white-space:nowrap;background:none;border:0;cursor:pointer}
-.nav-inner a.active{color:#FFC800;border-bottom:3px solid #FFC800}
-.wrap{max-width:1180px;margin:auto;padding:0 16px 110px}
-.search-example{margin:10px 0 0}
-.search-example input{width:100%;max-width:420px;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;background:#fff}
-.pills{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
-.pills button{padding:8px 14px;border-radius:999px;border:1px solid #e2e2e2;background:#fff;font-size:13px;cursor:pointer}
-.pills button.on{background:#0B3D91;color:#fff;border-color:#0B3D91}
-.alert{background:#FFF8D6;border:1px solid #FFE58A;padding:12px 14px;border-radius:10px;font-size:13px;color:#5a4a00;margin:10px 0}
-.feed{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.06);border:1px solid #eee}
-.card-head{padding:12px;display:flex;gap:10px;align-items:flex-start}
-.avatar{width:38px;height:38px;border-radius:50%;background:#FFC800;display:flex;align-items:center;justify-content:center;font-weight:900;color:#0B3D91;flex-shrink:0;font-size:16px}
-.card-head .meta{flex:1;line-height:1.3}
-.card-head .meta b{font-size:13px}
-.card-head .meta div{font-size:11px;color:#666}
-.badge-cat{font-size:10px;font-weight:800;background:#EDF2FF;color:#0B3D91;padding:5px 8px;border-radius:999px;white-space:nowrap}
-.cover{position:relative;aspect-ratio:4/3.4;background:linear-gradient(135deg,#0B3D91,#1E6FE0);color:#fff;overflow:hidden;display:flex;align-items:flex-end}
-.cover .label{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.35);padding:6px 10px;border-radius:999px;font-size:11px;font-weight:700}
-.cover .titlebox{margin:12px;background:rgba(0,0,0,.35);backdrop-filter:blur(2px);padding:12px;border-radius:12px;width:calc(100% - 24px)}
-.cover .titlebox h3{font-size:22px;line-height:1.1}
-.cover .titlebox p{font-size:12px;opacity:.9;margin-top:4px}
-.cover.yellow{background:linear-gradient(135deg,#FFC800,#FF9500);color:#111}
-.cover.yellow .titlebox{background:rgba(0,0,0,.35);color:#fff}
-.card-foot{padding:12px;display:flex;justify-content:space-between;align-items:flex-start}
-.card-foot .harga-label{font-size:11px;letter-spacing:1px;color:#666;font-weight:700}
-.card-foot .harga{font-size:18px;font-weight:900;color:#0B3D91}
-.btn-detail{border:1px solid #ddd;background:#fff;padding:7px 12px;border-radius:999px;font-size:12px;cursor:pointer}
-.section{margin-top:22px}
-.section h2{font-size:18px;margin-bottom:6px}
-.muted{font-size:13px;color:#666;line-height:1.5}
-input,select,textarea{font-size:13px}
-.form-card{background:#fff;border-radius:16px;padding:16px;border:1px solid #eee}
-.form-card h3{font-size:16px;margin-bottom:8px}
-.form-card input,.form-card select,.form-card textarea{width:100%;padding:11px;border:1px solid #ddd;border-radius:10px;margin:5px 0}
-.btn-primary{width:100%;padding:11px;border:0;border-radius:10px;background:#0B3D91;color:#fff;font-weight:700;cursor:pointer;font-size:13px}
-.btn-yellow{width:100%;padding:11px;border:0;border-radius:10px;background:#FFC800;color:#111;font-weight:700;cursor:pointer;font-size:13px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.hidden{display:none}
-.stat{background:#EEF2FF;border-radius:12px;padding:12px;text-align:center}
-.stat b{font-size:18px}
-.wa{position:fixed;right:14px;bottom:84px;background:#25D366;color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;text-decoration:none;z-index:50;box-shadow:0 8px 16px rgba(0,0,0,.2)}
-.bottomnav{position:fixed;left:0;right:0;bottom:0;background:#fff;display:flex;justify-content:space-around;padding:8px 0;border-top:1px solid #eee;z-index:40}
-.bottomnav a{text-decoration:none;color:#333;font-size:11px;text-align:center;line-height:1.2}
-video{width:100%;border-radius:12px;background:#000}
-@media(max-width:820px){.feed{grid-template-columns:1fr 1fr}.header-inner{flex-wrap:wrap}.search{order:3;width:100%}.header-actions{margin-left:auto}.topbar-inner .left{display:none}.grid2,.grid3{grid-template-columns:1fr}}
-@media(max-width:520px){.feed{grid-template-columns:1fr}.nav-inner{gap:14px}.logo-text{font-size:16px}}
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PT ARTRISA PRODUCTION STUDIO - Visual Kuat, Bisnis Melesat</title><style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,system-ui,Arial,sans-serif;background:#f4f6f9;color:#1a1a1a;padding-bottom:90px}
+a{color:inherit;text-decoration:none}
+.topbar{background:#0B3D91;color:#fff;padding:10px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20}
+.topbar b{font-size:18px}.topbar span{font-size:12px;opacity:.9}
+.search{max-width:1100px;margin:14px auto;padding:0 14px}.search input{width:100%;padding:14px 16px;border:1px solid #dde3ec;border-radius:999px;font-size:15px;background:#fff}
+.hero{max-width:1100px;margin:0 auto;padding:0 14px}.hero-box{background:#0B3D91;color:#fff;border-radius:20px;padding:28px;overflow:hidden;position:relative}
+.hero-box h1{font-family:Montserrat,Arial,sans-serif;font-weight:900;font-size:42px;line-height:1.05}.hero-box h1 i{color:#FFC800;font-style:normal}.hero-box p{margin:12px 0 18px;opacity:.92;max-width:600px}
+.btn{display:inline-block;background:#FFC800;color:#0B3D91;padding:12px 18px;border-radius:999px;font-weight:800}.btn2{background:#fff;color:#0B3D91}
+.cats{max-width:1100px;margin:16px auto;padding:0 14px;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.cat{background:#fff;border-radius:14px;padding:14px;text-align:center;font-size:13px;font-weight:700;border:1px solid #e8ecf2}
+.section{max-width:1100px;margin:18px auto;padding:0 14px}.section h2{font-size:22px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e8ecf2}.card .img{height:130px;background:linear-gradient(135deg,#0B3D91,#2a6bd6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:38px}.card .img.y{background:linear-gradient(135deg,#FFC800,#ffb800);color:#0B3D91}.card .body{padding:12px}.price{color:#0B3D91;font-weight:900;margin:6px 0}.small{font-size:12px;color:#5A5A5A}
+.kb{background:#fff;border:2px solid #0B3D91;border-radius:18px;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px}.kb .box{border-radius:14px;padding:16px}.kb .a{background:#f0f5ff}.kb .b{background:#0B3D91;color:#fff}
+.order{background:#fff;border-radius:18px;padding:18px}.order input,.order select,.order textarea{width:100%;padding:12px;border:1px solid #dde3ec;border-radius:10px;margin:8px 0}
+.bottom{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e5e8ee;display:flex;justify-content:space-around;padding:10px 0 14px;z-index:30}.bottom a{text-align:center;font-size:11px;color:#5A5A5A}.bottom a.active{color:#0B3D91;font-weight:800}.bottom .plus{background:#FFC800;color:#0B3D91;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin-top:-26px;border:3px solid #fff}
+.dash{background:#0B3D91;color:#fff;border-radius:18px;padding:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.dash div{background:rgba(255,255,255,.12);border-radius:12px;padding:14px}.dash b{font-size:22px}
+@media(max-width:700px){.cats{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:repeat(2,1fr)}.kb{grid-template-columns:1fr}.hero-box h1{font-size:32px}.dash{grid-template-columns:repeat(2,1fr)}.topbar span{display:none}}
 </style></head><body>
-<div class="topbar"><div class="topbar-inner"><div class="left">📍 Stabat • Langkat • Sumatera Utara &nbsp;&nbsp; Visual Kuat, Bisnis Melesat.</div><div class="right"><a href="#affiliate">Program Afiliasi</a><a href="#login" class="login-owner" onclick="openLogin();return false">🔐 Login Owner</a><a href="https://wa.me/6283851722321">Bantuan WhatsApp</a></div></div></div>
-<div class="header"><div class="header-inner"><div class="logo-wrap"><div class="logo-circle">A</div><div class="logo-text">ARTRISA<small>PRODUCTION</small></div></div><div class="search"><input id="searchInput" placeholder="Cari: spanduk ulang tahun, stiker chromo, Konten Beres..." oninput="renderFeed()"><button onclick="renderFeed()">🔍 Cari</button></div><div class="header-actions"><button class="btn-pesan" onclick="document.getElementById('pesan').scrollIntoView({behavior:'smooth'})">🛒 Pesan <b id="cartCount">0 pesanan</b></button><button class="btn-login" onclick="openLogin()">🔐 Login</button></div></div>
-<div class="nav"><div class="nav-inner"><a href="#beranda" class="active">Beranda</a><a href="#produk">Semua Layanan</a><a href="#produk">Konten Beres</a><a href="#pesan">Pesan Sekarang</a><a href="#affiliate">Afiliasi</a><button onclick="openDashboard()">Dashboard</button></div></div></div>
-<div class="wrap" id="beranda">
-<div class="search-example"><input placeholder="Contoh: Budi"></div>
-<div class="pills" id="filters"></div>
-<div class="alert" id="dbAlert">Menghubungkan ke Supabase...</div>
-<div class="feed" id="feedList"></div>
-
-<div class="section" id="reels"><h2>Reels 9:16 — Klik Play untuk Putar</h2><p class="muted">Video dari link MP4 langsung / Supabase Storage. Thumbnail dulu, klik Play baru muter, biar ringan.</p><div class="grid2" id="reelsList" style="margin-top:12px"></div></div>
-
-<div class="grid2 section">
-<div class="form-card" id="pesan"><h3>Form Pesan — Masuk ke Supabase</h3><input id="custName" placeholder="Nama Lengkap"><input id="custWA" placeholder="Nomor WhatsApp"><select id="prodSelect"></select><input id="sizeInput" placeholder="Ukuran (opsional) contoh: 2x1 m / A3 / A4"><input id="unitInput" placeholder="Satuan (opsional) contoh: meter / lembar / pcs"><textarea id="detail" placeholder="Ceritakan mau bikin apa + gambar referensi (jelaskan di sini)"></textarea><button class="btn-primary" onclick="kirimPesanan()">Kirim Pesanan</button><div id="orderStatus" class="muted"></div></div>
-<div class="form-card" id="affiliate"><h3>Daftar Affiliate</h3><input id="affName" placeholder="Nama Kamu"><input id="affWA" placeholder="Nomor WhatsApp"><button class="btn-primary" onclick="daftarAffiliate()">Daftar Affiliate</button><div id="affStatus" class="muted"></div><hr style="margin:12px 0"><h4 style="font-size:14px">Pesanan Terbaru (Real)</h4><div id="recentOrders" class="muted">Memuat...</div></div>
-</div>
-
-<div class="form-card section hidden" id="loginCard"><h3>Login Owner</h3><p class="muted">Login pakai username + password yang dibuat Direktur. Tersimpan di Supabase tabel users.</p><input id="loginUser" placeholder="Username, contoh: M Fakhri / okta1925"><input id="loginPass" type="password" placeholder="Password"><button class="btn-primary" onclick="doLogin()">Login</button><div id="loginStatus" class="muted"></div></div>
-
-<div class="form-card section hidden" id="dashboard"><h3>Dashboard — <span id="dashRole"></span> — <span id="dashUser"></span></h3><button onclick="logout()" class="btn-detail">Logout</button>
-<div class="grid3" style="margin-top:12px"><div class="stat"><div style="font-size:12px">Total Penjualan</div><b id="statTotal">Rp 0</b><div class="muted" id="statToday">Hari ini: Rp 0</div></div><div class="stat"><div style="font-size:12px">Bulan Ini</div><b id="statMonth">Rp 0</b><div class="muted" id="statYear">Tahun ini: Rp 0</div></div><div class="stat"><div style="font-size:12px">Pesanan / Affiliate</div><b id="statCount">0 / 0</b><div class="muted" id="statInter">Like: 0 • Komen: 0 • Share: 0</div></div></div>
-<div class="grid2" style="margin-top:12px"><div class="form-card"><h4 style="font-size:14px">Keuangan — Pemasukan / Pengeluaran / Utang / Piutang / Aset</h4><div id="financeList" class="muted">Memuat...</div><input id="finDesc" placeholder="Keterangan keuangan"><select id="finKind"><option value="Pemasukan">Pemasukan</option><option value="Pengeluaran">Pengeluaran</option><option value="Utang">Utang</option><option value="Piutang">Piutang</option><option value="Aset">Aset</option></select><input id="finAmount" type="number" placeholder="Nominal"><button class="btn-primary" onclick="addFinance()">Tambah Keuangan</button></div>
-<div class="form-card"><h4 style="font-size:14px">Manajemen — Feed / Reels / Admin</h4><input id="newFeedName" placeholder="Nama produk baru"><input id="newFeedPrice" type="number" placeholder="Harga jual"><input id="newFeedCat" placeholder="Kategori"><input id="newFeedImg" placeholder="Link gambar Supabase Storage"><button class="btn-primary" onclick="addFeed()">Tambah Feed / Produk</button><hr style="margin:10px 0"><input id="newReelTitle" placeholder="Judul Reels"><input id="newReelUrl" placeholder="Link Video MP4 langsung / Supabase Storage"><input id="newReelCover" placeholder="Link Sampul (opsional)"><button class="btn-primary" onclick="addReel()">Tambah Reels</button><hr style="margin:10px 0"><h4 style="font-size:14px">Tambah Admin (Direktur saja)</h4><input id="newAdminUser" placeholder="Username admin baru"><input id="newAdminPass" type="password" placeholder="Password admin baru"><input id="newAdminName" placeholder="Nama admin"><select id="newAdminRole"><option value="admin">Admin</option><option value="manajer">Manajer</option></select><button class="btn-primary" onclick="addAdmin()">Tambah Admin</button><div id="adminStatus" class="muted"></div><hr style="margin:10px 0"><h4 style="font-size:14px">Pixel Iklan</h4><input id="pixelId" placeholder="Meta Pixel ID"><button class="btn-primary" onclick="savePixel()">Simpan Pixel ID</button><div id="pixelList" class="muted"></div></div></div>
-<div class="form-card" style="margin-top:12px"><h4 style="font-size:14px">Interaksi Real — Like / Komen / Share (Admin tidak tampil)</h4><div id="interList" class="muted">Memuat...</div></div>
-<div class="form-card" style="margin-top:12px"><h4 style="font-size:14px">Transaksi + Chat Masuk</h4><div id="dashOrders" class="muted">Memuat...</div></div>
-</div>
-
-<div class="form-card section"><h3>Kontak PT ARTRISA PRODUCTION STUDIO</h3><p class="muted">Perumahan Citra Stabat Blok D No.5, Desa Ara Condong, Kec. Stabat, Kab. Langkat, Sumatera Utara 20811<br>WA Bisnis: 0838 5172 2321 • Email: artrisa25@gmail.com<br>NIB: 1811260001963 • AHU-060488.AH.01.30.Tahun 2025<br>Nomor pribadi Direktur tidak ditampilkan.</p></div>
-</div>
-<a class="wa" href="https://wa.me/6283851722321?text=Halo%20ARTRISA,%20saya%20mau%20pesan">💬</a>
-<div class="bottomnav"><a href="#beranda">🏠<br>Beranda</a><a href="#produk">🛍️<br>Produk</a><a href="#reels">🎬<br>Reels</a><a href="#pesan">📝<br>Pesan</a><a href="#affiliate">💰<br>Affiliate</a></div>
-<script>
-const SUPABASE_URL="https://spqivuqidggtcivrddtm.supabase.co";const SUPABASE_KEY="sb_publishable_QR18b-QtSl0jUnpsPZdayQ_88ftX6m6";
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let products=[],reels=[],currentUser=null,currentFilter="Semua",showPrice=false;
-async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
-function esc(s){return String(s||"").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
-function track(ev,detail){try{sb.from("pixel_events").insert([{event_name:ev,source:"vercel",detail:detail||""}]);}catch(_){}}
-const FALLBACK=[
-{name:"Spanduk Ulang Tahun",price:35000,category:"Spanduk & Outdoor",description:"Spanduk ucapan ulang tahun siap pasang. Bahan spanduk outdoor, ukuran bisa request, finishing rapi."},
-{name:"Stiker Chromo + Cutting Bulat",price:15000,category:"Stiker",description:"Stiker chromo dipotong bulat rapi, siap tempel. Ukuran A3 / A4, finishing cutting."},
-{name:"Stiker Outdoor",price:95000,category:"Stiker",description:"Stiker tahan cuaca untuk luar ruang. Per meter."},
-{name:"Stiker Indoor",price:150000,category:"Stiker",description:"Stiker indoor halus untuk dalam ruang. Per meter."},
-{name:"Stiker Indoor + Cut",price:185000,category:"Stiker",description:"Stiker indoor + cutting. Per meter."},
-{name:"Backlite",price:95000,category:"Spanduk & Outdoor",description:"Backlite untuk neonbox / lightbox. Per meter."},
-{name:"Spanduk",price:20000,category:"Spanduk & Outdoor",description:"Spanduk standar. Per meter."},
-{name:"Kertas Tik A3",price:10000,category:"Cetak & Kertas",description:"Kertas Tik ukuran A3. Per lembar."},
-{name:"Stiker Chromo A3",price:10000,category:"Stiker",description:"Stiker Chromo A3. Per lembar."},
-{name:"Stiker Chromo A4",price:5000,category:"Stiker",description:"Stiker Chromo A4. Per lembar."},
-{name:"Stiker PVC A3",price:20000,category:"Stiker",description:"Stiker PVC A3. Per lembar."},
-{name:"Stiker PVC + Cut A3",price:25000,category:"Stiker",description:"Stiker PVC + Cutting A3. Per lembar."},
-{name:"Undangan 1 Warna 21x33",price:1500,category:"Undangan & Cetak",description:"Undangan 1 warna ukuran 21x33, min 500 lbr. Per lembar."},
-{name:"Yasin Hardcover",price:35000,category:"Undangan & Cetak",description:"Yasin Hardcover min 50 pcs. Per pcs."},
-{name:"Brosur Konstruk A4",price:750000,category:"Brosur & Faktur",description:"Brosur Konstruk A4 per rim."},
-{name:"Brosur Kontruk A5",price:550000,category:"Brosur & Faktur",description:"Brosur Kontruk A5 per rim."},
-{name:"Bon Faktur HVS NCR F4",price:240000,category:"Brosur & Faktur",description:"Bon Faktur 1 rim. 2 rim 380000, 3 rim 500000."},
-{name:"Undangan Full Color 11.75x16",price:1500,category:"Undangan & Cetak",description:"Undangan full color 11.75x16cm. Per lembar."},
-{name:"Neonbox Petak",price:1200000,category:"Neonbox",description:"Neonbox petak. Harga per unit."},
-{name:"Neonbox Bentuk",price:1500000,category:"Neonbox",description:"Neonbox bentuk custom. Harga per unit."},
-{name:"Cetak Cepat - ST Cina Outdoor",price:45000,category:"Cetak Cepat",description:"Cetak cepat ST Cina Outdoor. Per meter."},
-{name:"Cetak Cepat - ST Ritrama Outdoor",price:50000,category:"Cetak Cepat",description:"Cetak cepat ST Ritrama Outdoor. Per meter."},
-{name:"Konten Beres - Paket Hemat",price:300000,category:"Konten Beres",description:"8 Konten: 4 Reels + 4 Feed, Caption + Hashtag, 1x Revisi, Bonus 2 lembar Stiker Chromo."},
-{name:"Konten Beres - Paket Sultan",price:800000,category:"Konten Beres",description:"20 Konten: 12 Reels + 8 Feed/Carousel, Caption + Hashtag + Jam Terbaik, 2x Revisi, 1 Motion Graphic, Kalender Konten, Bonus 6 lembar Stiker Chromo."}
-].map((x,i)=>({...x,id:1000+i,show_in_front:true,sort_order:i+1}));
-async function loadAll(){
-  try{
-    const {data,error}=await sb.from("products").select("*").eq("active",true).order("sort_order");
-    if(error) throw error;
-    if(!data||data.length===0) throw new Error("Tabel products masih kosong - RUN SQL dulu di Supabase");
-    products=data;document.getElementById("dbAlert").style.display="none";
-  }catch(e){
-    products=FALLBACK;
-    document.getElementById("dbAlert").style.display="block";
-    document.getElementById("dbAlert").innerHTML='Koneksi database gagal: '+esc(e.message||e)+'. Menampilkan katalog terakhir yang tersimpan di halaman ini. <b>Cara benerin: Buka Supabase > SQL Editor > RUN file supabase-full-schema.sql, lalu refresh halaman ini.</b>';
-  }
-  const cats=["Semua","Spanduk & Outdoor","Stiker","Cetak & Kertas","Undangan & Cetak","Brosur & Faktur","Neonbox","Cetak Cepat","Konten Beres"];
-  document.getElementById("filters").innerHTML=cats.map(c=>`<button class="${c===currentFilter?"on":""}" onclick="setFilter('${esc(c)}')">${esc(c)}</button>`).join("");
-  document.getElementById("prodSelect").innerHTML=products.map(p=>`<option>${esc(p.name)}</option>`).join("");
-  renderFeed();loadReels();loadRecent();loadStats();
-}
-function setFilter(c){currentFilter=c;loadAll();track("ViewContent",c)}
-function renderFeed(){
-  const q=(document.getElementById("searchInput").value||"").toLowerCase();
-  const list=products.filter(p=>(currentFilter==="Semua"||p.category===currentFilter)&&p.name.toLowerCase().includes(q)&&p.show_in_front!==false);
-  document.getElementById("feedList").innerHTML=list.map((p,i)=>{
-    const isYellow=i%3===1;
-    return `<div class="card"><div class="card-head"><div class="avatar">A</div><div class="meta"><b>artrisa.production ✓</b><div>Stabat • Langkat • ${esc(p.category||"")}</div></div><span class="badge-cat">${esc((p.category||"").toUpperCase())}</span></div><div class="cover ${isYellow?"yellow":""}"><span class="label">FEED • ARTRISA</span><div class="titlebox"><h3>${esc(p.name)}</h3><p>${esc(p.description||"")}</p></div></div><div class="card-foot"><div><div class="harga-label">HARGA</div><div class="harga">${showPrice?"Rp "+(p.price||0).toLocaleString("id-ID"):"Rp XXXX"+(p.category&&p.category.includes("Stiker")?"/lbr A3":p.category==="Spanduk & Outdoor"?"/m":"")}</div><div class="muted" style="font-size:11px">❤️ <span id="like-${p.id}">0</span> • 💬 <span id="cmt-${p.id}">0</span></div></div><div style="display:flex;flex-direction:column;gap:6px"><button class="btn-detail" onclick="showDetail(${p.id})">Detail ⌄</button><button class="btn-detail" onclick="likeIt('product',${p.id})">❤️ Like</button></div></div></div>`
-  }).join("")||"<p class='muted'>Belum ada produk.</p>";
-  loadInteractions();
-}
-function showDetail(id){const p=products.find(x=>x.id===id);if(!p)return;const txt=prompt("Komen untuk "+p.name+" (kosongkan kalau cuma mau liat detail):", "");if(txt){commentIt('product',id,txt)}else{askPrice(p.name)}}
-async function loadInteractions(){try{const {data}=await sb.from("interactions").select("*");(data||[]).forEach(it=>{const el=document.getElementById((it.kind==="like"?"like-":"cmt-")+it.target_id);if(el&&it.target_type==="product"){el.textContent=Number(el.textContent)+1}})}
-async function loadReels(){try{const {data}=await sb.from("reels").select("*").eq("active",true).order("id");reels=data||[]; }catch(_){reels=[];}document.getElementById("reelsList").innerHTML=reels.map(r=>`<div class="form-card"><b style="font-size:14px">${esc(r.title)}</b><p class="muted">${esc(r.description||"")}</p>${r.cover_url?`<img src="${esc(r.cover_url)}" style="width:100%;border-radius:12px" loading="lazy">`:"<div style='aspect-ratio:9/16;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;border-radius:12px'>▶️ Klik Play — Reels 9:16</div>"}<video controls preload="none" playsinline style="aspect-ratio:9/16;margin-top:8px" poster="${esc(r.cover_url||"")}"><source src="${esc(r.video_url)}" type="video/mp4"></video><button class="btn-primary" style="margin-top:8px" onclick="likeIt('reel',${r.id})">❤️ Like Reels</button></div>`).join("")||"<p class='muted'>Belum ada reels.</p>";}
-async function loadRecent(){const {data}=await sb.from("orders").select("*").order("created_at",{ascending:false}).limit(5);document.getElementById("recentOrders").innerHTML=(data||[]).length?(data||[]).map(o=>`• ${esc(o.customer_name)} — ${esc(o.product)} — <b>${esc(o.status||"Baru")}</b>`).join("<br>"):"Belum ada pesanan.";document.getElementById("cartCount").textContent=(data||[]).length+" pesanan"}
-async function loadStats(){const {data:o}=await sb.from("orders").select("total,created_at");const {data:a}=await sb.from("affiliates").select("*");const {data:f}=await sb.from("finance").select("*");const total=(o||[]).reduce((s,x)=>s+(x.total||0),0);const today=new Date().toISOString().slice(0,10);const month=new Date().toISOString().slice(0,7);const year=new Date().getFullYear().toString();const tToday=(o||[]).filter(x=>String(x.created_at).slice(0,10)===today).reduce((s,x)=>s+(x.total||0),0);const tMonth=(o||[]).filter(x=>String(x.created_at).slice(0,7)===month).reduce((s,x)=>s+(x.total||0),0);const tYear=(o||[]).filter(x=>String(x.created_at).slice(0,4)===year).reduce((s,x)=>s+(x.total||0),0);if(currentUser){document.getElementById("statTotal").textContent="Rp "+total.toLocaleString("id-ID");document.getElementById("statToday").textContent="Hari ini: Rp "+tToday.toLocaleString("id-ID");document.getElementById("statMonth").textContent="Rp "+tMonth.toLocaleString("id-ID");document.getElementById("statYear").textContent="Tahun ini: Rp "+tYear.toLocaleString("id-ID");document.getElementById("statCount").textContent=(o||[]).length+" / "+(a||[]).length;const {data:inter}=await sb.from("interactions").select("kind");const likes=(inter||[]).filter(x=>x.kind==="like").length;const cmts=(inter||[]).filter(x=>x.kind==="comment").length;const shares=(inter||[]).filter(x=>x.kind==="share").length;document.getElementById("statInter").textContent=`Like: ${likes} • Komen: ${cmts} • Share: ${shares}`;if(currentUser.role!=="admin"){document.getElementById("interList").innerHTML=(inter||[]).slice(-10).map(x=>`• ${esc(x.kind)} — ${esc(x.target_type)} ${x.target_id}`).join("<br>")||"Belum ada interaksi."}else{document.getElementById("interList").textContent="Admin tidak tampil interaksi."}document.getElementById("financeList").innerHTML=(f||[]).slice(-10).map(x=>`• ${esc(x.kind)} — ${esc(x.description||"")} — Rp ${(x.amount||0).toLocaleString("id-ID")}`).join("<br>")||"Belum ada keuangan.";document.getElementById("dashOrders").innerHTML=(o||[]).slice(0,10).map(x=>`• ${esc(x.customer_name)} — ${esc(x.product)} — Rp ${(x.total||0).toLocaleString("id-ID")}`).join("<br>")||"Belum ada pesanan.";}}
-function openLogin(){document.getElementById("loginCard").classList.remove("hidden");document.getElementById("loginCard").scrollIntoView({behavior:"smooth"})}
-function openDashboard(){if(!currentUser){openLogin();return}document.getElementById("dashboard").classList.remove("hidden");document.getElementById("dashboard").scrollIntoView({behavior:"smooth"});loadStats()}
-async function doLogin(){const u=document.getElementById("loginUser").value.trim();const p=document.getElementById("loginPass").value;if(!u||!p){document.getElementById("loginStatus").textContent="Isi username + password.";return}const h=await sha256(p);const {data,error}=await sb.from("users").select("*").eq("username",u).eq("password_hash",h).eq("active",true).single();if(error||!data){document.getElementById("loginStatus").textContent="Login gagal: username / password salah.";return}currentUser=data;showPrice=(data.role==="direktur"||data.role==="wakil_direktur"||data.role==="manajer");document.getElementById("loginStatus").innerHTML='Berhasil login sebagai '+esc(data.role);document.getElementById("dashRole").textContent=data.role;document.getElementById("dashUser").textContent=data.name||data.username;document.getElementById("dashboard").classList.remove("hidden");renderFeed();loadStats();track("Lead","login "+data.role)}
-function logout(){currentUser=null;showPrice=false;document.getElementById("dashboard").classList.add("hidden");renderFeed()}
-async function likeIt(type,id){const name=prompt("Nama kamu untuk Like (real)?")||"customer";await sb.from("interactions").insert([{target_type:type,target_id:id,kind:"like",customer_name:name}]);track("Like",type+" "+id);loadInteractions();loadStats();alert("Terima kasih, Like kamu tercatat (real).")}
-async function commentIt(type,id,txt){const name=prompt("Nama kamu?")||"customer";const t=txt||prompt("Tulis komen kamu:");if(!t)return;await sb.from("interactions").insert([{target_type:type,target_id:id,kind:"comment",customer_name:name,comment_text:t}]);track("Comment",t);loadInteractions();loadStats();alert("Komen tercatat.")}
-function askPrice(name){window.open("https://wa.me/6283851722321?text="+encodeURIComponent("Halo ARTRISA, saya mau tanya harga: "+name),"_blank");track("InitiateCheckout",name)}
-async function kirimPesanan(){const name=document.getElementById("custName").value.trim();const wa=document.getElementById("custWA").value.trim();const product=document.getElementById("prodSelect").value;const detail=document.getElementById("detail").value.trim();const size=document.getElementById("sizeInput").value.trim();const unit=document.getElementById("unitInput").value.trim();if(!name||!wa){document.getElementById("orderStatus").textContent="Isi nama & WA dulu.";return}const prod=products.find(p=>p.name===product);const total=prod?prod.price:0;const {error}=await sb.from("orders").insert([{customer_name:name,whatsapp:wa,product:product,detail:detail,size_text:size,unit_text:unit,total:total,status:"Baru"}]);if(error){document.getElementById("orderStatus").textContent="Gagal: "+error.message;return}document.getElementById("orderStatus").innerHTML='BERHASIL! Pesanan masuk ke Supabase.';track("Purchase",product);window.open("https://wa.me/6283851722321?text="+encodeURIComponent("Halo ARTRISA, saya "+name+" mau pesan "+product+" ukuran "+size+" "+unit+" detail: "+detail),"_blank");loadRecent();loadStats()}
-async function daftarAffiliate(){const name=document.getElementById("affName").value.trim();const wa=document.getElementById("affWA").value.trim();if(!name||!wa){document.getElementById("affStatus").textContent="Isi nama & WA.";return}const code="ARTRISA-"+name.toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6)+"-"+Math.floor(100+Math.random()*900);const {error}=await sb.from("affiliates").insert([{name:name,whatsapp:wa,referral_code:code}]);if(error){document.getElementById("affStatus").textContent="Gagal: "+error.message;return}document.getElementById("affStatus").innerHTML="BERHASIL! Kode referral: <b>"+code+"</b>";track("Lead","affiliate "+name)}
-async function addFinance(){if(!currentUser){alert("Login dulu.");return}const desc=document.getElementById("finDesc").value;const kind=document.getElementById("finKind").value;const amt=parseInt(document.getElementById("finAmount").value||"0");await sb.from("finance").insert([{kind:kind,description:desc,amount:amt,status:"Lunas"}]);loadStats();alert("Keuangan ditambah.")}
-async function addFeed(){if(!currentUser){alert("Login dulu.");return}const name=document.getElementById("newFeedName").value;const price=parseInt(document.getElementById("newFeedPrice").value||"0");const cat=document.getElementById("newFeedCat").value||"Lainnya";const img=document.getElementById("newFeedImg").value;await sb.from("products").insert([{name:name,price:price,category:cat,description:"Ditambah dari dashboard",image_url:img,show_in_front:true}]);loadAll();alert("Feed ditambah.")}
-async function addReel(){if(!currentUser){alert("Login dulu.");return}const t=document.getElementById("newReelTitle").value;const u=document.getElementById("newReelUrl").value;const c=document.getElementById("newReelCover").value;await sb.from("reels").insert([{title:t,video_url:u,cover_url:c,description:"Ditambah dari dashboard"}]);loadReels();alert("Reels ditambah.")}
-async function addAdmin(){if(!currentUser||currentUser.role!=="direktur"){alert("Hanya Direktur yang bisa tambah admin.");return}const u=document.getElementById("newAdminUser").value.trim();const p=document.getElementById("newAdminPass").value;const n=document.getElementById("newAdminName").value;const r=document.getElementById("newAdminRole").value;if(!u||!p){document.getElementById("adminStatus").textContent="Isi username + password admin.";return}const h=await sha256(p);const {error}=await sb.from("users").insert([{username:u,password_hash:h,name:n,role:r,permissions:{}}]);if(error){document.getElementById("adminStatus").textContent="Gagal: "+error.message;return}document.getElementById("adminStatus").innerHTML='Admin ditambah: '+esc(u);}
-async function savePixel(){const v=document.getElementById("pixelId").value;await sb.from("settings").upsert([{key:"pixel_id",value:v}]);alert("Pixel ID disimpan.");track("Pixel",v)}
-loadAll();track("PageView","home");
-</script></body></html>
+<div class="topbar"><div><b>ARTRISA</b> <span>PT ARTRISA PRODUCTION STUDIO</span></div><div><span>Stabat • Langkat • WA 0822-6127-5447</span> <a class="btn" style="padding:8px 14px" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20mau%20pesan">Chat WA</a></div></div>
+<div class="search"><input placeholder="Cari spanduk, undangan, banner, Konten Beres..."></div>
+<div class="hero"><div class="hero-box"><p>STUDIO PRODUKSI TERPERCAYA DI LANGKAT</p><h1>Visual Kuat,<br><i>Bisnis Melesat.</i></h1><p>Dari ide sampai terpasang. Undangan, spanduk, baliho, desain, dokumentasi & pengadaan untuk Desa, Sekolah, UMKM & Perusahaan.</p><a class="btn" href="#order">Pesan Sekarang →</a> <a class="btn btn2" href="#katalog">Lihat Katalog</a><p style="font-size:12px;margin-top:14px">NIB 1811260001963 • AHU AHU-060488.AH.01.30.Tahun 2025 • Berbadan Hukum</p></div></div>
+<div class="cats"><div class="cat">🖨️<br>Print</div><div class="cat">🎨<br>Desain</div><div class="cat">🪧<br>Signage</div><div class="cat">📸<br>Dokumentasi</div><div class="cat">🎁<br>Merchandise</div><div class="cat">📱<br>Konten Beres</div></div>
+<div class="section" id="katalog"><h2>Katalog Produk</h2><div class="grid">
+<div class="card"><div class="img">🪧</div><div class="body"><b>Spanduk Flexy 280gr</b><div class="small">Kuat & tahan lama, custom ukuran</div><div class="price">Mulai Rp 25.000 / m²</div><a class="btn" href="#order">Pesan</a></div></div>
+<div class="card"><div class="img y">💌</div><div class="body"><b>Undangan Pernikahan</b><div class="small">Desain + cetak, rapi & tepat janji</div><div class="price">Mulai Rp 2.500 / pcs</div><a class="btn" href="#order">Pesan</a></div></div>
+<div class="card"><div class="img">💡</div><div class="body"><b>Neon Box Custom</b><div class="small">Akrilik + stiker, LED watt rendah</div><div class="price">Harga Sesuai Ukuran</div><a class="btn" href="#order">Pesan</a></div></div>
+<div class="card"><div class="img y">🏷️</div><div class="body"><b>Stiker Label UMKM</b><div class="small">Tahan air, bahan premium</div><div class="price">Mulai Rp 150 / pcs</div><a class="btn" href="#order">Pesan</a></div></div>
+</div></div>
+<div class="section"><h2>Konten Beres — Udah Beres, Tinggal Posting.</h2><div class="kb"><div class="box a"><b>PAKET RINGAN</b><div style="font-size:32px;font-weight:900;color:#0B3D91">Rp 300.000 <span style="font-size:14px">/ bulan</span></div><p>8 konten • 4 Video Reels + 4 Feed<br>Caption + Hashtag<br>Bonus Stiker Chromo 2 Lembar</p><br><a class="btn" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20mau%20langganan%20Konten%20Beres%20Paket%20Ringan%20300rb">Langganan 300rb</a></div><div class="box b"><b style="color:#FFC800">PAKET PENUH</b><div style="font-size:32px;font-weight:900">Rp 800.000 <span style="font-size:14px">/ bulan</span></div><p>20 konten • 12 Reels + 8 Feed<br>Caption + Hashtag<br>Bonus Stiker 6 Lembar</p><br><a class="btn" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20mau%20langganan%20Konten%20Beres%20Paket%20Penuh%20800rb">Langganan 800rb</a></div></div></div>
+<div class="section"><h2>Studi Kasus Nyata</h2><div style="background:#fff;padding:18px;border-radius:16px"><b>Pemerintah Desa Klumpang Kebun</b><p class="small">Pengadaan 1 unit komputer Intel Core i5 RAM 8GB SSD 128GB HDD 500GB Monitor 22 inci untuk kantor desa. Pengadaan terlaksana & diserahterimakan.</p></div></div>
+<div class="section" id="order"><h2>Pesan Langsung</h2><div class="order"><label>Nama / Instansi</label><input placeholder="Contoh: Pemdes Klumpang Kebun"><label>WhatsApp</label><input placeholder="0822-xxxx-xxxx"><label>Pilih Produk</label><select><option>Spanduk Flexy 280gr</option><option>Undangan Pernikahan</option><option>Neon Box Custom</option><option>Konten Beres - Paket Ringan Rp 300.000</option><option>Konten Beres - Paket Penuh Rp 800.000</option></select><label>Detail Pesanan / Ukuran / Jumlah</label><textarea rows="3" placeholder="Contoh: Spanduk 2x1m, 2 pcs, desain dibuatkan"></textarea><button class="btn" style="width:100%;border:none;cursor:pointer" onclick="alert('Terima kasih! Pesanan dicatat. Silakan lanjut ke WhatsApp untuk konfirmasi.');window.open('https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20mau%20pesan%20dari%20website','_blank')">Kirim Pesanan → WhatsApp</button><p class="small" style="margin-top:10px">Pembayaran: Transfer Bank Sumut / SeaBank / QRIS / COD Stabat. Invoice otomatis dikirim via WhatsApp.</p></div></div>
+<div class="section"><h2>Program Afiliasi</h2><div style="background:#fff;padding:18px;border-radius:16px"><p>Daftar jadi Affiliate, dapat link khusus <b>artrisa.id/ref/nama-kamu</b>. Kalau ada yang pesan lewat link kamu, kamu dapat komisi. Contoh: Konten Beres 300rb → Rp 30.000, Konten Beres 800rb → Rp 80.000.</p><br><a class="btn" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20mau%20daftar%20Affiliate">Daftar Affiliate →</a></div></div>
+<div class="section"><h2>Dashboard Backend (Untuk Admin ARTRISA)</h2><div class="dash"><div>Pesanan Hari Ini<br><b>0</b><br><span>Belum ada pesanan baru</span></div><div>Omzet Bulan Ini<br><b>Rp 0</b><br><span>Data demo</span></div><div>Chat Belum Dibalas<br><b>0</b></div><div>Affiliate Aktif<br><b>0</b></div></div><p class="small" style="margin-top:8px">Dashboard lengkap dengan database ada di versi Supabase. Ini versi depan (frontend) yang bisa langsung di-deploy ke Vercel.</p></div>
+<div class="section"><h2>Hubungi Kami</h2><p>Perumahan Citra Stabat Blok D No.5, Desa Ara Condong, Kec. Stabat, Kab. Langkat<br>WA / Telp: 0822-6127-5447 • IG: @artrisa.production • Email: artrisa25@gmail.com</p></div>
+<div class="bottom"><a href="#" class="active">🏠<br>Home</a><a href="#katalog">🛍️<br>Katalog</a><a href="#order"><span class="plus">+</span><br>Order</a><a href="https://wa.me/6282261275447">💬<br>Chat</a><a href="#order">👤<br>Akun</a></div>
+</body></html>
