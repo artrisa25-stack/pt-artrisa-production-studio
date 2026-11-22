@@ -310,7 +310,27 @@ footer .cta{background:var(--y);color:#111;padding:9px 14px;border-radius:99px;f
 </div>
 
 <script>
-const SB_URL="https://spqivuqidggtcivrddtm.supabase.co",SB_KEY="sb_publishable_QR18b-QtSl0jUnpsPZdayQ_88ftX6m6",WA="6283851722321";
+
+  const FALLBACK=[
+  {name:"Spanduk Ulang Tahun",price:35000,modal_price:20000,category:"Spanduk & Outdoor",description:"Spanduk ucapan ulang tahun siap pasang.",unit:"/m",sort_order:1,show_in_front:true,active:true},
+  {name:"Stiker Chromo + Cutting Bulat",price:15000,modal_price:8000,category:"Stiker",description:"Stiker chromo dipotong bulat rapi.",unit:"/pcs",sort_order:2,show_in_front:true,active:true},
+  {name:"Stiker Outdoor",price:95000,modal_price:50000,category:"Stiker",description:"Stiker tahan cuaca. Per meter.",unit:"/m",sort_order:3,show_in_front:true,active:true},
+  {name:"Stiker Indoor",price:150000,modal_price:80000,category:"Stiker",description:"Stiker indoor halus. Per meter.",unit:"/m",sort_order:4,show_in_front:true,active:true},
+  {name:"Stiker Chromo A3",price:10000,modal_price:5000,category:"Stiker",description:"Stiker Chromo A3.",unit:"/lbr",sort_order:9,show_in_front:true,active:true},
+  {name:"Stiker Chromo A4",price:5000,modal_price:2500,category:"Stiker",description:"Stiker Chromo A4.",unit:"/lbr",sort_order:10,show_in_front:true,active:true},
+  {name:"Stiker PVC A3",price:20000,modal_price:10000,category:"Stiker",description:"Stiker PVC A3.",unit:"/lbr",sort_order:11,show_in_front:true,active:true},
+  {name:"Undangan 1 Warna 21x33",price:1500,modal_price:800,category:"Undangan & Cetak",description:"Undangan 1 warna 21x33, min 500 lbr.",unit:"/lbr",sort_order:13,show_in_front:true,active:true},
+  {name:"Yasin Hardcover",price:35000,modal_price:20000,category:"Undangan & Cetak",description:"Yasin Hardcover min 50 pcs.",unit:"/pcs",sort_order:14,show_in_front:true,active:true},
+  {name:"Brosur Konstruk A4",price:750000,modal_price:400000,category:"Brosur & Faktur",description:"Brosur Konstruk A4.",unit:"/rim",sort_order:16,show_in_front:true,active:true},
+  {name:"Neonbox Petak",price:1200000,modal_price:700000,category:"Neonbox",description:"Neonbox petak.",unit:"",sort_order:19,show_in_front:true,active:true},
+  {name:"Neonbox Bentuk",price:1500000,modal_price:900000,category:"Neonbox",description:"Neonbox bentuk custom.",unit:"",sort_order:20,show_in_front:true,active:true},
+  {name:"Cetak Cepat - ST Cina Outdoor",price:45000,modal_price:25000,category:"Cetak Cepat",description:"Stiker Cina outdoor.",unit:"/m",sort_order:21,show_in_front:true,active:true},
+  {name:"Cetak Cepat - ST Ritrama Outdoor",price:50000,modal_price:28000,category:"Cetak Cepat",description:"Stiker Ritrama outdoor kualitas stabil.",unit:"/m",sort_order:23,show_in_front:true,active:true},
+  {name:"Konten Beres - Paket Hemat",price:300000,modal_price:0,category:"Konten Beres",description:"Paket mulai konsisten untuk UMKM dan desa.",unit:"/bulan",sort_order:25,show_in_front:true,active:true},
+  {name:"Konten Beres - Paket Sultan",price:800000,modal_price:0,category:"Konten Beres",description:"Paket paling lengkap untuk brand yang mau gaspol.",unit:"/bulan",sort_order:26,show_in_front:true,active:true}
+  ].map((x,i)=>({...x,id:1000+i}));
+
+  const SB_URL="https://spqivuqidggtcivrddtm.supabase.co",SB_KEY="sb_publishable_QR18b-QtSl0jUnpsPZdayQ_88ftX6m6",WA="6283851722321";
 let sb,P=[],C={},U=null,F="Semua";
 const $=id=>document.getElementById(id),v=id=>$(id).value.trim();
 const fmt=n=>(+n||0).toLocaleString("id-ID");
@@ -371,7 +391,7 @@ async function load(){
     const{data:ix}=await sb.from("interactions").select("target_id,kind");
     (ix||[]).forEach(r=>{C[r.target_id]=C[r.target_id]||{};C[r.target_id][r.kind]=(C[r.target_id][r.kind]||0)+1});
     render();
-  }catch(e){showErr("Katalog gagal dimuat: "+e.message)}
+  }catch(e){P=FALLBACK.slice();render();showErr("Supabase belum nyambung ("+e.message+"). Katalog cadangan tampil dulu. RUN SQL + Resume project di Supabase, lalu refresh.")}
 }
 
 // REELS lazy
@@ -395,7 +415,7 @@ async function doLogin(){
   try{
     const h=await sha256(p);
     const{data,error}=await sb.from("users").select("*").eq("username",u).eq("password_hash",h).eq("active",true).single();
-    if(error||!data){ls.textContent="Username atau password salah. Pastikan SQL sudah dijalankan.";return}
+    if(error||!data){ls.textContent="Username atau password salah, atau Supabase belum nyambung (Failed to fetch). Pastikan SQL sudah di-RUN + project tidak ke-pause.";return}
     U=data;$("lp").value="";
     ls.innerHTML="✅ Login berhasil sebagai <b>"+esc(data.role)+"</b>";
     $("lb").textContent="👤 "+(data.name||data.username);
