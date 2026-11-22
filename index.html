@@ -637,6 +637,7 @@ body.in-dash{padding-bottom:0}
   .d-form{grid-template-columns:1fr}
 }
 @media(max-width:560px){.hero h1{font-size:32px}.hstat{flex:1}}
+.d-prev{display:block;max-width:100%;max-height:160px;border-radius:12px;margin-top:8px;object-fit:cover}.d-thumb{width:38px;height:38px;border-radius:9px;object-fit:cover;float:left;margin-right:10px}
 </style>
 </head>
 <body>
@@ -1215,7 +1216,7 @@ window.addEventListener("popstate",()=>{
 function card(p,i){
   const c=C[p.id]||{};
   const pr=U&&["direktur","wakil_direktur","manajer"].includes(U.role)?"Rp "+fmt(p.price):"Rp XXXX";
-  const bg=p.image_url?`url('${encodeURI(p.image_url)}') center/cover`:GR[i%GR.length];
+  const bg=p.image_url?`url('${encodeURI(p.image_url.replace(SB_URL,"/api/supabase"))}') center/cover`:GR[i%GR.length];
   const u=p.unit||"";
   const ic=IC[p.category]||"🏷️";
   const lk=c.like||0;const cm=c.comment||0;
@@ -1454,6 +1455,23 @@ function renderDash(){
 }
 function dTab(k){DTAB=k;renderDash();window.scrollTo(0,0)}
 
+// ---- upload foto ke Supabase Storage (lewat proxy Vercel) ----
+const BUCKET="feed";
+function shrink(file,max){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const r=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*r);c.height=Math.round(im.height*r);c.getContext("2d").drawImage(im,0,0,c.width,c.height);c.toBlob(b=>b?res(b):rej(new Error("gagal kompres")),"image/jpeg",.85)};im.onerror=()=>rej(new Error("file bukan gambar (HEIC? ubah ke JPG)"));im.src=URL.createObjectURL(file)})}
+async function upImg(inp,tid){
+  const f=inp.files[0];if(!f)return;
+  toast("Mengunggah…");
+  try{
+    const blob=await shrink(f,1200);
+    const name=Date.now()+"-"+Math.random().toString(36).slice(2,7)+".jpg";
+    const{error}=await sb.storage.from(BUCKET).upload(name,blob,{contentType:"image/jpeg"});
+    if(error)throw error;
+    const url="/api/supabase/storage/v1/object/public/"+BUCKET+"/"+name;
+    $(tid).value=url;const pv=$(tid.replace("f_","pv_"));if(pv){pv.src=url;pv.hidden=false}
+    toast("✅ Foto terunggah — klik Simpan");
+  }catch(e){toast("Gagal unggah: "+e.message)}
+}
+
 // ---- generic modal form ----
 function openForm(title,fields,vals,save){
   FORM={fields,save};
@@ -1461,6 +1479,7 @@ function openForm(title,fields,vals,save){
     const val=vals[f.k]??"";let inp;
     if(f.opts)inp=`<select id="f_${f.k}" class="form-input">${f.opts.map(o=>`<option ${o==val?"selected":""}>${esc(o)}</option>`).join("")}</select>`;
     else if(f.type==="textarea")inp=`<textarea id="f_${f.k}" class="form-input" rows="3">${esc(val)}</textarea>`;
+    else if(f.type==="img")inp=`<input id="f_${f.k}" class="form-input" value="${esc(val)}" placeholder="URL gambar, atau pilih file di bawah" autocomplete="off"><input type="file" accept="image/*" class="form-input" style="margin-top:6px" onchange="upImg(this,'f_${f.k}')"><img id="pv_${f.k}" class="d-prev" src="${esc(val)}" ${val?"":"hidden"}>`;
     else if(f.type==="bool")inp=`<label class="d-chk"><input type="checkbox" id="f_${f.k}" ${val===false?"":"checked"}> Ya</label>`;
     else inp=`<input id="f_${f.k}" class="form-input" type="${f.type||"text"}" value="${esc(val)}" autocomplete="off">`;
     return`<div class="form-group ${f.wide?"wide":""}"><label>${esc(f.l)}</label>${inp}</div>`}).join("")}</div>
@@ -1507,7 +1526,7 @@ VIEWS.pesanan=async()=>{
 };
 
 // ---- PRODUK ----
-const PF=[{k:"name",l:"Nama produk",wide:1},{k:"category",l:"Kategori",opts:CATS.slice(1)},{k:"unit",l:"Satuan (mis. /m)"},{k:"price",l:"Harga jual (Rp)",type:"number"},{k:"modal_price",l:"Harga modal (Rp)",type:"number"},{k:"description",l:"Deskripsi",type:"textarea",wide:1},{k:"image_url",l:"URL gambar (opsional)",wide:1},{k:"sort_order",l:"Urutan",type:"number"},{k:"show_in_front",l:"Tampil di beranda",type:"bool"},{k:"active",l:"Produk aktif",type:"bool"}];
+const PF=[{k:"name",l:"Nama produk",wide:1},{k:"category",l:"Kategori",opts:CATS.slice(1)},{k:"unit",l:"Satuan (mis. /m)"},{k:"price",l:"Harga jual (Rp)",type:"number"},{k:"modal_price",l:"Harga modal (Rp)",type:"number"},{k:"description",l:"Deskripsi",type:"textarea",wide:1},{k:"image_url",l:"Foto feed (upload dari galeri/PC)",type:"img",wide:1},{k:"sort_order",l:"Urutan",type:"number"},{k:"show_in_front",l:"Tampil di beranda",type:"bool"},{k:"active",l:"Produk aktif",type:"bool"}];
 const saveProd=id=>async o=>{
   if(!o.name){toast("Nama produk wajib diisi");return false}
   const ok=await run(id?sb.from("products").update(o).eq("id",id):sb.from("products").insert([o]),"Produk disimpan");
@@ -1520,7 +1539,7 @@ VIEWS.produk=async()=>{
   $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${DP.length} produk</span><button class="btn btn-y" onclick="addProd()">+ Tambah produk</button></div>
   <div class="d-table"><table><thead><tr><th>Produk</th><th>Harga jual</th><th>Modal</th><th>Margin</th><th>Beranda</th><th>Aktif</th><th></th></tr></thead><tbody>${DP.map(p=>{
     const m=p.price?Math.round((p.price-p.modal_price)/p.price*100):0;
-    return`<tr><td><b>${esc(p.name)}</b><br><small>${esc(p.category)} ${esc(p.unit)}</small></td><td>${rp(p.price)}</td><td>${rp(p.modal_price)}</td><td>${m}%</td>
+    return`<tr><td>${p.image_url?`<img class="d-thumb" src="${esc(p.image_url.replace(SB_URL,"/api/supabase"))}" alt="">`:""}<b>${esc(p.name)}</b><br><small>${esc(p.category)} ${esc(p.unit)}</small></td><td>${rp(p.price)}</td><td>${rp(p.modal_price)}</td><td>${m}%</td>
     <td><input type="checkbox" ${p.show_in_front?"checked":""} onchange="toggle('products',${p.id},'show_in_front',this.checked)"></td>
     <td><input type="checkbox" ${p.active?"checked":""} onchange="toggle('products',${p.id},'active',this.checked)"></td>
     <td><button class="d-ic" onclick="editProd(${p.id})">✏️</button><button class="d-ic" onclick="delRow('products',${p.id},'produk')">🗑</button></td></tr>`}).join("")}</tbody></table></div>`;
@@ -1550,7 +1569,7 @@ VIEWS.afiliasi=async()=>{
 };
 
 // ---- REELS ----
-const RF=[{k:"title",l:"Judul",wide:1},{k:"video_url",l:"URL video (.mp4)",wide:1},{k:"cover_url",l:"URL cover (opsional)",wide:1},{k:"description",l:"Deskripsi",type:"textarea",wide:1},{k:"active",l:"Tampilkan",type:"bool"}];
+const RF=[{k:"title",l:"Judul",wide:1},{k:"video_url",l:"URL video (.mp4)",wide:1},{k:"cover_url",l:"Cover (upload dari galeri/PC)",type:"img",wide:1},{k:"description",l:"Deskripsi",type:"textarea",wide:1},{k:"active",l:"Tampilkan",type:"bool"}];
 const saveReel=id=>async o=>{
   if(!o.video_url){toast("URL video wajib diisi");return false}
   const ok=await run(id?sb.from("reels").update(o).eq("id",id):sb.from("reels").insert([o]),"Reels disimpan");
