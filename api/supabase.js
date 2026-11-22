@@ -1,6 +1,6 @@
 // Vercel Serverless Proxy ke Supabase
 export default async function handler(req, res) {
-  const SB_URL = 'https://spqivuqidggtcivrddtm.supabase.co';
+  const SB_URL = 'https://spqivuqidqgtcivrddtm.supabase.co';
   const path = req.query.path || '';
   const qs = new URLSearchParams(req.query);
   qs.delete('path');
