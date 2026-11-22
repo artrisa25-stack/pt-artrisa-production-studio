@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PT ARTRISA PRODUCTION STUDIO</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 /* === FONT & LAYOUT PERSIS SCREENSHOT - JANGAN DIUBAH === */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
@@ -111,11 +111,44 @@ const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let products=[],reels=[],currentUser=null,currentFilter="Semua",showPrice=false;
 async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
 function esc(s){return String(s||"").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
-function track(ev,detail){sb.from("pixel_events").insert([{event_name:ev,source:"vercel",detail:detail||""}]);}
+function track(ev,detail){try{sb.from("pixel_events").insert([{event_name:ev,source:"vercel",detail:detail||""}]);}catch(_){}}
+const FALLBACK=[
+{name:"Spanduk Ulang Tahun",price:35000,category:"Spanduk & Outdoor",description:"Spanduk ucapan ulang tahun siap pasang. Bahan spanduk outdoor, ukuran bisa request, finishing rapi."},
+{name:"Stiker Chromo + Cutting Bulat",price:15000,category:"Stiker",description:"Stiker chromo dipotong bulat rapi, siap tempel. Ukuran A3 / A4, finishing cutting."},
+{name:"Stiker Outdoor",price:95000,category:"Stiker",description:"Stiker tahan cuaca untuk luar ruang. Per meter."},
+{name:"Stiker Indoor",price:150000,category:"Stiker",description:"Stiker indoor halus untuk dalam ruang. Per meter."},
+{name:"Stiker Indoor + Cut",price:185000,category:"Stiker",description:"Stiker indoor + cutting. Per meter."},
+{name:"Backlite",price:95000,category:"Spanduk & Outdoor",description:"Backlite untuk neonbox / lightbox. Per meter."},
+{name:"Spanduk",price:20000,category:"Spanduk & Outdoor",description:"Spanduk standar. Per meter."},
+{name:"Kertas Tik A3",price:10000,category:"Cetak & Kertas",description:"Kertas Tik ukuran A3. Per lembar."},
+{name:"Stiker Chromo A3",price:10000,category:"Stiker",description:"Stiker Chromo A3. Per lembar."},
+{name:"Stiker Chromo A4",price:5000,category:"Stiker",description:"Stiker Chromo A4. Per lembar."},
+{name:"Stiker PVC A3",price:20000,category:"Stiker",description:"Stiker PVC A3. Per lembar."},
+{name:"Stiker PVC + Cut A3",price:25000,category:"Stiker",description:"Stiker PVC + Cutting A3. Per lembar."},
+{name:"Undangan 1 Warna 21x33",price:1500,category:"Undangan & Cetak",description:"Undangan 1 warna ukuran 21x33, min 500 lbr. Per lembar."},
+{name:"Yasin Hardcover",price:35000,category:"Undangan & Cetak",description:"Yasin Hardcover min 50 pcs. Per pcs."},
+{name:"Brosur Konstruk A4",price:750000,category:"Brosur & Faktur",description:"Brosur Konstruk A4 per rim."},
+{name:"Brosur Kontruk A5",price:550000,category:"Brosur & Faktur",description:"Brosur Kontruk A5 per rim."},
+{name:"Bon Faktur HVS NCR F4",price:240000,category:"Brosur & Faktur",description:"Bon Faktur 1 rim. 2 rim 380000, 3 rim 500000."},
+{name:"Undangan Full Color 11.75x16",price:1500,category:"Undangan & Cetak",description:"Undangan full color 11.75x16cm. Per lembar."},
+{name:"Neonbox Petak",price:1200000,category:"Neonbox",description:"Neonbox petak. Harga per unit."},
+{name:"Neonbox Bentuk",price:1500000,category:"Neonbox",description:"Neonbox bentuk custom. Harga per unit."},
+{name:"Cetak Cepat - ST Cina Outdoor",price:45000,category:"Cetak Cepat",description:"Cetak cepat ST Cina Outdoor. Per meter."},
+{name:"Cetak Cepat - ST Ritrama Outdoor",price:50000,category:"Cetak Cepat",description:"Cetak cepat ST Ritrama Outdoor. Per meter."},
+{name:"Konten Beres - Paket Hemat",price:300000,category:"Konten Beres",description:"8 Konten: 4 Reels + 4 Feed, Caption + Hashtag, 1x Revisi, Bonus 2 lembar Stiker Chromo."},
+{name:"Konten Beres - Paket Sultan",price:800000,category:"Konten Beres",description:"20 Konten: 12 Reels + 8 Feed/Carousel, Caption + Hashtag + Jam Terbaik, 2x Revisi, 1 Motion Graphic, Kalender Konten, Bonus 6 lembar Stiker Chromo."}
+].map((x,i)=>({...x,id:1000+i,show_in_front:true,sort_order:i+1}));
 async function loadAll(){
-  const {data,error}=await sb.from("products").select("*").eq("active",true).order("sort_order");
-  if(error){document.getElementById("dbAlert").innerHTML='Koneksi database gagal: '+esc(error.message)+'. Menampilkan katalog terakhir yang tersimpan di halaman ini.';return;}
-  products=data||[];document.getElementById("dbAlert").style.display="none";
+  try{
+    const {data,error}=await sb.from("products").select("*").eq("active",true).order("sort_order");
+    if(error) throw error;
+    if(!data||data.length===0) throw new Error("Tabel products masih kosong - RUN SQL dulu di Supabase");
+    products=data;document.getElementById("dbAlert").style.display="none";
+  }catch(e){
+    products=FALLBACK;
+    document.getElementById("dbAlert").style.display="block";
+    document.getElementById("dbAlert").innerHTML='Koneksi database gagal: '+esc(e.message||e)+'. Menampilkan katalog terakhir yang tersimpan di halaman ini. <b>Cara benerin: Buka Supabase > SQL Editor > RUN file supabase-full-schema.sql, lalu refresh halaman ini.</b>';
+  }
   const cats=["Semua","Spanduk & Outdoor","Stiker","Cetak & Kertas","Undangan & Cetak","Brosur & Faktur","Neonbox","Cetak Cepat","Konten Beres"];
   document.getElementById("filters").innerHTML=cats.map(c=>`<button class="${c===currentFilter?"on":""}" onclick="setFilter('${esc(c)}')">${esc(c)}</button>`).join("");
   document.getElementById("prodSelect").innerHTML=products.map(p=>`<option>${esc(p.name)}</option>`).join("");
@@ -132,8 +165,8 @@ function renderFeed(){
   loadInteractions();
 }
 function showDetail(id){const p=products.find(x=>x.id===id);if(!p)return;const txt=prompt("Komen untuk "+p.name+" (kosongkan kalau cuma mau liat detail):", "");if(txt){commentIt('product',id,txt)}else{askPrice(p.name)}}
-async function loadInteractions(){const {data}=await sb.from("interactions").select("*");(data||[]).forEach(it=>{const el=document.getElementById((it.kind==="like"?"like-":"cmt-")+it.target_id);if(el&&it.target_type==="product"){el.textContent=Number(el.textContent)+1}})}
-async function loadReels(){const {data}=await sb.from("reels").select("*").eq("active",true).order("id");reels=data||[];document.getElementById("reelsList").innerHTML=reels.map(r=>`<div class="form-card"><b style="font-size:14px">${esc(r.title)}</b><p class="muted">${esc(r.description||"")}</p>${r.cover_url?`<img src="${esc(r.cover_url)}" style="width:100%;border-radius:12px" loading="lazy">`:"<div style='aspect-ratio:9/16;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;border-radius:12px'>▶️ Klik Play — Reels 9:16</div>"}<video controls preload="none" playsinline style="aspect-ratio:9/16;margin-top:8px" poster="${esc(r.cover_url||"")}"><source src="${esc(r.video_url)}" type="video/mp4"></video><button class="btn-primary" style="margin-top:8px" onclick="likeIt('reel',${r.id})">❤️ Like Reels</button></div>`).join("")||"<p class='muted'>Belum ada reels.</p>";}
+async function loadInteractions(){try{const {data}=await sb.from("interactions").select("*");(data||[]).forEach(it=>{const el=document.getElementById((it.kind==="like"?"like-":"cmt-")+it.target_id);if(el&&it.target_type==="product"){el.textContent=Number(el.textContent)+1}})}
+async function loadReels(){try{const {data}=await sb.from("reels").select("*").eq("active",true).order("id");reels=data||[]; }catch(_){reels=[];}document.getElementById("reelsList").innerHTML=reels.map(r=>`<div class="form-card"><b style="font-size:14px">${esc(r.title)}</b><p class="muted">${esc(r.description||"")}</p>${r.cover_url?`<img src="${esc(r.cover_url)}" style="width:100%;border-radius:12px" loading="lazy">`:"<div style='aspect-ratio:9/16;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;border-radius:12px'>▶️ Klik Play — Reels 9:16</div>"}<video controls preload="none" playsinline style="aspect-ratio:9/16;margin-top:8px" poster="${esc(r.cover_url||"")}"><source src="${esc(r.video_url)}" type="video/mp4"></video><button class="btn-primary" style="margin-top:8px" onclick="likeIt('reel',${r.id})">❤️ Like Reels</button></div>`).join("")||"<p class='muted'>Belum ada reels.</p>";}
 async function loadRecent(){const {data}=await sb.from("orders").select("*").order("created_at",{ascending:false}).limit(5);document.getElementById("recentOrders").innerHTML=(data||[]).length?(data||[]).map(o=>`• ${esc(o.customer_name)} — ${esc(o.product)} — <b>${esc(o.status||"Baru")}</b>`).join("<br>"):"Belum ada pesanan.";document.getElementById("cartCount").textContent=(data||[]).length+" pesanan"}
 async function loadStats(){const {data:o}=await sb.from("orders").select("total,created_at");const {data:a}=await sb.from("affiliates").select("*");const {data:f}=await sb.from("finance").select("*");const total=(o||[]).reduce((s,x)=>s+(x.total||0),0);const today=new Date().toISOString().slice(0,10);const month=new Date().toISOString().slice(0,7);const year=new Date().getFullYear().toString();const tToday=(o||[]).filter(x=>String(x.created_at).slice(0,10)===today).reduce((s,x)=>s+(x.total||0),0);const tMonth=(o||[]).filter(x=>String(x.created_at).slice(0,7)===month).reduce((s,x)=>s+(x.total||0),0);const tYear=(o||[]).filter(x=>String(x.created_at).slice(0,4)===year).reduce((s,x)=>s+(x.total||0),0);if(currentUser){document.getElementById("statTotal").textContent="Rp "+total.toLocaleString("id-ID");document.getElementById("statToday").textContent="Hari ini: Rp "+tToday.toLocaleString("id-ID");document.getElementById("statMonth").textContent="Rp "+tMonth.toLocaleString("id-ID");document.getElementById("statYear").textContent="Tahun ini: Rp "+tYear.toLocaleString("id-ID");document.getElementById("statCount").textContent=(o||[]).length+" / "+(a||[]).length;const {data:inter}=await sb.from("interactions").select("kind");const likes=(inter||[]).filter(x=>x.kind==="like").length;const cmts=(inter||[]).filter(x=>x.kind==="comment").length;const shares=(inter||[]).filter(x=>x.kind==="share").length;document.getElementById("statInter").textContent=`Like: ${likes} • Komen: ${cmts} • Share: ${shares}`;if(currentUser.role!=="admin"){document.getElementById("interList").innerHTML=(inter||[]).slice(-10).map(x=>`• ${esc(x.kind)} — ${esc(x.target_type)} ${x.target_id}`).join("<br>")||"Belum ada interaksi."}else{document.getElementById("interList").textContent="Admin tidak tampil interaksi."}document.getElementById("financeList").innerHTML=(f||[]).slice(-10).map(x=>`• ${esc(x.kind)} — ${esc(x.description||"")} — Rp ${(x.amount||0).toLocaleString("id-ID")}`).join("<br>")||"Belum ada keuangan.";document.getElementById("dashOrders").innerHTML=(o||[]).slice(0,10).map(x=>`• ${esc(x.customer_name)} — ${esc(x.product)} — Rp ${(x.total||0).toLocaleString("id-ID")}`).join("<br>")||"Belum ada pesanan.";}}
 function openLogin(){document.getElementById("loginCard").classList.remove("hidden");document.getElementById("loginCard").scrollIntoView({behavior:"smooth"})}
