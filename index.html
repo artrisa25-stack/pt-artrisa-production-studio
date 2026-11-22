@@ -341,7 +341,7 @@ const GR=["linear-gradient(135deg,#2a5fd0,#0B3D91)","linear-gradient(135deg,#ffb
 const IC={"Spanduk & Outdoor":"🚩","Stiker":"🏷️","Cetak & Kertas":"📄","Undangan & Cetak":"💌","Brosur & Faktur":"📑","Neonbox":"💡","Cetak Cepat":"⚡","Konten Beres":"📸"};
 const SV=[["📄","Print & Finishing","Produksi cepat","Undangan, spanduk, banner, baliho, stiker, ID card, buku, dan kalender.","Mulai sesuai ukuran"],["🎨","Desain Kreatif","Identitas brand","Logo, feed Instagram, dan kemasan UMKM yang siap naik kelas.","Konsultasi gratis"],["📣","Advertising & Instalasi","Luar ruang","Spanduk, baliho, plang nama — dari produksi sampai terpasang.","Survei lokasi"],["📷","Dokumentasi & Pengadaan","Acara & instan","Foto/video acara serta pengadaan ATK dan komputer untuk Desa/Sekolah.","Paket acara"],["✨","Social Media Management","Konten Beres","Konten rutin, publikasi digital, dan pengelolaan akun yang konsisten.","Rp 300rb / bulan"]];
 
-try{sb=window.supabase.createClient(SB_URL,SB_KEY)}catch(e){showErr("Koneksi Supabase gagal: "+e.message)}
+try{sb=window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:async(u,o)=>{try{const s=String(u).replace(SB_URL,"/api/supabase");const r=await fetch(s,o);return r;}catch(e){return fetch(u,o);}}}})}catch(e){showErr("Koneksi Supabase gagal: "+e.message)}
 
 function showErr(m){const a=$("al");if(a){a.classList.remove("hidden");a.innerHTML=esc(m)+" — <a href=\"#\" onclick=\"location.reload();return false\"><b>Coba lagi</b></a>"}}
 
@@ -391,7 +391,7 @@ async function load(){
     const{data:ix}=await sb.from("interactions").select("target_id,kind");
     (ix||[]).forEach(r=>{C[r.target_id]=C[r.target_id]||{};C[r.target_id][r.kind]=(C[r.target_id][r.kind]||0)+1});
     render();
-  }catch(e){P=FALLBACK.slice();render();showErr("Supabase belum nyambung ("+e.message+"). Katalog cadangan tampil dulu. RUN SQL + Resume project di Supabase, lalu refresh.")}
+  }catch(e){P=FALLBACK.slice();render();showErr("Supabase via Vercel belum nyambung ("+e.message+"). Katalog cadangan tampil dulu. RUN SQL + Resume project di Supabase, lalu refresh.")}
 }
 
 // REELS lazy
@@ -415,7 +415,7 @@ async function doLogin(){
   try{
     const h=await sha256(p);
     const{data,error}=await sb.from("users").select("*").eq("username",u).eq("password_hash",h).eq("active",true).single();
-    if(error||!data){ls.textContent="Username atau password salah, atau Supabase belum nyambung (Failed to fetch). Pastikan SQL sudah di-RUN + project tidak ke-pause.";return}
+    if(error||!data){ls.textContent="Username atau password salah, atau Supabase via Vercel belum nyambung (Failed to fetch). Pastikan SQL sudah di-RUN + project tidak ke-pause.";return}
     U=data;$("lp").value="";
     ls.innerHTML="✅ Login berhasil sebagai <b>"+esc(data.role)+"</b>";
     $("lb").textContent="👤 "+(data.name||data.username);
