@@ -638,6 +638,17 @@ body.in-dash{padding-bottom:0}
 }
 @media(max-width:560px){.hero h1{font-size:32px}.hstat{flex:1}}
 .d-prev{display:block;max-width:100%;max-height:160px;border-radius:12px;margin-top:8px;object-fit:cover}.d-thumb{width:38px;height:38px;border-radius:9px;object-fit:cover;float:left;margin-right:10px}
+.pos{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);gap:16px;align-items:start}
+.pos-card{padding:18px;border-radius:20px;background:rgba(255,255,255,.7);border:1px solid var(--glass-line);box-shadow:var(--glass-sh)}
+.pos-line{display:grid;grid-template-columns:repeat(6,1fr);gap:8px 10px;padding:14px 0;border-bottom:1px solid rgba(11,61,145,.1)}
+.pos-line label{font-size:10px;font-weight:700;color:var(--m);display:block;margin-bottom:3px}
+.pos-line .form-input{padding:8px 10px;font-size:12px}
+.pos-info{font-size:12px;color:var(--m);align-self:end;padding-bottom:9px}.pos-info b{color:var(--t)}
+.pos-sub{text-align:right;font-size:12px;color:var(--m)}.pos-sub b{font-size:15px;color:var(--b);margin:0 8px}
+.pos-sum{margin:6px 0 12px;padding:12px 14px;border-radius:14px;background:rgba(11,61,145,.06)}
+.pos-sum>div{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}.pos-sum .big{font-size:17px;font-weight:900;border-top:1px solid rgba(11,61,145,.15);margin-top:6px;padding-top:8px;color:var(--b)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--m);margin-top:8px}.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+@media(max-width:900px){.pos{grid-template-columns:1fr}.pos-line>div{grid-column:span 6!important}.pos-line>div.half{grid-column:span 3!important}}
 </style>
 </head>
 <body>
@@ -654,16 +665,16 @@ body.in-dash{padding-bottom:0}
       <button onclick="render()">Cari</button>
     </div>
     <div id="user-area"></div>
-    <button class="nav-btn-login" id="login-nav-btn" onclick="goAcc()">🔒 Login</button>
+    <button class="nav-btn-login" id="login-nav-btn" onclick="goAcc()">Login</button>
   </div>
   <nav>
     <div class="nav-scroll" id="main-nav">
-      <span class="nav-link on" data-page="beranda" onclick="goPage('beranda')">🏠 Beranda</span>
-      <span class="nav-link" data-page="layanan" onclick="goPage('layanan')">🛠 Semua Layanan</span>
-      <span class="nav-link" data-page="konten-beres" onclick="goPage('konten-beres')">✨ Konten Beres</span>
-      <span class="nav-link" data-page="pesan" onclick="goPage('pesan')">📦 Pesan Sekarang</span>
-      <span class="nav-link" data-page="afiliasi" onclick="goPage('afiliasi')">🤝 Afiliasi</span>
-      <span class="nav-link" data-page="reels" onclick="goPage('reels')">🎬 Reels</span>
+      <span class="nav-link on" data-page="beranda" onclick="goPage('beranda')">Beranda</span>
+      <span class="nav-link" data-page="layanan" onclick="goPage('layanan')">Semua Layanan</span>
+      <span class="nav-link" data-page="konten-beres" onclick="goPage('konten-beres')">Konten Beres</span>
+      <span class="nav-link" data-page="pesan" onclick="goPage('pesan')">Pesan Sekarang</span>
+      <span class="nav-link" data-page="afiliasi" onclick="goPage('afiliasi')">Afiliasi</span>
+      <span class="nav-link" data-page="reels" onclick="goPage('reels')">Reels</span>
     </div>
   </nav>
 </header>
@@ -721,11 +732,7 @@ body.in-dash{padding-bottom:0}
       <div class="eyebrow">KATALOG • FEED PRODUK</div>
       <h2>Feed Produk Artrisa.</h2>
       <p class="muted">Harga publik tampil sebagai XXXX. Like & Komen langsung tersimpan.</p>
-      <div class="name-input-wrap">
-        <span class="name-label">Nama kamu (untuk Like/Komen):</span>
-        <input class="name-input" id="nm" placeholder="Contoh: Budi" autocomplete="off">
-      </div>
-      <div class="pills" id="pl"></div>
+            <div class="pills" id="pl"></div>
       <div class="alert hidden" id="al"></div>
       <div class="feed" id="feed"><p class="muted">Memuat katalog…</p></div>
     </section>
@@ -1055,8 +1062,8 @@ body.in-dash{padding-bottom:0}
       <div class="d-user" id="d-user"></div>
       <nav id="d-nav"></nav>
       <div class="d-side-foot">
-        <button onclick="goPage('beranda')">🌐 Lihat Website</button>
-        <button onclick="logout()">⎋ Keluar</button>
+        <button onclick="goPage('beranda')">Lihat Website</button>
+        <button onclick="logout()">Keluar</button>
       </div>
     </aside>
     <section class="d-main">
@@ -1069,6 +1076,14 @@ body.in-dash{padding-bottom:0}
 
 </main><!-- /main -->
 
+<div class="d-modal hidden" id="ix-modal" onclick="if(event.target===this)ixClose()"><div class="d-modal-card" style="max-width:420px">
+  <h3 id="ix-title"></h3><p class="muted" id="ix-prod" style="margin:-8px 0 12px"></p>
+  <div class="form-group"><label>Nama</label><input class="form-input" id="ix-name" autocomplete="name"></div>
+  <div class="form-group"><label>Nomor HP / WhatsApp</label><input class="form-input" id="ix-wa" inputmode="tel" autocomplete="tel"></div>
+  <div class="form-group hidden" id="ix-cm-wrap"><label>Komentar</label><textarea class="form-input" id="ix-cm" rows="3"></textarea></div>
+  <div class="form-status" id="ix-st"></div>
+  <div class="d-form-act"><button class="btn btn-ghost-d" onclick="ixClose()">Batal</button><button class="btn btn-y" onclick="ixSend()">Kirim</button></div>
+</div></div>
 <div class="toast" id="toast"></div>
 <!-- FLOAT WA -->
 <a class="wa-btn" href="https://wa.me/6283851722321" target="_blank" aria-label="WhatsApp" id="wa-float">💬</a>
@@ -1286,13 +1301,33 @@ function renderSV(){
 }
 
 // ===== INTERAKSI =====
-async function interact(id,kind){
-  const nm=v("nm")||"Anonim";
-  try{
-    C[id]=C[id]||{};C[id][kind]=(C[id][kind]||0)+1;
-    render();
-    if(sb)await sb.from("interactions").insert([{target_type:"product",target_id:id,kind,customer_name:nm}]);
-  }catch(e){console.log("Interaksi:",e.message)}
+let IX=null;
+function interact(id,kind){
+  IX={id,kind};
+  let sv={};try{sv=JSON.parse(localStorage.getItem("artrisa_guest")||"{}")}catch(e){}
+  const p=P.find(x=>x.id==id);
+  $("ix-title").textContent=kind==="like"?"Suka produk ini":"Tulis komentar";
+  $("ix-prod").textContent=p?p.name:"";
+  $("ix-name").value=sv.n||"";$("ix-wa").value=sv.w||"";$("ix-cm").value="";$("ix-st").textContent="";
+  $("ix-cm-wrap").classList.toggle("hidden",kind!=="comment");
+  $("ix-modal").classList.remove("hidden");
+}
+function ixClose(){$("ix-modal").classList.add("hidden");IX=null}
+async function ixSend(){
+  if(!IX)return;
+  const n=v("ix-name"),w=v("ix-wa"),c=v("ix-cm"),st=$("ix-st");
+  if(!n){st.textContent="Isi nama dulu.";return}
+  if(!/^[0-9+\s-]{9,16}$/.test(w)){st.textContent="Nomor HP tidak valid.";return}
+  if(IX.kind==="comment"&&!c){st.textContent="Tulis komentarnya dulu.";return}
+  const{id,kind}=IX;
+  try{localStorage.setItem("artrisa_guest",JSON.stringify({n,w}))}catch(e){}
+  C[id]=C[id]||{};C[id][kind]=(C[id][kind]||0)+1;
+  render();if(CURRENT_PAGE==="layanan")renderFeed2();
+  ixClose();
+  if(sb){
+    const r=await sb.from("interactions").insert([{target_type:"product",target_id:id,kind,customer_name:n,whatsapp:w,comment_text:c}]);
+    if(r.error)await sb.from("interactions").insert([{target_type:"product",target_id:id,kind,customer_name:n+" ("+w+")",comment_text:c}]);
+  }
 }
 
 function waOrder(id){
@@ -1378,7 +1413,7 @@ function logout(){
 
 function updateUserUI(){
   const btn=$("login-nav-btn"),bnL=$("bn-login-label");
-  if(btn)btn.textContent=U?"📊 Dashboard":"🔒 Login";
+  if(btn)btn.textContent=U?"Dashboard":"Login";
   if(bnL)bnL.textContent=U?"Dashboard":"Login";
 }
 
@@ -1409,9 +1444,9 @@ async function daftarAff(){
 }
 
 // ===== DASHBOARD =====
-const TABS={ringkasan:["📊","Ringkasan"],pesanan:["📦","Pesanan"],produk:["🏷️","Produk"],keuangan:["💰","Keuangan"],afiliasi:["🤝","Afiliasi"],reels:["🎬","Reels"],akses:["🔐","Manajemen Akses"]};
+const TABS={ringkasan:["","Ringkasan"],kasir:["","Kasir (POS)"],pesanan:["","Pesanan"],produk:["","Produk"],keuangan:["","Keuangan"],afiliasi:["","Afiliasi"],reels:["","Reels"],interaksi:["","Interaksi"],akses:["","Manajemen Akses"]};
 const ROLES={direktur:"Direktur",wakil_direktur:"Wakil Direktur",manajer:"Manajer",admin:"Admin"};
-const ROLE_TABS={direktur:Object.keys(TABS),wakil_direktur:["ringkasan","pesanan","produk","keuangan","afiliasi","reels"],manajer:["ringkasan","pesanan","produk","reels"],admin:["ringkasan","pesanan","produk"]};
+const ROLE_TABS={direktur:Object.keys(TABS),wakil_direktur:["ringkasan","kasir","pesanan","produk","keuangan","afiliasi","reels","interaksi"],manajer:["ringkasan","kasir","pesanan","produk","reels","interaksi"],admin:["kasir","pesanan","produk"]};
 const ST=["Baru","Diproses","Selesai","Batal"];
 const rp=n=>"Rp "+fmt(n);
 const dt=s=>s?new Date(s).toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"}):"-";
@@ -1433,7 +1468,7 @@ async function rows(t,col="created_at",asc=false){
 async function run(p,ok){
   const{error}=await p;
   if(error){toast("Gagal: "+error.message);return false}
-  if(ok)toast("✅ "+ok);return true;
+  if(ok)toast(ok);return true;
 }
 async function delRow(t,id,label){
   if(!confirm("Hapus "+label+" ini? Tindakan tidak bisa dibatalkan."))return;
@@ -1448,16 +1483,16 @@ function renderDash(){
   const ps=permsOf(U);
   if(!ps.includes(DTAB))DTAB=ps[0];
   $("d-user").innerHTML=`<b>${esc(U.name||U.username)}</b><small>${esc(ROLES[U.role]||U.role)}</small>`;
-  $("d-nav").innerHTML=ps.map(k=>`<button class="${k===DTAB?"on":""}" onclick="dTab('${k}')"><span>${TABS[k][0]}</span>${TABS[k][1]}</button>`).join("");
+  $("d-nav").innerHTML=ps.map(k=>`<button class="${k===DTAB?"on":""}" onclick="dTab('${k}')">${TABS[k][1]}</button>`).join("");
   $("d-title").textContent=TABS[DTAB][1];
   $("d-body").innerHTML='<p class="muted">Memuat…</p>';
-  VIEWS[DTAB]().catch(e=>{$("d-body").innerHTML=`<div class="alert">⚠️ ${esc(e.message)}<br>Pastikan file <b>Supabase-UPDATE-V4.sql</b> sudah di-RUN di Supabase.</div>`});
+  VIEWS[DTAB]().catch(e=>{$("d-body").innerHTML=`<div class="alert">${esc(e.message)}<br>Pastikan file <b>Supabase-UPDATE-V4.sql</b> sudah di-RUN di Supabase.</div>`});
 }
 function dTab(k){DTAB=k;renderDash();window.scrollTo(0,0)}
 
 // ---- upload foto ke Supabase Storage (lewat proxy Vercel) ----
 const BUCKET="feed";
-function shrink(file,max){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const r=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*r);c.height=Math.round(im.height*r);c.getContext("2d").drawImage(im,0,0,c.width,c.height);c.toBlob(b=>b?res(b):rej(new Error("gagal kompres")),"image/jpeg",.85)};im.onerror=()=>rej(new Error("file bukan gambar (HEIC? ubah ke JPG)"));im.src=URL.createObjectURL(file)})}
+function shrink(file,max,qual){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const r=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*r);c.height=Math.round(im.height*r);c.getContext("2d").drawImage(im,0,0,c.width,c.height);c.toBlob(b=>b?res(b):rej(new Error("gagal kompres")),"image/jpeg",qual||.85)};im.onerror=()=>rej(new Error("file bukan gambar (HEIC? ubah ke JPG)"));im.src=URL.createObjectURL(file)})}
 async function upImg(inp,tid){
   const f=inp.files[0];if(!f)return;
   toast("Mengunggah…");
@@ -1468,8 +1503,15 @@ async function upImg(inp,tid){
     if(error)throw error;
     const url="/api/supabase/storage/v1/object/public/"+BUCKET+"/"+name;
     $(tid).value=url;const pv=$(tid.replace("f_","pv_"));if(pv){pv.src=url;pv.hidden=false}
-    toast("✅ Foto terunggah — klik Simpan");
-  }catch(e){toast("Gagal unggah: "+e.message)}
+    toast("Foto terunggah, klik Simpan");
+  }catch(e){
+    try{
+      const b2=await shrink(f,700,.62);
+      const dataUrl=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(b2)});
+      $(tid).value=dataUrl;const pv=$(tid.replace("f_","pv_"));if(pv){pv.src=dataUrl;pv.hidden=false}
+      toast("Storage gagal ("+e.message+"). Foto disimpan langsung di database, klik Simpan");
+    }catch(e2){toast("Gagal unggah: "+e.message)}
+  }
 }
 
 // ---- generic modal form ----
@@ -1494,29 +1536,16 @@ async function submitForm(){
   if(await FORM.save(o)!==false)closeForm();
 }
 
-// ---- RINGKASAN ----
-VIEWS.ringkasan=async()=>{
-  const ps=permsOf(U),fin=ps.includes("keuangan");
-  const[o,f,pr,af]=await Promise.all([rows("orders"),fin?rows("finance","date"):[],rows("products","sort_order",true),ps.includes("afiliasi")?rows("affiliates"):[]]);
-  const nilai=o.filter(x=>x.status!=="Batal").reduce((a,x)=>a+(+x.total||0),0);
-  const inc=f.filter(x=>x.kind==="pemasukan").reduce((a,x)=>a+(+x.amount||0),0);
-  const out=f.filter(x=>x.kind==="pengeluaran").reduce((a,x)=>a+(+x.amount||0),0);
-  const S=[["📦","Total pesanan",o.length],["🆕","Pesanan baru",o.filter(x=>x.status==="Baru").length],["⚙️","Sedang diproses",o.filter(x=>x.status==="Diproses").length],["💵","Nilai pesanan",rp(nilai)],["🏷️","Produk aktif",pr.filter(x=>x.active).length]];
-  if(fin)S.push(["📈","Saldo kas",rp(inc-out)]);
-  if(ps.includes("afiliasi"))S.push(["🤝","Mitra afiliasi",af.length]);
-  $("d-body").innerHTML=`<div class="d-stats">${S.map(s=>`<div class="d-stat"><i>${s[0]}</i><small>${s[1]}</small><b>${s[2]}</b></div>`).join("")}</div><h3 class="d-h">Pesanan terbaru</h3>${ordersTable(o.slice(0,6),false)}`;
-};
-
 // ---- PESANAN ----
 function ordersTable(l,ed){
   if(!l.length)return'<p class="muted">Belum ada pesanan.</p>';
   return`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Pelanggan</th><th>Produk</th><th>Total</th><th>Status</th>${ed?"<th></th>":""}</tr></thead><tbody>${l.map(o=>`<tr>
   <td>${dt(o.created_at)}</td>
-  <td><b>${esc(o.customer_name)}</b><br><a class="lnk" target="_blank" href="https://wa.me/${esc(waNum(o.whatsapp))}">💬 ${esc(o.whatsapp)}</a></td>
+  <td><b>${esc(o.customer_name)}</b><br><a class="lnk" target="_blank" href="https://wa.me/${esc(waNum(o.whatsapp))}">${esc(o.whatsapp)}</a></td>
   <td>${esc(o.product)}<br><small>${esc([o.size_text,o.unit_text,o.detail].filter(Boolean).join(" · "))}</small></td>
   <td>${rp(o.total)}</td>
   <td>${ed?`<select class="d-sel st-${esc(o.status)}" onchange="setStatus(${o.id},this.value)">${ST.map(s=>`<option ${s===o.status?"selected":""}>${s}</option>`).join("")}</select>`:`<span class="badge st-${esc(o.status)}">${esc(o.status)}</span>`}</td>
-  ${ed?`<td><button class="d-ic" onclick="delRow('orders',${o.id},'pesanan')">🗑</button></td>`:""}</tr>`).join("")}</tbody></table></div>`;
+  ${ed?`<td><button class="d-ic" onclick="delRow('orders',${o.id},'pesanan')">Hapus</button></td>`:""}</tr>`).join("")}</tbody></table></div>`;
 }
 async function setStatus(id,s){if(await run(sb.from("orders").update({status:s}).eq("id",id),"Status diperbarui"))renderDash()}
 VIEWS.pesanan=async()=>{
@@ -1542,7 +1571,7 @@ VIEWS.produk=async()=>{
     return`<tr><td>${p.image_url?`<img class="d-thumb" src="${esc(p.image_url.replace(SB_URL,"/api/supabase"))}" alt="">`:""}<b>${esc(p.name)}</b><br><small>${esc(p.category)} ${esc(p.unit)}</small></td><td>${rp(p.price)}</td><td>${rp(p.modal_price)}</td><td>${m}%</td>
     <td><input type="checkbox" ${p.show_in_front?"checked":""} onchange="toggle('products',${p.id},'show_in_front',this.checked)"></td>
     <td><input type="checkbox" ${p.active?"checked":""} onchange="toggle('products',${p.id},'active',this.checked)"></td>
-    <td><button class="d-ic" onclick="editProd(${p.id})">✏️</button><button class="d-ic" onclick="delRow('products',${p.id},'produk')">🗑</button></td></tr>`}).join("")}</tbody></table></div>`;
+    <td><button class="d-ic" onclick="editProd(${p.id})">Edit</button><button class="d-ic" onclick="delRow('products',${p.id},'produk')">Hapus</button></td></tr>`}).join("")}</tbody></table></div>`;
 };
 
 // ---- KEUANGAN ----
@@ -1555,9 +1584,9 @@ VIEWS.keuangan=async()=>{
   const f=await rows("finance","date");
   const inc=f.filter(x=>x.kind==="pemasukan").reduce((a,x)=>a+(+x.amount||0),0);
   const out=f.filter(x=>x.kind==="pengeluaran").reduce((a,x)=>a+(+x.amount||0),0);
-  $("d-body").innerHTML=`<div class="d-stats"><div class="d-stat"><i>⬇️</i><small>Pemasukan</small><b>${rp(inc)}</b></div><div class="d-stat"><i>⬆️</i><small>Pengeluaran</small><b>${rp(out)}</b></div><div class="d-stat"><i>📈</i><small>Saldo kas</small><b>${rp(inc-out)}</b></div></div>
+  $("d-body").innerHTML=`<div class="d-stats"><div class="d-stat"><small>Pemasukan</small><b>${rp(inc)}</b></div><div class="d-stat"><small>Pengeluaran</small><b>${rp(out)}</b></div><div class="d-stat"><small>Saldo kas</small><b>${rp(inc-out)}</b></div></div>
   <div class="d-bar"><span class="muted">${f.length} transaksi</span><button class="btn btn-y" onclick="addFin()">+ Catat transaksi</button></div>
-  ${f.length?`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Keterangan</th><th>Jumlah</th><th></th></tr></thead><tbody>${f.map(x=>`<tr><td>${dt(x.date)}</td><td><span class="badge ${x.kind==="pemasukan"?"in":"out"}">${esc(x.kind)}</span></td><td>${esc(x.description)}</td><td>${rp(x.amount)}</td><td><button class="d-ic" onclick="delRow('finance',${x.id},'transaksi')">🗑</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada transaksi.</p>'}`;
+  ${f.length?`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Keterangan</th><th>Jumlah</th><th></th></tr></thead><tbody>${f.map(x=>`<tr><td>${dt(x.date)}</td><td><span class="badge ${x.kind==="pemasukan"?"in":"out"}">${esc(x.kind)}</span></td><td>${esc(x.description)}</td><td>${rp(x.amount)}</td><td><button class="d-ic" onclick="delRow('finance',${x.id},'transaksi')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada transaksi.</p>'}`;
 };
 
 // ---- AFILIASI ----
@@ -1565,7 +1594,7 @@ const AF=[{k:"name",l:"Nama",wide:1},{k:"whatsapp",l:"WhatsApp"},{k:"referral_co
 const editAff=id=>openForm("Edit afiliasi",AF,DA.find(a=>a.id===id),async o=>{const ok=await run(sb.from("affiliates").update(o).eq("id",id),"Tersimpan");if(ok)renderDash();return ok});
 VIEWS.afiliasi=async()=>{
   DA=await rows("affiliates");
-  $("d-body").innerHTML=DA.length?`<div class="d-table"><table><thead><tr><th>Mitra</th><th>Kode</th><th>Klik</th><th>Komisi</th><th></th></tr></thead><tbody>${DA.map(a=>`<tr><td><b>${esc(a.name)}</b><br><a class="lnk" target="_blank" href="https://wa.me/${esc(waNum(a.whatsapp))}">💬 ${esc(a.whatsapp)}</a></td><td><b>${esc(a.referral_code)}</b></td><td>${a.total_clicks||0}</td><td>${rp(a.total_commission)}</td><td><button class="d-ic" onclick="editAff(${a.id})">✏️</button><button class="d-ic" onclick="delRow('affiliates',${a.id},'mitra')">🗑</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada mitra afiliasi.</p>';
+  $("d-body").innerHTML=DA.length?`<div class="d-table"><table><thead><tr><th>Mitra</th><th>Kode</th><th>Klik</th><th>Komisi</th><th></th></tr></thead><tbody>${DA.map(a=>`<tr><td><b>${esc(a.name)}</b><br><a class="lnk" target="_blank" href="https://wa.me/${esc(waNum(a.whatsapp))}">${esc(a.whatsapp)}</a></td><td><b>${esc(a.referral_code)}</b></td><td>${a.total_clicks||0}</td><td>${rp(a.total_commission)}</td><td><button class="d-ic" onclick="editAff(${a.id})">Edit</button><button class="d-ic" onclick="delRow('affiliates',${a.id},'mitra')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada mitra afiliasi.</p>';
 };
 
 // ---- REELS ----
@@ -1579,7 +1608,7 @@ const addReel=()=>openForm("Tambah reels",RF,{},saveReel(null));
 const editReel=id=>openForm("Edit reels",RF,DR.find(r=>r.id===id),saveReel(id));
 VIEWS.reels=async()=>{
   DR=await rows("reels");
-  $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${DR.length} video</span><button class="btn btn-y" onclick="addReel()">+ Tambah reels</button></div>${DR.length?`<div class="d-table"><table><thead><tr><th>Judul</th><th>Video</th><th>Tampil</th><th></th></tr></thead><tbody>${DR.map(r=>`<tr><td><b>${esc(r.title)}</b><br><small>${esc(r.description||"")}</small></td><td><a class="lnk" target="_blank" href="${esc(r.video_url)}">▶ Buka</a></td><td><input type="checkbox" ${r.active?"checked":""} onchange="toggle('reels',${r.id},'active',this.checked);reelsLoaded=false"></td><td><button class="d-ic" onclick="editReel(${r.id})">✏️</button><button class="d-ic" onclick="delRow('reels',${r.id},'reels');reelsLoaded=false">🗑</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada reels.</p>'}`;
+  $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${DR.length} video</span><button class="btn btn-y" onclick="addReel()">+ Tambah reels</button></div>${DR.length?`<div class="d-table"><table><thead><tr><th>Judul</th><th>Video</th><th>Tampil</th><th></th></tr></thead><tbody>${DR.map(r=>`<tr><td><b>${esc(r.title)}</b><br><small>${esc(r.description||"")}</small></td><td><a class="lnk" target="_blank" href="${esc(r.video_url)}">Buka</a></td><td><input type="checkbox" ${r.active?"checked":""} onchange="toggle('reels',${r.id},'active',this.checked);reelsLoaded=false"></td><td><button class="d-ic" onclick="editReel(${r.id})">Edit</button><button class="d-ic" onclick="delRow('reels',${r.id},'reels');reelsLoaded=false">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada reels.</p>'}`;
 };
 
 // ---- MANAJEMEN AKSES ----
@@ -1625,9 +1654,256 @@ VIEWS.akses=async()=>{
   <td><div class="chips">${permsOf(u).map(k=>`<span>${TABS[k][1]}</span>`).join("")}</div></td>
   <td>${dt(u.last_login)}</td>
   <td><input type="checkbox" ${u.active?"checked":""} onchange="toggleUser(${u.id},this.checked)"></td>
-  <td><button class="d-ic" title="Atur akses" onclick="editUser(${u.id})">✏️</button><button class="d-ic" title="Reset password" onclick="resetPw(${u.id})">🔑</button><button class="d-ic" onclick="delUser(${u.id})">🗑</button></td></tr>`).join("")}</tbody></table></div>`;
+  <td><button class="d-ic" title="Atur akses" onclick="editUser(${u.id})">Edit</button><button class="d-ic" title="Reset password" onclick="resetPw(${u.id})">Reset</button><button class="d-ic" onclick="delUser(${u.id})">Hapus</button></td></tr>`).join("")}</tbody></table></div>`;
 };
 
+// ===== UTIL ANGKA & TANGGAL =====
+const dec=x=>{const n=parseFloat(String(x??"").replace(",","."));return isFinite(n)?n:0};
+const money=x=>+String(x??"").replace(/\D/g,"")||0;
+const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const asDate=s=>new Date(String(s).length===10?s+"T00:00:00":s);
+function weekStart(d){const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
+const shortRp=n=>n>=1e9?(n/1e9).toFixed(1)+" M":n>=1e6?(n/1e6).toFixed(1)+" jt":n>=1e3?Math.round(n/1e3)+" rb":String(Math.round(n));
+
+// ===== GRAFIK RINGKASAN =====
+let CP="bulan";
+function buckets(per){
+  const now=new Date(),b=[];
+  if(per==="minggu"){const s=weekStart(now);for(let i=7;i>=0;i--){const d=new Date(s);d.setDate(d.getDate()-7*i);b.push({k:ymd(d),l:d.toLocaleDateString("id-ID",{day:"numeric",month:"short"})})}}
+  else if(per==="bulan"){for(let i=11;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);b.push({k:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"),l:d.toLocaleDateString("id-ID",{month:"short",year:"2-digit"})})}}
+  else{for(let i=4;i>=0;i--){const y=now.getFullYear()-i;b.push({k:""+y,l:""+y})}}
+  return b;
+}
+function keyOf(per,s){
+  if(!s)return"";const d=asDate(s);
+  return per==="minggu"?ymd(weekStart(d)):per==="bulan"?d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"):""+d.getFullYear();
+}
+function sumBy(per,bk,list,dateF,amtF){
+  const m={};bk.forEach(b=>m[b.k]=0);
+  list.forEach(r=>{const k=keyOf(per,r[dateF]);if(k in m)m[k]+=(+r[amtF]||0)});
+  return bk.map(b=>m[b.k]);
+}
+function chartSvg(bk,A,B){
+  const W=760,H=270,pl=48,pb=30,pt=14,pr=10,iw=W-pl-pr,ih=H-pt-pb;
+  const mx=Math.max(1,...A,...(B||[0]));
+  const e=Math.pow(10,Math.floor(Math.log10(mx))),f=mx/e,nice=(f<=1?1:f<=2?2:f<=5?5:10)*e;
+  const n=bk.length,gw=iw/n,bw=Math.min(28,gw/(B?2.5:1.6));
+  let g="";
+  for(let i=0;i<=4;i++){const y=pt+ih-ih*i/4;g+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" stroke="rgba(11,61,145,.12)"/><text x="${pl-6}" y="${y+3}" text-anchor="end" font-size="10" fill="#6b7280">${shortRp(nice*i/4)}</text>`}
+  bk.forEach((b,i)=>{
+    const cx=pl+gw*i+gw/2,h1=ih*A[i]/nice,x1=B?cx-bw-1:cx-bw/2;
+    g+=`<rect x="${x1}" y="${pt+ih-h1}" width="${bw}" height="${h1}" rx="4" fill="#0B3D91"><title>${b.l} — Penjualan ${rp(A[i])}</title></rect>`;
+    if(B){const h2=ih*B[i]/nice;g+=`<rect x="${cx+1}" y="${pt+ih-h2}" width="${bw}" height="${h2}" rx="4" fill="#FFC800"><title>${b.l} — Pengeluaran ${rp(B[i])}</title></rect>`}
+    g+=`<text x="${cx}" y="${H-10}" text-anchor="middle" font-size="10" fill="#6b7280">${b.l}</text>`;
+  });
+  return`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Grafik penjualan">${g}</svg>`;
+}
+
+VIEWS.ringkasan=async()=>{
+  const ps=permsOf(U),fin=ps.includes("keuangan"),pos=ps.includes("kasir");
+  const[o,f,sl,pr]=await Promise.all([rows("orders"),fin?rows("finance","date"):[],pos?rows("sales"):[],rows("products","sort_order",true)]);
+  const bk=buckets(CP);
+  const live=o.filter(x=>x.status!=="Batal");
+  const A1=sumBy(CP,bk,live,"created_at","total"),A2=sumBy(CP,bk,sl,"created_at","total");
+  const A=A1.map((x,i)=>x+A2[i]);
+  const B=fin?sumBy(CP,bk,f.filter(x=>x.kind==="pengeluaran"),"date","amount"):null;
+  const tot=a=>a.reduce((x,y)=>x+y,0);
+  const inc=f.filter(x=>x.kind==="pemasukan").reduce((a,x)=>a+(+x.amount||0),0);
+  const out=f.filter(x=>x.kind==="pengeluaran").reduce((a,x)=>a+(+x.amount||0),0);
+  const S=[["Total pesanan web",o.length],["Pesanan baru",o.filter(x=>x.status==="Baru").length],["Produk aktif",pr.filter(x=>x.active).length]];
+  if(pos)S.push(["Transaksi kasir",sl.length]);
+  if(fin)S.push(["Saldo kas",rp(inc-out)]);
+  const per={minggu:"8 minggu terakhir",bulan:"12 bulan terakhir",tahun:"5 tahun terakhir"}[CP];
+  $("d-body").innerHTML=`<div class="d-stats">${S.map(s=>`<div class="d-stat"><small>${s[0]}</small><b>${s[1]}</b></div>`).join("")}</div>
+  <div class="pos-card" style="margin-bottom:20px">
+    <div class="d-bar"><div><h3 class="d-h" style="margin:0">Grafik penjualan</h3><span class="muted">${per}</span></div>
+    <div class="pills" style="margin:0">${[["minggu","Per minggu"],["bulan","Per bulan"],["tahun","Per tahun"]].map(p=>`<button class="pill-btn ${p[0]===CP?"on":""}" onclick="CP='${p[0]}';renderDash()">${p[1]}</button>`).join("")}</div></div>
+    ${chartSvg(bk,A,B)}
+    <div class="legend"><span><i style="background:#0B3D91"></i>Penjualan (pesanan web + kasir): <b>${rp(tot(A))}</b></span>${B?`<span><i style="background:#FFC800"></i>Pengeluaran: <b>${rp(tot(B))}</b></span>`:""}</div>
+  </div>
+  <h3 class="d-h">Pesanan web terbaru</h3>${ordersTable(o.slice(0,6),false)}`;
+};
+
+// ===== INTERAKSI (like & komentar pengunjung) =====
+VIEWS.interaksi=async()=>{
+  const[l,pr]=await Promise.all([rows("interactions"),rows("products","sort_order",true)]);
+  const nm=id=>(pr.find(p=>p.id==id)||{}).name||"-";
+  $("d-body").innerHTML=l.length?`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Pengunjung</th><th>Produk</th><th>Jenis</th><th>Komentar</th><th></th></tr></thead><tbody>${l.map(x=>`<tr><td>${dt(x.created_at)}</td><td><b>${esc(x.customer_name)}</b>${x.whatsapp?`<br><a class="lnk" target="_blank" href="https://wa.me/${esc(waNum(x.whatsapp))}">${esc(x.whatsapp)}</a>`:""}</td><td>${esc(nm(x.target_id))}</td><td><span class="badge">${esc(x.kind)}</span></td><td>${esc(x.comment_text||"")}</td><td><button class="d-ic" onclick="delRow('interactions',${x.id},'interaksi')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada interaksi.</p>';
+};
+
+// ===== KASIR / POS =====
+let CART=[],DS=[],PSUB="baru";
+const posNew=()=>({pid:"",name:"",mode:"m2",p:"",l:"",qty:"1",price:""});
+const posReset=()=>({disc:"",dtype:"Rp",paid:"",method:"Tunai",cust:"",wa:"",note:""});
+let POSD=posReset();
+function lineCalc(L){
+  const area=L.mode==="m2"?dec(L.p)*dec(L.l):0,q=dec(L.qty),pr=money(L.price);
+  return{area,q,pr,total:Math.round((L.mode==="m2"?area*q:q)*pr)};
+}
+function posTotals(){
+  const sub=CART.reduce((a,L)=>a+lineCalc(L).total,0);
+  let disc=POSD.dtype==="%"?Math.round(sub*Math.min(dec(POSD.disc),100)/100):money(POSD.disc);
+  disc=Math.min(disc,sub);
+  const total=sub-disc,paid=money(POSD.paid);
+  return{sub,disc,total,paid,sisa:Math.max(total-paid,0),kemb:Math.max(paid-total,0)};
+}
+function posCalc(){
+  CART.forEach((L,i)=>{const c=lineCalc(L);const a=$("ar_"+i),s=$("st_"+i);if(a)a.textContent=c.area.toLocaleString("id-ID",{maximumFractionDigits:3});if(s)s.textContent=rp(c.total)});
+  const t=posTotals(),set=(id,v)=>{const e=$(id);if(e)e.textContent=v};
+  set("p-sub",rp(t.sub));set("p-disc","- "+rp(t.disc));set("p-total",rp(t.total));
+  set("p-sisa",t.paid?(t.kemb?"Kembalian "+rp(t.kemb):t.sisa?"Sisa "+rp(t.sisa):"Lunas"):"");
+}
+function fld(l,h,cls,span){return`<div class="${cls||""}" style="grid-column:span ${span||1}"><label>${l}</label>${h}</div>`}
+function posLine(L,i){
+  const opts=`<option value="">Custom / ketik sendiri</option>`+DP.filter(p=>p.active).map(p=>`<option value="${p.id}" ${L.pid==p.id?"selected":""}>${esc(p.name)}</option>`).join("");
+  const m2=L.mode==="m2";
+  return`<div class="pos-line">
+  ${fld("Produk (opsional)",`<select class="form-input" onchange="posPick(${i},this.value)">${opts}</select>`,"",3)}
+  ${fld("Nama item",`<input class="form-input" value="${esc(L.name)}" placeholder="mis. Spanduk 3x1" oninput="posSet(${i},'name',this.value)">`,"",3)}
+  ${fld("Hitung",`<select class="form-input" onchange="posMode(${i},this.value)"><option value="m2" ${m2?"selected":""}>Per m² (P × L)</option><option value="unit" ${m2?"":"selected"}>Satuan</option></select>`,"",2)}
+  ${m2?fld("Panjang (m)",`<input class="form-input" inputmode="decimal" value="${esc(L.p)}" placeholder="0" oninput="posSet(${i},'p',this.value)">`,"half")+fld("Lebar (m)",`<input class="form-input" inputmode="decimal" value="${esc(L.l)}" placeholder="0" oninput="posSet(${i},'l',this.value)">`,"half"):""}
+  ${fld("Jumlah",`<input class="form-input" inputmode="decimal" value="${esc(L.qty)}" oninput="posSet(${i},'qty',this.value)">`,"half",2)}
+  ${fld(m2?"Harga per m² (Rp)":"Harga satuan (Rp)",`<input class="form-input" inputmode="numeric" value="${esc(L.price)}" placeholder="bebas diubah" oninput="posSet(${i},'price',this.value)">`,"half",m2?3:2)}
+  ${m2?`<div style="grid-column:span 3" class="pos-info">Luas: <b id="ar_${i}">0</b> m² per lembar</div>`:""}
+  <div style="grid-column:span 6" class="pos-sub">Subtotal <b id="st_${i}">Rp 0</b> <button class="d-ic" onclick="posDel(${i})">Hapus</button></div></div>`;
+}
+function posRows(){$("pos-lines").innerHTML=CART.map(posLine).join("");posCalc()}
+function posSet(i,k,v){CART[i][k]=v;posCalc()}
+function posMode(i,m){CART[i].mode=m;posRows()}
+function posPick(i,pid){
+  const L=CART[i],p=DP.find(x=>x.id==pid);
+  L.pid=pid;
+  if(p){L.name=p.name;L.price=String(p.price||"");L.mode=String(p.unit||"").trim()==="/m"?"m2":"unit"}
+  posRows();
+}
+function posDel(i){CART.splice(i,1);if(!CART.length)CART.push(posNew());posRows()}
+function posAdd(){CART.push(posNew());posRows()}
+function posD(k,v){POSD[k]=v;posCalc()}
+function posPayFull(){POSD.paid=String(posTotals().total);$("pos-paid").value=POSD.paid;posCalc()}
+
+async function posView(){
+  DP=await rows("products","sort_order",true);
+  if(!CART.length)CART=[posNew()];
+  $("pos-body").innerHTML=`<div class="pos">
+  <div class="pos-card"><h3 class="d-h">Item pesanan</h3>
+    <p class="muted" style="margin-bottom:6px">Pilih produk untuk mengisi harga otomatis, lalu ubah bebas sesuai kebutuhan. Luas = panjang × lebar, subtotal = luas × jumlah × harga per m².</p>
+    <div id="pos-lines"></div>
+    <button class="btn btn-ghost-d" style="margin-top:12px" onclick="posAdd()">+ Tambah item</button></div>
+  <div class="pos-card"><h3 class="d-h">Pembayaran</h3>
+    <div class="form-group"><label>Nama pelanggan</label><input class="form-input" value="${esc(POSD.cust)}" placeholder="Umum" oninput="posD('cust',this.value)"></div>
+    <div class="form-group"><label>WhatsApp (opsional)</label><input class="form-input" inputmode="tel" value="${esc(POSD.wa)}" oninput="posD('wa',this.value)"></div>
+    <div class="d-form" style="grid-template-columns:1fr 1fr;gap:0 10px">
+      <div class="form-group"><label>Diskon</label><input class="form-input" inputmode="decimal" value="${esc(POSD.disc)}" oninput="posD('disc',this.value)"></div>
+      <div class="form-group"><label>Jenis diskon</label><select class="form-input" onchange="posD('dtype',this.value)"><option ${POSD.dtype==="Rp"?"selected":""}>Rp</option><option ${POSD.dtype==="%"?"selected":""}>%</option></select></div></div>
+    <div class="pos-sum"><div><span>Subtotal</span><b id="p-sub">Rp 0</b></div><div><span>Diskon</span><b id="p-disc">- Rp 0</b></div><div class="big"><span>TOTAL</span><b id="p-total">Rp 0</b></div></div>
+    <div class="form-group"><label>Metode bayar</label><select class="form-input" onchange="posD('method',this.value)">${["Tunai","Transfer","QRIS"].map(m=>`<option ${POSD.method===m?"selected":""}>${m}</option>`).join("")}</select></div>
+    <div class="form-group"><label>Dibayar (Rp) — kosongkan jika belum bayar, isi sebagian untuk DP</label><div style="display:flex;gap:6px"><input id="pos-paid" class="form-input" inputmode="numeric" value="${esc(POSD.paid)}" oninput="posD('paid',this.value)"><button class="btn btn-ghost-d" onclick="posPayFull()">Pas</button></div><div class="form-status" id="p-sisa"></div></div>
+    <div class="form-group"><label>Catatan</label><input class="form-input" value="${esc(POSD.note)}" oninput="posD('note',this.value)"></div>
+    <button class="btn-submit" onclick="posSave()">Simpan &amp; buat invoice</button></div></div>`;
+  posRows();
+}
+async function posSave(){
+  const t=posTotals();
+  const items=CART.map(L=>{const c=lineCalc(L);return{name:L.name||"Item",mode:L.mode,p:dec(L.p),l:dec(L.l),area:+c.area.toFixed(3),qty:c.q,price:c.pr,total:c.total}}).filter(x=>x.total>0);
+  if(!items.length){toast("Isi minimal satu item dengan harga");return}
+  const st=t.paid>=t.total?"Lunas":t.paid>0?"DP":"Belum Bayar";
+  const inv="INV-"+ymd(new Date()).replace(/-/g,"").slice(2)+"-"+Math.floor(1000+Math.random()*9000);
+  const row={invoice_no:inv,customer_name:POSD.cust||"Umum",whatsapp:POSD.wa,items,subtotal:t.sub,discount:t.disc,total:t.total,paid:t.paid,method:POSD.method,status:st,note:POSD.note,cashier:U.username,cashier_name:U.name};
+  const{data,error}=await sb.from("sales").insert([row]).select().single();
+  if(error){toast("Gagal simpan: "+error.message);return}
+  const cash=Math.min(t.paid,t.total);
+  if(cash>0)await sb.from("finance").insert([{date:ymd(new Date()),kind:"pemasukan",description:"Penjualan "+inv+" - "+row.customer_name,amount:cash}]);
+  DS.unshift(data);CART=[posNew()];POSD=posReset();
+  $("d-modal-card").innerHTML=`<h3>Transaksi tersimpan</h3><p class="muted" style="margin-bottom:14px"><b>${esc(inv)}</b> · ${rp(t.total)} · ${st}</p>
+  <div class="d-form-act" style="justify-content:flex-start;flex-wrap:wrap"><button class="btn btn-y" onclick="salePdf(${data.id},'a4')">Unduh invoice PDF</button><button class="btn btn-ghost-d" onclick="salePdf(${data.id},'struk')">Struk 80mm</button><button class="btn btn-ghost-d" onclick="closeForm();renderDash()">Transaksi baru</button></div>`;
+  FORM=null;$("d-modal").classList.remove("hidden");
+}
+async function riwayatView(){
+  let q=sb.from("sales").select("*").order("created_at",{ascending:false}).limit(300);
+  if(U.role==="admin")q=q.eq("cashier",U.username);
+  const{data,error}=await q;if(error)throw error;
+  DS=data||[];
+  const today=ymd(new Date()),mon=today.slice(0,7);
+  const sm=f=>DS.filter(f).reduce((a,x)=>a+(+x.total||0),0);
+  const owe=DS.reduce((a,x)=>a+Math.max((+x.total||0)-(+x.paid||0),0),0);
+  $("pos-body").innerHTML=`<div class="d-stats"><div class="d-stat"><small>Penjualan hari ini</small><b>${rp(sm(x=>ymd(new Date(x.created_at))===today))}</b></div><div class="d-stat"><small>Penjualan bulan ini</small><b>${rp(sm(x=>ymd(new Date(x.created_at)).slice(0,7)===mon))}</b></div><div class="d-stat"><small>Piutang (belum lunas)</small><b>${rp(owe)}</b></div></div>
+  ${DS.length?`<div class="d-table"><table><thead><tr><th>Invoice</th><th>Pelanggan</th><th>Total</th><th>Status</th><th>Kasir</th><th></th></tr></thead><tbody>${DS.map(s=>`<tr><td><b>${esc(s.invoice_no)}</b><br><small>${dt(s.created_at)}</small></td><td>${esc(s.customer_name)}</td><td>${rp(s.total)}<br><small>${esc(s.method)}</small></td><td><span class="badge ${s.status==="Lunas"?"in":"out"}">${esc(s.status)}</span>${s.total>s.paid?`<br><small>Sisa ${rp(s.total-s.paid)}</small>`:""}</td><td>${esc(s.cashier_name||s.cashier||"")}</td>
+  <td><button class="d-ic" onclick="salePdf(${s.id},'a4')">Invoice</button><button class="d-ic" onclick="salePdf(${s.id},'struk')">Struk</button>${s.total>s.paid?`<button class="d-ic" onclick="payMore(${s.id})">Lunasi</button>`:""}${U.role!=="admin"?`<button class="d-ic" onclick="delRow('sales',${s.id},'transaksi')">Hapus</button>`:""}</td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada transaksi.</p>'}`;
+}
+function payMore(id){
+  const s=DS.find(x=>x.id===id);
+  openForm("Pelunasan "+s.invoice_no,[{k:"amt",l:"Jumlah dibayar (Rp) — sisa "+rp(s.total-s.paid),type:"number"}],{amt:s.total-s.paid},async o=>{
+    if(o.amt<=0){toast("Isi jumlah pembayaran");return false}
+    const paid=s.paid+o.amt,st=paid>=s.total?"Lunas":"DP";
+    const ok=await run(sb.from("sales").update({paid,status:st}).eq("id",id),"Pembayaran dicatat");
+    if(ok){await sb.from("finance").insert([{date:ymd(new Date()),kind:"pemasukan",description:"Pelunasan "+s.invoice_no,amount:Math.min(o.amt,s.total-s.paid)}]);renderDash()}
+    return ok;
+  });
+}
+VIEWS.kasir=async()=>{
+  $("d-body").innerHTML=`<div class="pills">${[["baru","Transaksi baru"],["riwayat","Riwayat penjualan"]].map(p=>`<button class="pill-btn ${p[0]===PSUB?"on":""}" onclick="PSUB='${p[0]}';renderDash()">${p[1]}</button>`).join("")}</div><div id="pos-body"></div>`;
+  if(PSUB==="baru")await posView();else await riwayatView();
+};
+
+// ===== PDF INVOICE / STRUK =====
+function loadPdf(){return window.jspdf?Promise.resolve():new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";s.onload=res;s.onerror=()=>rej(new Error("Pustaka PDF gagal dimuat, cek koneksi internet"));document.head.appendChild(s)})}
+function logoData(){return new Promise(r=>{const i=new Image();i.onload=()=>{const c=document.createElement("canvas");c.width=i.width;c.height=i.height;c.getContext("2d").drawImage(i,0,0);r({d:c.toDataURL("image/png"),w:i.width,h:i.height})};i.onerror=()=>r(null);i.src="logo-artrisa.png"})}
+const A2=n=>(+n).toLocaleString("id-ID",{maximumFractionDigits:2});
+const itemDesc=it=>it.mode==="m2"?`${A2(it.p)} x ${A2(it.l)} m = ${A2(it.area)} m² x ${A2(it.qty)}`:`${A2(it.qty)} x`;
+async function salePdf(id,mode){
+  const s=DS.find(x=>x.id===id);if(!s)return;
+  try{await loadPdf()}catch(e){toast(e.message);return}
+  const{jsPDF}=window.jspdf,R=n=>"Rp "+fmt(n),items=s.items||[];
+  const sisa=Math.max(s.total-s.paid,0),kemb=Math.max(s.paid-s.total,0);
+  const when=new Date(s.created_at).toLocaleString("id-ID",{dateStyle:"long",timeStyle:"short"});
+  if(mode==="struk"){
+    const d=new jsPDF({unit:"mm",format:[80,Math.max(130,100+items.length*16)]});let y=8;
+    const C=(t,sz,b)=>{d.setFont("helvetica",b?"bold":"normal");d.setFontSize(sz);d.text(t,40,y,{align:"center"});y+=sz*.45};
+    const LR=(a,b,bold)=>{d.setFont("helvetica",bold?"bold":"normal");d.setFontSize(8);d.text(a,6,y);d.text(b,74,y,{align:"right"});y+=4};
+    const DL=()=>{d.setLineDashPattern([1,1],0);d.line(5,y,75,y);d.setLineDashPattern([],0);y+=4};
+    C("ARTRISA PRODUCTION STUDIO",10,1);y+=1;C("Stabat, Langkat, Sumatera Utara",7);C("WA 0838-5172-2321",7);y+=2;DL();
+    LR("No",s.invoice_no);LR("Tgl",new Date(s.created_at).toLocaleDateString("id-ID"));LR("Kasir",s.cashier_name||s.cashier||"-");LR("Pelanggan",s.customer_name);DL();
+    items.forEach(it=>{
+      d.setFont("helvetica","bold");d.setFontSize(8);const nm=d.splitTextToSize(it.name,68);d.text(nm,6,y);y+=nm.length*3.6;
+      d.setFont("helvetica","normal");d.setFontSize(7);d.text(`${itemDesc(it)} @ ${fmt(it.price)}`,6,y);d.text(R(it.total),74,y,{align:"right"});y+=5;
+    });
+    DL();LR("Subtotal",R(s.subtotal));if(s.discount)LR("Diskon","- "+R(s.discount));LR("TOTAL",R(s.total),1);LR("Bayar ("+s.method+")",R(s.paid));
+    if(sisa)LR("Sisa",R(sisa),1);if(kemb)LR("Kembali",R(kemb));LR("Status",s.status);y+=2;DL();
+    C("Terima kasih",8,1);C("Visual Kuat, Bisnis Melesat.",7);
+    d.save(s.invoice_no+"-struk.pdf");return;
+  }
+  const d=new jsPDF({unit:"mm",format:"a4"}),W=210;
+  d.setFillColor(11,61,145);d.rect(0,0,W,34,"F");
+  const lg=await logoData();let tx=14;
+  if(lg){const h=18,w=h*lg.w/lg.h;d.addImage(lg.d,"PNG",14,8,w,h);tx=14+w+5}
+  d.setTextColor(255,255,0);d.setFont("helvetica","bold");d.setFontSize(18);d.text("ARTRISA",tx,17);
+  d.setTextColor(255,255,255);d.setFontSize(8);d.setFont("helvetica","normal");d.text("Production Studio · Visual Kuat, Bisnis Melesat",tx,22);
+  d.setFont("helvetica","bold");d.setFontSize(22);d.text("INVOICE",W-14,17,{align:"right"});d.setFontSize(9);d.setFont("helvetica","normal");d.text(s.invoice_no,W-14,23,{align:"right"});
+  d.setTextColor(40,40,40);let y=44;
+  d.setFontSize(8);d.setTextColor(110,110,110);d.text("DITAGIHKAN KEPADA",14,y);d.text("DETAIL",125,y);y+=5;
+  d.setTextColor(20,20,20);d.setFont("helvetica","bold");d.setFontSize(11);d.text(s.customer_name||"Umum",14,y);
+  d.setFont("helvetica","normal");d.setFontSize(9);d.text("Tanggal : "+when,125,y);
+  y+=5;if(s.whatsapp)d.text("WA : "+s.whatsapp,14,y);d.text("Kasir   : "+(s.cashier_name||s.cashier||"-"),125,y);y+=5;d.text("Metode  : "+s.method,125,y);y+=8;
+  const head=()=>{d.setFillColor(234,240,255);d.rect(14,y,W-28,8,"F");d.setFont("helvetica","bold");d.setFontSize(8.5);d.setTextColor(11,61,145);d.text("NO",17,y+5.4);d.text("DESKRIPSI",27,y+5.4);d.text("HARGA",150,y+5.4,{align:"right"});d.text("JUMLAH",W-17,y+5.4,{align:"right"});y+=12;d.setTextColor(20,20,20)};
+  head();
+  items.forEach((it,i)=>{
+    if(y>255){d.addPage();y=20;head()}
+    d.setFont("helvetica","bold");d.setFontSize(9.5);d.text(String(i+1),17,y);const nm=d.splitTextToSize(it.name,100);d.text(nm,27,y);
+    d.setFont("helvetica","normal");d.text(R(it.price)+(it.mode==="m2"?" /m²":""),150,y,{align:"right"});d.text(R(it.total),W-17,y,{align:"right"});
+    y+=nm.length*4.4;d.setFontSize(8);d.setTextColor(110,110,110);d.text(itemDesc(it),27,y);d.setTextColor(20,20,20);y+=3;
+    d.setDrawColor(225,230,240);d.line(14,y,W-14,y);y+=6;
+  });
+  if(y>225){d.addPage();y=20}
+  const row=(a,b,bold)=>{d.setFont("helvetica",bold?"bold":"normal");d.setFontSize(bold?12:9.5);d.text(a,130,y);d.text(b,W-17,y,{align:"right"});y+=bold?8:6};
+  y+=2;row("Subtotal",R(s.subtotal));if(s.discount)row("Diskon","- "+R(s.discount));
+  d.setFillColor(255,200,0);d.rect(126,y-5.5,W-126-14,9.5,"F");row("TOTAL",R(s.total),1);y+=1;
+  row("Dibayar",R(s.paid));if(sisa)row("Sisa tagihan",R(sisa),1);if(kemb)row("Kembalian",R(kemb));
+  d.setFontSize(10);d.setFont("helvetica","bold");d.setTextColor(s.status==="Lunas"?21:185,s.status==="Lunas"?128:28,s.status==="Lunas"?61:28);d.text("STATUS: "+s.status.toUpperCase(),14,y-8);d.setTextColor(20,20,20);
+  if(s.note){d.setFont("helvetica","normal");d.setFontSize(9);d.text("Catatan: "+s.note,14,y+4)}
+  d.setFontSize(8);d.setTextColor(110,110,110);d.text("PT Perorangan ARTRISA Production Studio · NIB 1811260001963 · Stabat, Langkat, Sumatera Utara 20811",W/2,282,{align:"center"});
+  d.text("Terima kasih atas kepercayaan Anda. WA 0838-5172-2321 · @artrisa.production",W/2,287,{align:"center"});
+  d.save(s.invoice_no+".pdf");
+}
 // ===== INIT =====
 renderSV();
 try{const ss=sessionStorage.getItem("artrisa_u");if(ss){U=JSON.parse(ss);updateUserUI()}}catch(e){}
