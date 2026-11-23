@@ -685,6 +685,35 @@ body.in-dash{padding-bottom:0}
   .pos-line>div{grid-column:span 6!important}.pos-line>div.half{grid-column:span 3!important}
   .toast{bottom:calc(16px + var(--safe-bot))}
 }
+
+/* ===== REELS ala Instagram (HP) ===== */
+.rf-snd,.rf-sh{display:none}
+.bn-item[data-page="reels"]{color:var(--b);font-weight:800}
+.bn-item[data-page="reels"] .bn-icon{width:44px;height:44px;margin-top:-18px;border-radius:50%;background:var(--y);box-shadow:0 6px 18px rgba(11,61,145,.35),0 0 0 4px rgba(255,255,255,.9)}
+.bn-item[data-page="reels"] .bn-icon svg{width:22px;height:22px;stroke:#111}
+.reel-card.paused .reel-play-btn{display:grid!important}
+@media(max-width:900px){
+  body.in-reels{overflow:hidden;position:fixed;width:100%;padding-bottom:0}
+  body.in-reels #main-header,body.in-reels .wa-btn{display:none!important}
+  body.in-reels #page-reels{position:fixed;left:0;right:0;top:0;bottom:calc(58px + var(--safe-bot));background:#000;z-index:50}
+  #page-reels>.wrap,#page-reels .reels-page{padding:0;height:100%;max-width:none}
+  #page-reels .eyebrow,#page-reels h2,#page-reels .reels-page>p.muted{display:none}
+  .reels-grid{display:block;height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;scroll-behavior:smooth;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .reels-grid::-webkit-scrollbar{display:none}
+  .reels-grid>p.muted{color:#fff;padding:24px}
+  .reel-card{height:100%;width:100%;border-radius:0;border:0;scroll-snap-align:start;scroll-snap-stop:always;transform:none!important}
+  .reel-card.emb-on{max-width:none}
+  .reel-video-wrap{aspect-ratio:auto;height:100%;width:100%}
+  .reel-video-wrap video{object-fit:cover}
+  .rf-sh{display:block;position:absolute;inset:0;z-index:2}
+  .rf-sh.edge{pointer-events:none}
+  .rf-sh.edge::before,.rf-sh.edge::after{content:"";position:absolute;left:0;right:0;height:24%;pointer-events:auto}
+  .rf-sh.edge::before{top:0}.rf-sh.edge::after{bottom:0}
+  .rf-snd{display:grid;place-items:center;position:absolute;top:calc(14px + var(--safe-top));right:14px;z-index:4;width:40px;height:40px;border-radius:50%;border:0;background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:18px;cursor:pointer}
+  .reel-play-btn{z-index:3;pointer-events:none;width:64px;height:64px;font-size:26px}
+  .reel-overlay{z-index:3;pointer-events:none;padding:60px 16px 22px}
+  .reel-overlay b{font-size:15px}.reel-overlay small{font-size:11px}
+}
 </style>
 </head>
 <body>
@@ -1138,17 +1167,17 @@ body.in-dash{padding-bottom:0}
     </div>
     Layanan
   </div>
-  <div class="bn-item" data-page="pesan" onclick="goPage('pesan')">
-    <div class="bn-icon">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    </div>
-    Pesan
-  </div>
   <div class="bn-item" data-page="reels" onclick="goPage('reels')">
     <div class="bn-icon">
       <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
     </div>
     Reels
+  </div>
+  <div class="bn-item" data-page="pesan" onclick="goPage('pesan')">
+    <div class="bn-icon">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    </div>
+    Pesan
   </div>
   <div class="bn-item" id="bn-login-item" data-page="login" onclick="goAcc()">
     <div class="bn-icon">
@@ -1247,6 +1276,8 @@ function goPage(name){
   window.scrollTo({top:0,behavior:"smooth"});
 
   // Lazy load reels
+  document.body.classList.toggle("in-reels",name==="reels");
+  if(name!=="reels")stopReels();else if(reelsLoaded)resumeReels();
   if(name==="reels"&&!reelsLoaded){loadReels()}
 
   // Render feed 2 jika layanan
@@ -1403,9 +1434,12 @@ async function loadReels(){
       const bg=th?`background:#111 url('${encodeURI(th)}') center/cover no-repeat`:"background:linear-gradient(135deg,#0B3D91,#061a4a)";
       return`<div class="reel-card" id="reel-${i}" onclick="toggleReel(${i})">
         <div class="reel-video-wrap" id="rw-${i}" style="${bg}">${f.embed?"":`<video preload="none" playsinline loop id="rv-${i}" ${th?`poster="${esc(th)}"`:""}><source src="${esc(f.src)}" type="video/mp4"></video>`}</div>
+        ${f.embed?`<div class="rf-sh ${f.yt||f.vm?"full":"edge"}"></div>`:""}<button class="rf-snd" onclick="sndReel(event)">${MUTED?"🔇":"🔊"}</button>
         <div class="reel-play-btn">▶</div>
         <div class="reel-overlay"><b>${esc(r.title||"Reels")}</b><small>ARTRISA Production</small></div>
       </div>`}).join(""):"<p class='muted'>Belum ada reels. Tambahkan via dashboard owner.</p>";
+    if(RIO)RIO.disconnect();ACT=-1;
+    if(MOBR()&&RL.length){RIO=new IntersectionObserver(es=>es.forEach(e=>{const i=+e.target.id.slice(5);e.intersectionRatio>=.6?actReel(i):offReel(i)}),{root:rl,threshold:[0,.6]});rl.querySelectorAll(".reel-card").forEach(c=>RIO.observe(c))}
   }catch(e){
     rl.innerHTML="<p class='muted'>Reels belum bisa dimuat. Periksa koneksi.</p>";
   }
@@ -1416,16 +1450,48 @@ let RL=[];
 function reelInfo(raw){
   let u=String(raw||"").trim();const m0=u.match(/<iframe[^>]*\ssrc=["']([^"']+)["']/i);if(m0)u=m0[1].replace(/&amp;/g,"&");
   let m;
-  if(m=u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/))([\w-]{11})/))return{embed:1,src:"https://www.youtube.com/embed/"+m[1]+"?autoplay=1&playsinline=1&rel=0",thumb:"https://i.ytimg.com/vi/"+m[1]+"/hqdefault.jpg",open:u};
+  if(m=u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/))([\w-]{11})/))return{embed:1,yt:m[1],src:"https://www.youtube.com/embed/"+m[1]+"?autoplay=1&playsinline=1&rel=0",thumb:"https://i.ytimg.com/vi/"+m[1]+"/hqdefault.jpg",open:u};
   if(m=u.match(/instagram\.com\/(?:[\w.]+\/)?(reels?|p|tv)\/([\w-]+)/))return{embed:1,src:"https://www.instagram.com/"+(m[1]==="reels"?"reel":m[1])+"/"+m[2]+"/embed",open:u};
   if(m=u.match(/tiktok\.com\/.*?video\/(\d+)/))return{embed:1,src:"https://www.tiktok.com/embed/v2/"+m[1],open:u};
   if(m=u.match(/drive\.google\.com\/file\/d\/([\w-]+)/))return{embed:1,src:"https://drive.google.com/file/d/"+m[1]+"/preview",thumb:"https://drive.google.com/thumbnail?id="+m[1]+"&sz=w600",open:u};
-  if(m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/))return{embed:1,src:"https://player.vimeo.com/video/"+m[1]+"?autoplay=1",open:u};
+  if(m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/))return{embed:1,vm:1,src:"https://player.vimeo.com/video/"+m[1]+"?autoplay=1",open:u};
   if(/facebook\.com|fb\.watch/.test(u))return{embed:1,src:"https://www.facebook.com/plugins/video.php?show_text=false&autoplay=true&href="+encodeURIComponent(u),open:u};
   if(m0)return{embed:1,src:u,open:u};
   return{embed:0,src:u,open:u};
 }
+const MOBR=()=>matchMedia("(max-width:900px)").matches;
+let ACT=-1,MUTED=true,RIO=null;
+function ytCmd(i,fn){const f=document.querySelector("#rw-"+i+" iframe");if(f&&f.contentWindow)f.contentWindow.postMessage(JSON.stringify({event:"command",func:fn,args:[]}),"*")}
+function reelSrc(f){
+  if(f.yt)return"https://www.youtube.com/embed/"+f.yt+"?autoplay=1&mute=1&playsinline=1&rel=0&controls=0&loop=1&playlist="+f.yt+"&enablejsapi=1&modestbranding=1";
+  if(f.vm)return f.src+"&muted=1&loop=1";
+  return f.src;
+}
+function actReel(i){
+  const r=RL[i],c=$("reel-"+i);if(!r||!c)return;ACT=i;const f=reelInfo(r.video_url);
+  c.classList.add("playing");c.classList.remove("paused");c.dataset.p="";
+  if(f.embed){const w=$("rw-"+i);if(!w.querySelector("iframe"))w.innerHTML=`<iframe src="${esc(reelSrc(f))}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" onload="if(!MUTED)ytCmd(${i},'unMute')" style="width:100%;height:100%;border:0;background:#000"></iframe>`}
+  else{const v=$("rv-"+i);if(v){v.muted=MUTED;v.play().catch(()=>{})}}
+}
+function offReel(i){
+  const c=$("reel-"+i);if(!c)return;c.classList.remove("playing","paused");
+  const w=$("rw-"+i);if(w&&w.querySelector("iframe"))w.innerHTML="";
+  const v=$("rv-"+i);if(v)v.pause();
+}
+const stopReels=()=>RL.forEach((_,i)=>offReel(i));
+const resumeReels=()=>{if(MOBR()&&ACT>=0)actReel(ACT)};
+function sndReel(e){
+  e.stopPropagation();MUTED=!MUTED;
+  document.querySelectorAll(".rf-snd").forEach(b=>b.textContent=MUTED?"🔇":"🔊");
+  if(ACT>=0){const v=$("rv-"+ACT);if(v)v.muted=MUTED;ytCmd(ACT,MUTED?"mute":"unMute")}
+}
+function tapReel(i){
+  const f=reelInfo(RL[i].video_url),c=$("reel-"+i);
+  if(f.yt){const p=c.dataset.p==="1";ytCmd(i,p?"playVideo":"pauseVideo");c.dataset.p=p?"0":"1";c.classList.toggle("paused",!p)}
+  else if(!f.embed){const v=$("rv-"+i);if(v.paused){v.play();c.classList.remove("paused")}else{v.pause();c.classList.add("paused")}}
+}
 function toggleReel(i){
+  if(MOBR()){tapReel(i);return}
   const c=$("reel-"+i),r=RL[i];if(!c||!r)return;const f=reelInfo(r.video_url);
   if(f.embed){
     if(c.classList.contains("emb-on"))return;
