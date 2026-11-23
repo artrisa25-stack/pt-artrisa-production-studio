@@ -369,6 +369,8 @@ textarea.form-input{resize:vertical;min-height:80px}
   transition:background .2s;
 }
 .reel-card.playing .reel-play-btn{display:none}
+.reel-card.emb-on{grid-column:1/-1;width:100%;max-width:400px;justify-self:center;cursor:default}
+.reel-card.emb-on:hover{transform:none}
 
 /* ===== HALAMAN LOGIN ===== */
 #page-login{
@@ -1395,31 +1397,44 @@ async function loadReels(){
   try{
     if(!sb)throw new Error("no sb");
     const{data}=await sb.from("reels").select("*").eq("active",true);
-    rl.innerHTML=(data||[]).length?
-      (data||[]).map((r,i)=>`<div class="reel-card" id="reel-${i}" onclick="toggleReel(${i})">
-        <div class="reel-video-wrap">
-          <video preload="none" playsinline loop id="rv-${i}">
-            <source src="${esc(r.video_url)}" type="video/mp4">
-          </video>
-        </div>
+    RL=data||[];
+    rl.innerHTML=RL.length?RL.map((r,i)=>{
+      const f=reelInfo(r.video_url),th=r.cover_url?String(r.cover_url).replace(SB_URL,"/api/supabase"):(f.thumb||"");
+      const bg=th?`background:#111 url('${encodeURI(th)}') center/cover no-repeat`:"background:linear-gradient(135deg,#0B3D91,#061a4a)";
+      return`<div class="reel-card" id="reel-${i}" onclick="toggleReel(${i})">
+        <div class="reel-video-wrap" id="rw-${i}" style="${bg}">${f.embed?"":`<video preload="none" playsinline loop id="rv-${i}" ${th?`poster="${esc(th)}"`:""}><source src="${esc(f.src)}" type="video/mp4"></video>`}</div>
         <div class="reel-play-btn">▶</div>
-        <div class="reel-overlay">
-          <b>${esc(r.title||"Reels")}</b>
-          <small>ARTRISA Production</small>
-        </div>
-      </div>`).join(""):
-      "<p class='muted'>Belum ada reels. Tambahkan via dashboard owner.</p>";
+        <div class="reel-overlay"><b>${esc(r.title||"Reels")}</b><small>ARTRISA Production</small></div>
+      </div>`}).join(""):"<p class='muted'>Belum ada reels. Tambahkan via dashboard owner.</p>";
   }catch(e){
     rl.innerHTML="<p class='muted'>Reels belum bisa dimuat. Periksa koneksi.</p>";
   }
 }
 
+let RL=[];
+// Kenali link / kode embed: YouTube, Instagram, TikTok, Facebook, Google Drive, Vimeo, atau mp4 langsung
+function reelInfo(raw){
+  let u=String(raw||"").trim();const m0=u.match(/<iframe[^>]*\ssrc=["']([^"']+)["']/i);if(m0)u=m0[1].replace(/&amp;/g,"&");
+  let m;
+  if(m=u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/))([\w-]{11})/))return{embed:1,src:"https://www.youtube.com/embed/"+m[1]+"?autoplay=1&playsinline=1&rel=0",thumb:"https://i.ytimg.com/vi/"+m[1]+"/hqdefault.jpg",open:u};
+  if(m=u.match(/instagram\.com\/(?:[\w.]+\/)?(reels?|p|tv)\/([\w-]+)/))return{embed:1,src:"https://www.instagram.com/"+(m[1]==="reels"?"reel":m[1])+"/"+m[2]+"/embed",open:u};
+  if(m=u.match(/tiktok\.com\/.*?video\/(\d+)/))return{embed:1,src:"https://www.tiktok.com/embed/v2/"+m[1],open:u};
+  if(m=u.match(/drive\.google\.com\/file\/d\/([\w-]+)/))return{embed:1,src:"https://drive.google.com/file/d/"+m[1]+"/preview",thumb:"https://drive.google.com/thumbnail?id="+m[1]+"&sz=w600",open:u};
+  if(m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/))return{embed:1,src:"https://player.vimeo.com/video/"+m[1]+"?autoplay=1",open:u};
+  if(/facebook\.com|fb\.watch/.test(u))return{embed:1,src:"https://www.facebook.com/plugins/video.php?show_text=false&autoplay=true&href="+encodeURIComponent(u),open:u};
+  if(m0)return{embed:1,src:u,open:u};
+  return{embed:0,src:u,open:u};
+}
 function toggleReel(i){
-  const v=document.getElementById("rv-"+i);
-  const c=document.getElementById("reel-"+i);
-  if(!v)return;
-  if(v.paused){v.play();c.classList.add("playing")}
-  else{v.pause();c.classList.remove("playing")}
+  const c=$("reel-"+i),r=RL[i];if(!c||!r)return;const f=reelInfo(r.video_url);
+  if(f.embed){
+    if(c.classList.contains("emb-on"))return;
+    c.classList.add("emb-on","playing");
+    $("rw-"+i).innerHTML=`<iframe src="${esc(f.src)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="width:100%;height:100%;border:0;background:#000"></iframe>`;
+    c.querySelector(".reel-overlay").style.display="none";return;
+  }
+  const v=$("rv-"+i);if(!v)return;
+  if(v.paused){v.play();c.classList.add("playing")}else{v.pause();c.classList.remove("playing")}
 }
 
 // ===== LOGIN =====
@@ -1534,9 +1549,9 @@ async function upImg(inp,tid){
   const canLoad=u=>new Promise(r=>{const i=new Image();i.onload=()=>r(true);i.onerror=()=>r(false);i.src=u});
   toast("Mengunggah…");
   try{
-    const blob=await shrink(f,1200,.82);
+    const blob=await shrink(f,900,.8);
     const name=Date.now()+"-"+Math.random().toString(36).slice(2,7)+".jpg";
-    const{error}=await sb.storage.from(BUCKET).upload(name,blob,{contentType:"image/jpeg",upsert:true});
+    const{error}=await sb.storage.from(BUCKET).upload(name,blob,{contentType:"image/jpeg",upsert:true,cacheControl:"31536000"});
     if(error)throw error;
     const url="/api/supabase/storage/v1/object/public/"+BUCKET+"/"+name;
     if(!await canLoad(url))throw new Error("file belum bisa dibuka lewat proxy");
@@ -1615,7 +1630,7 @@ VIEWS.produk=async()=>{
   $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${DP.length} produk</span><button class="btn btn-y" onclick="addProd()">+ Tambah produk</button></div>
   <div class="d-table"><table><thead><tr><th>Produk</th><th>Harga jual</th><th>Modal</th><th>Margin</th><th>Beranda</th><th>Aktif</th><th></th></tr></thead><tbody>${DP.map(p=>{
     const m=p.price?Math.round((p.price-p.modal_price)/p.price*100):0;
-    return`<tr><td>${p.image_url?`<img class="d-thumb" src="${esc(p.image_url.replace(SB_URL,"/api/supabase"))}" alt="">`:""}<b>${esc(p.name)}</b><br><small>${esc(p.category)} ${esc(p.unit)}</small></td><td>${rp(p.price)}</td><td>${rp(p.modal_price)}</td><td>${m}%</td>
+    return`<tr><td>${p.image_url?`<img class="d-thumb" loading="lazy" decoding="async" src="${esc(p.image_url.replace(SB_URL,"/api/supabase"))}" alt="">`:""}<b>${esc(p.name)}</b><br><small>${esc(p.category)} ${esc(p.unit)}</small></td><td>${rp(p.price)}</td><td>${rp(p.modal_price)}</td><td>${m}%</td>
     <td><input type="checkbox" ${p.show_in_front?"checked":""} onchange="toggle('products',${p.id},'show_in_front',this.checked)"></td>
     <td><input type="checkbox" ${p.active?"checked":""} onchange="toggle('products',${p.id},'active',this.checked)"></td>
     <td><button class="d-ic" onclick="editProd(${p.id})">Edit</button><button class="d-ic" onclick="delRow('products',${p.id},'produk')">Hapus</button></td></tr>`}).join("")}</tbody></table></div>`;
@@ -1721,7 +1736,7 @@ VIEWS.afiliasi=async()=>{
 };
 
 // ---- REELS ----
-const RF=[{k:"title",l:"Judul",wide:1},{k:"video_url",l:"URL video (.mp4)",wide:1},{k:"cover_url",l:"Cover (upload dari galeri/PC)",type:"img",wide:1},{k:"description",l:"Deskripsi",type:"textarea",wide:1},{k:"active",l:"Tampilkan",type:"bool"}];
+const RF=[{k:"title",l:"Judul",wide:1},{k:"video_url",l:"Link video atau kode embed (YouTube, Instagram, TikTok, Facebook, Google Drive, Vimeo, .mp4)",type:"textarea",wide:1},{k:"cover_url",l:"Cover / preview (disarankan untuk Instagram & TikTok)",type:"img",wide:1},{k:"description",l:"Deskripsi",type:"textarea",wide:1},{k:"active",l:"Tampilkan",type:"bool"}];
 const saveReel=id=>async o=>{
   if(!o.video_url){toast("URL video wajib diisi");return false}
   const ok=await run(id?sb.from("reels").update(o).eq("id",id):sb.from("reels").insert([o]),"Reels disimpan");
@@ -1731,7 +1746,7 @@ const addReel=()=>openForm("Tambah reels",RF,{},saveReel(null));
 const editReel=id=>openForm("Edit reels",RF,DR.find(r=>r.id===id),saveReel(id));
 VIEWS.reels=async()=>{
   DR=await rows("reels");
-  $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${DR.length} video</span><button class="btn btn-y" onclick="addReel()">+ Tambah reels</button></div>${DR.length?`<div class="d-table"><table><thead><tr><th>Judul</th><th>Video</th><th>Tampil</th><th></th></tr></thead><tbody>${DR.map(r=>`<tr><td><b>${esc(r.title)}</b><br><small>${esc(r.description||"")}</small></td><td><a class="lnk" target="_blank" href="${esc(r.video_url)}">Buka</a></td><td><input type="checkbox" ${r.active?"checked":""} onchange="toggle('reels',${r.id},'active',this.checked);reelsLoaded=false"></td><td><button class="d-ic" onclick="editReel(${r.id})">Edit</button><button class="d-ic" onclick="delRow('reels',${r.id},'reels');reelsLoaded=false">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada reels.</p>'}`;
+  $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${DR.length} video</span><button class="btn btn-y" onclick="addReel()">+ Tambah reels</button></div>${DR.length?`<div class="d-table"><table><thead><tr><th>Judul</th><th>Video</th><th>Tampil</th><th></th></tr></thead><tbody>${DR.map(r=>`<tr><td><b>${esc(r.title)}</b><br><small>${esc(r.description||"")}</small></td><td><a class="lnk" target="_blank" href="${esc(reelInfo(r.video_url).open)}">Buka</a></td><td><input type="checkbox" ${r.active?"checked":""} onchange="toggle('reels',${r.id},'active',this.checked);reelsLoaded=false"></td><td><button class="d-ic" onclick="editReel(${r.id})">Edit</button><button class="d-ic" onclick="delRow('reels',${r.id},'reels');reelsLoaded=false">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada reels.</p>'}`;
 };
 
 // ---- MANAJEMEN AKSES ----
