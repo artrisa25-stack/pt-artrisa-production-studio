@@ -1162,7 +1162,7 @@ body.in-dash{padding-bottom:0}
 </nav>
 
 <script>
-const SB_URL="https://spqivuqidqgtcivrddtm.supabase.co";
+const SB_URL="https://spqivuqidggtcivrddtm.supabase.co";
 const SB_KEY="sb_publishable_QR18b-QtSl0jUnpsPZdayQ_88ftX6m6";
 const WA="6283851722321";
 
@@ -1413,7 +1413,7 @@ async function loadReels(){
     const{data}=await sb.from("reels").select("*").eq("active",true);
     RL=data||[];
     rl.innerHTML=RL.length?RL.map((r,i)=>{
-      const f=reelInfo(r.video_url),th=r.cover_url?String(r.cover_url).replace(SB_URL,"/api/supabase").replace(/['"()\]/g,""):(f.thumb||"");
+      const f=reelInfo(r.video_url),th=r.cover_url?String(r.cover_url).replace(SB_URL,"/api/supabase").replace(/['"()[\]]/g,""):(f.thumb||"");
       const bg=th?`background:#111 url('${encodeURI(th)}') center/cover no-repeat`:"background:linear-gradient(135deg,#0B3D91,#061a4a)";
       return`<div class="reel-card" id="reel-${i}" onclick="toggleReel(${i})">
         <div class="reel-video-wrap" id="rw-${i}" style="${bg}">${f.embed?"":`<video preload="none" playsinline loop id="rv-${i}" ${th?`poster="${esc(th)}"`:""}><source src="${esc(f.src)}" type="video/mp4"></video>`}</div>
