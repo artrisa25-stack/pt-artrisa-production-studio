@@ -56,7 +56,7 @@ body::before{
 .brand-name{color:var(--y);font-weight:900;font-size:13px;letter-spacing:5px;border-left:1px solid rgba(255,255,255,.25);padding-left:10px}
 .search-bar{flex:1;display:flex;background:#fff;border-radius:99px;overflow:hidden;height:36px;min-width:0}
 .search-bar input{flex:1;border:0;outline:0;padding:0 14px;font-size:12px;min-width:0}
-.search-bar button{background:var(--y);border:0;padding:0 16px;font-weight:800;font-size:12px;cursor:pointer;color:#111}
+.search-bar button{background:var(--y);border:0;padding:0 16px;font-weight:800;font-size:12px;cursor:pointer;color:#111;flex-shrink:0}
 .nav-scroll{display:flex;gap:0;overflow-x:auto;border-top:1px solid rgba(255,255,255,.1);max-width:1180px;margin:0 auto;scrollbar-width:none}
 .nav-scroll::-webkit-scrollbar{display:none}
 .nav-link{
@@ -81,7 +81,6 @@ body::before{
 .page.active{display:block}
 
 /* ===== BERANDA (HOME) ===== */
-/* HERO */
 .hero{
   background:var(--b);color:#fff;
   border-radius:0 0 28px 28px;
@@ -122,7 +121,6 @@ body::before{
 .hstat{background:rgba(255,255,255,.1);border-radius:10px;padding:8px 14px;text-align:center}
 .hstat b{display:block;font-size:15px;font-weight:800}
 .hstat span{font-size:9px;color:#b8caff}
-/* FOTO HERO */
 .hero-photo-wrap{
   position:relative;display:flex;align-items:flex-end;justify-content:center;
   height:380px;overflow:visible;
@@ -345,7 +343,6 @@ textarea.form-input{resize:vertical;min-height:80px}
 }
 .reel-card:hover{transform:scale(1.02)}
 .reel-video-wrap{
-  /* Instagram-like 9:16 ratio */
   aspect-ratio:9/16;
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;background:#111;
@@ -380,7 +377,6 @@ textarea.form-input{resize:vertical;min-height:80px}
   padding-top:0!important;
 }
 #page-login.active{display:flex;align-items:center;justify-content:center}
-/* Animated bg bubbles */
 .login-bubbles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .bubble{
   position:absolute;border-radius:50%;
@@ -399,7 +395,6 @@ textarea.form-input{resize:vertical;min-height:80px}
   90%{opacity:.4}
   100%{transform:translateY(-110vh) rotate(360deg);opacity:0}
 }
-/* Water wave rings */
 .wave-ring{
   position:absolute;border-radius:50%;
   border:1px solid rgba(255,255,255,.08);
@@ -413,7 +408,6 @@ textarea.form-input{resize:vertical;min-height:80px}
   100%{transform:translate(-50%,-50%) scale(5);opacity:0}
 }
 .wave-container{position:absolute;bottom:30%;left:50%;pointer-events:none}
-/* Glassmorphism card */
 .login-card{
   background:rgba(255,255,255,.08);
   backdrop-filter:blur(28px) saturate(180%);
@@ -463,7 +457,6 @@ textarea.form-input{resize:vertical;min-height:80px}
   backdrop-filter:blur(10px);transition:background .2s;
 }
 .login-back:hover{background:rgba(255,255,255,.2)}
-/* Logged in info on nav */
 .user-chip{
   display:inline-flex;align-items:center;gap:5px;
   background:rgba(255,255,255,.12);color:#fff;
@@ -522,7 +515,7 @@ textarea.form-input{resize:vertical;min-height:80px}
   .aff-grid{grid-template-columns:1fr}
   .kb-features{grid-template-columns:1fr 1fr}
   .bottom-nav{display:flex}
-  .wa-btn{bottom:calc(74px + var(--safe-bot))}
+  .wa-btn{bottom:calc(78px + var(--safe-bot))}
   .reels-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
 }
 @media(max-width:560px){
@@ -532,6 +525,17 @@ textarea.form-input{resize:vertical;min-height:80px}
   .kb-features{grid-template-columns:1fr}
   .hero h1{font-size:32px}
   .paket-price{font-size:26px}
+}
+@media(max-width:440px){
+  .hd{gap:6px;padding:8px 10px}
+  .brand{gap:6px}
+  .brand img{width:26px;height:26px}
+  .brand-name{font-size:11px;letter-spacing:2.5px;padding-left:6px}
+  .search-bar{height:32px}
+  .search-bar input{padding:0 8px;font-size:11px}
+  .search-bar button{padding:0 10px;font-size:11px}
+  .nav-btn-login{padding:6px 10px;font-size:10px}
+  .nav-link{padding:8px 10px 7px;font-size:10.5px}
 }
 
 /* ===================== GLASS THEME v4 ===================== */
@@ -763,7 +767,7 @@ body.in-dash{padding-bottom:0}
         <p class="hero-sub">Print, desain, advertising, dokumentasi, dan pengelolaan media sosial — satu studio untuk UMKM, Desa, Kecamatan, dan Perusahaan di seluruh Indonesia.</p>
         <div class="hero-btns">
           <button class="btn btn-y" onclick="goPage('pesan')">Pesan Sekarang →</button>
-          <a class="btn btn-w" href="https://wa.me/6283851722321" target="_blank">💬 Chat WhatsApp</a>
+          <a class="btn btn-w" href="https://wa.me/6283851722321" target="_blank" rel="noopener">💬 Chat WhatsApp</a>
           <button class="btn btn-ghost" onclick="goPage('konten-beres')">✨ Konten Beres</button>
         </div>
         <div class="hero-stats">
@@ -797,7 +801,7 @@ body.in-dash{padding-bottom:0}
       <div class="eyebrow">KATALOG • FEED PRODUK</div>
       <h2>Feed Produk Artrisa.</h2>
       <p class="muted">Harga publik tampil sebagai XXXX. Like & Komen langsung tersimpan.</p>
-            <div class="pills" id="pl"></div>
+      <div class="pills" id="pl"></div>
       <div class="alert hidden" id="al"></div>
       <div class="feed" id="feed"><p class="muted">Memuat katalog…</p></div>
     </section>
@@ -838,7 +842,7 @@ body.in-dash{padding-bottom:0}
         <div>
           <b>Hubungi kami</b>
           <p>📞 0838-5172-2321 (Bisnis)<br>📷 @artrisa.production<br>✉ artrisa25@gmail.com</p>
-          <a class="footer-cta" href="https://wa.me/6283851722321" target="_blank">Chat WhatsApp ↗</a>
+          <a class="footer-cta" href="https://wa.me/6283851722321" target="_blank" rel="noopener">Chat WhatsApp ↗</a>
         </div>
       </div>
       <div class="footer-fin">
@@ -847,8 +851,8 @@ body.in-dash{padding-bottom:0}
       </div>
     </footer>
 
-  </div><!-- .wrap -->
-</div><!-- #page-beranda -->
+  </div>
+</div>
 
 <!-- PAGE: SEMUA LAYANAN -->
 <div class="page" id="page-layanan">
@@ -860,7 +864,6 @@ body.in-dash{padding-bottom:0}
       <div class="svs" id="svs-full" style="margin-top:16px"></div>
     </section>
 
-    <!-- Katalog produk juga di halaman layanan -->
     <section class="sec">
       <div class="eyebrow">KATALOG PRODUK</div>
       <h2>Harga & Produk.</h2>
@@ -884,7 +887,6 @@ body.in-dash{padding-bottom:0}
       </div>
 
       <div class="paket-grid">
-        <!-- Paket Hemat -->
         <div class="paket-card">
           <div class="paket-head">
             <div class="eyebrow" style="color:var(--y);margin-bottom:4px">PAKET</div>
@@ -903,10 +905,9 @@ body.in-dash{padding-bottom:0}
               <li>Konsultasi via WhatsApp</li>
             </ul>
             <button class="btn-submit" onclick="goPage('pesan')">Pilih Paket Hemat →</button>
-            <a href="https://wa.me/6283851722321?text=Halo+ARTRISA,+saya+tertarik+Paket+Konten+Beres+Hemat" target="_blank" style="display:block;text-align:center;margin-top:8px;font-size:11px;color:var(--m)">atau hubungi via WhatsApp</a>
+            <a href="https://wa.me/6283851722321?text=Halo+ARTRISA,+saya+tertarik+Paket+Konten+Beres+Hemat" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:8px;font-size:11px;color:var(--m)">atau hubungi via WhatsApp</a>
           </div>
         </div>
-        <!-- Paket Sultan -->
         <div class="paket-card featured">
           <div class="paket-head">
             <div class="paket-badge">TERPOPULER ⭐</div>
@@ -929,12 +930,11 @@ body.in-dash{padding-bottom:0}
               <li>Revisi tanpa batas</li>
             </ul>
             <button class="btn-submit" onclick="goPage('pesan')">Pilih Paket Sultan →</button>
-            <a href="https://wa.me/6283851722321?text=Halo+ARTRISA,+saya+tertarik+Paket+Konten+Beres+Sultan" target="_blank" style="display:block;text-align:center;margin-top:8px;font-size:11px;color:var(--m)">atau hubungi via WhatsApp</a>
+            <a href="https://wa.me/6283851722321?text=Halo+ARTRISA,+saya+tertarik+Paket+Konten+Beres+Sultan" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:8px;font-size:11px;color:var(--m)">atau hubungi via WhatsApp</a>
           </div>
         </div>
       </div>
 
-      <!-- Fitur -->
       <div class="eyebrow" style="margin-top:8px">KENAPA KONTEN BERES?</div>
       <h2 style="margin:4px 0 16px">Yang kamu dapat.</h2>
       <div class="kb-features">
@@ -964,11 +964,11 @@ body.in-dash{padding-bottom:0}
           <h3>📋 Detail Pesanan</h3>
           <div class="form-group">
             <label>Nama Lengkap *</label>
-            <input class="form-input" id="cn" placeholder="Nama kamu" autocomplete="name">
+            <input class="form-input" id="cn" placeholder="Nama kamu" autocomplete="name" maxlength="100">
           </div>
           <div class="form-group">
             <label>Nomor WhatsApp *</label>
-            <input class="form-input" id="cw" placeholder="08xxxxxxxxxx" inputmode="tel" autocomplete="tel">
+            <input class="form-input" id="cw" placeholder="08xxxxxxxxxx" inputmode="tel" autocomplete="tel" maxlength="20">
           </div>
           <div class="form-group">
             <label>Pilih Produk / Layanan *</label>
@@ -976,15 +976,15 @@ body.in-dash{padding-bottom:0}
           </div>
           <div class="form-group">
             <label>Ukuran (opsional)</label>
-            <input class="form-input" id="sz" placeholder="Contoh: 2x1 m / A3 / A4">
+            <input class="form-input" id="sz" placeholder="Contoh: 2x1 m / A3 / A4" maxlength="60">
           </div>
           <div class="form-group">
             <label>Satuan (opsional)</label>
-            <input class="form-input" id="un" placeholder="Contoh: meter / lembar / pcs">
+            <input class="form-input" id="un" placeholder="Contoh: meter / lembar / pcs" maxlength="40">
           </div>
           <div class="form-group">
             <label>Detail / Keterangan</label>
-            <textarea class="form-input" id="dt" rows="4" placeholder="Ceritakan mau bikin apa, warna, jumlah, referensi, dll."></textarea>
+            <textarea class="form-input" id="dt" rows="4" placeholder="Ceritakan mau bikin apa, warna, jumlah, referensi, dll." maxlength="1000"></textarea>
           </div>
           <button class="btn-submit" onclick="order()">Kirim Pesanan & Buka WhatsApp</button>
           <div class="form-status" id="os"></div>
@@ -1035,11 +1035,11 @@ body.in-dash{padding-bottom:0}
           <h3>Daftar Afiliasi</h3>
           <div class="form-group">
             <label>Nama Lengkap *</label>
-            <input class="form-input" id="an1" placeholder="Nama kamu">
+            <input class="form-input" id="an1" placeholder="Nama kamu" maxlength="100">
           </div>
           <div class="form-group">
             <label>Nomor WhatsApp *</label>
-            <input class="form-input" id="aw1" placeholder="08xxxxxxxxxx" inputmode="tel">
+            <input class="form-input" id="aw1" placeholder="08xxxxxxxxxx" inputmode="tel" maxlength="20">
           </div>
           <button class="btn-submit" onclick="daftarAff()">Gabung Afiliasi →</button>
           <div class="form-status" id="as"></div>
@@ -1114,7 +1114,7 @@ body.in-dash{padding-bottom:0}
     <div class="login-status" id="ls"></div>
     <div class="login-links">
       <a onclick="goPage('beranda')">← Kembali ke Beranda</a>
-      <a href="https://wa.me/6283851722321?text=Halo+ARTRISA,+saya+lupa+kata+sandi+akun+saya" target="_blank">Lupa kata sandi?</a>
+      <a href="https://wa.me/6283851722321?text=Halo+ARTRISA,+saya+lupa+kata+sandi+akun+saya" target="_blank" rel="noopener">Lupa kata sandi?</a>
     </div>
   </div>
 </div>
@@ -1139,19 +1139,18 @@ body.in-dash{padding-bottom:0}
   <div class="d-modal hidden" id="d-modal" onclick="if(event.target===this)closeForm()"><div class="d-modal-card" id="d-modal-card"></div></div>
 </div>
 
-</main><!-- /main -->
+</main>
 
 <div class="d-modal hidden" id="ix-modal" onclick="if(event.target===this)ixClose()"><div class="d-modal-card" style="max-width:420px">
   <h3 id="ix-title"></h3><p class="muted" id="ix-prod" style="margin:-8px 0 12px"></p>
-  <div class="form-group"><label>Nama</label><input class="form-input" id="ix-name" autocomplete="name"></div>
-  <div class="form-group"><label>Nomor HP / WhatsApp</label><input class="form-input" id="ix-wa" inputmode="tel" autocomplete="tel"></div>
-  <div class="form-group hidden" id="ix-cm-wrap"><label>Komentar</label><textarea class="form-input" id="ix-cm" rows="3"></textarea></div>
+  <div class="form-group"><label>Nama</label><input class="form-input" id="ix-name" autocomplete="name" maxlength="80"></div>
+  <div class="form-group"><label>Nomor HP / WhatsApp</label><input class="form-input" id="ix-wa" inputmode="tel" autocomplete="tel" maxlength="20"></div>
+  <div class="form-group hidden" id="ix-cm-wrap"><label>Komentar</label><textarea class="form-input" id="ix-cm" rows="3" maxlength="500"></textarea></div>
   <div class="form-status" id="ix-st"></div>
   <div class="d-form-act"><button class="btn btn-ghost-d" onclick="ixClose()">Batal</button><button class="btn btn-y" onclick="ixSend()">Kirim</button></div>
 </div></div>
 <div class="toast" id="toast"></div>
-<!-- FLOAT WA -->
-<a class="wa-btn" href="https://wa.me/6283851722321" target="_blank" aria-label="WhatsApp" id="wa-float">💬</a>
+<a class="wa-btn" href="https://wa.me/6283851722321" target="_blank" rel="noopener" aria-label="WhatsApp" id="wa-float">💬</a>
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav" id="bottom-nav">
@@ -1186,10 +1185,9 @@ body.in-dash{padding-bottom:0}
     <span id="bn-login-label">Login</span>
   </div>
 </nav>
-
 <script>
 // ===== CONFIG =====
-const SB_URL="https://spqivuqidggtcivrddtm.supabase.co";
+const SB_URL="https://spqivuqidqgtcivrddtm.supabase.co";
 const SB_KEY="sb_publishable_QR18b-QtSl0jUnpsPZdayQ_88ftX6m6";
 const WA="6283851722321";
 
@@ -1198,6 +1196,7 @@ const $=id=>document.getElementById(id);
 const v=id=>$(id)?$(id).value.trim():"";
 const fmt=n=>(+n||0).toLocaleString("id-ID");
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':'&quot;',"'":'&#39;'}[c]));
+const validWa=w=>/^[0-9+\s()-]{9,18}$/.test(String(w||"").trim());
 
 async function sha256(t){
   const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));
@@ -1205,27 +1204,31 @@ async function sha256(t){
 }
 
 // ===== SUPABASE =====
-let sb,P=[],C={},U=null,FILTER="Semua";
+let sb,P=[],C={},U=null,TOKEN="",FILTER="Semua";
 try{
-  sb=window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:async(u,o)=>{
-    try{const s=String(u).replace(SB_URL,"/api/supabase");const r=await fetch(s,o);return r}
+  sb=window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:async(u,o={})=>{
+    const s=String(u).replace(SB_URL,"/api/supabase");
+    const hdrs=new Headers(o.headers||{});
+    if(TOKEN)hdrs.set("x-artrisa-token",TOKEN);
+    const nextOpts={...o,headers:hdrs};
+    try{return await fetch(s,nextOpts)}
     catch(e){return fetch(u,o)}
   }}})
 }catch(e){console.error("Supabase init:",e)}
 
 // ===== FALLBACK DATA =====
 const FALLBACK=[
-  {id:1001,name:"Spanduk Ulang Tahun",price:35000,modal_price:20000,category:"Spanduk & Outdoor",description:"Spanduk ucapan ulang tahun siap pasang.",unit:"/m",sort_order:1,show_in_front:true,active:true},
-  {id:1002,name:"Stiker Chromo + Cutting Bulat",price:15000,modal_price:8000,category:"Stiker",description:"Stiker chromo dipotong bulat rapi.",unit:"/pcs",sort_order:2,show_in_front:true,active:true},
-  {id:1003,name:"Stiker Outdoor",price:95000,modal_price:50000,category:"Stiker",description:"Stiker tahan cuaca. Per meter.",unit:"/m",sort_order:3,show_in_front:true,active:true},
-  {id:1004,name:"Stiker Indoor",price:150000,modal_price:80000,category:"Stiker",description:"Stiker indoor halus. Per meter.",unit:"/m",sort_order:4,show_in_front:true,active:true},
-  {id:1005,name:"Stiker Indoor + Cut",price:185000,modal_price:90000,category:"Stiker",description:"Stiker indoor + cutting bentuk.",unit:"/m",sort_order:5,show_in_front:true,active:true},
-  {id:1006,name:"Backlite",price:95000,modal_price:50000,category:"Spanduk & Outdoor",description:"Media tembus cahaya untuk neonbox.",unit:"/m",sort_order:6,show_in_front:true,active:true},
-  {id:1007,name:"Spanduk",price:20000,modal_price:10000,category:"Spanduk & Outdoor",description:"Spanduk standar.",unit:"/m",sort_order:7,show_in_front:true,active:true},
-  {id:1008,name:"Stiker Chromo A3",price:10000,modal_price:5000,category:"Stiker",description:"Stiker Chromo A3.",unit:"/lbr",sort_order:9,show_in_front:true,active:true},
-  {id:1009,name:"Undangan Full Color",price:1500,modal_price:800,category:"Undangan & Cetak",description:"Undangan full color 11.75x16 cm.",unit:"/lbr",sort_order:15,show_in_front:true,active:true},
-  {id:1010,name:"Neonbox Petak",price:1200000,modal_price:700000,category:"Neonbox",description:"Neonbox petak.",unit:"",sort_order:19,show_in_front:true,active:true},
-  {id:1011,name:"Cetak Cepat - ST Ritrama Outdoor",price:50000,modal_price:28000,category:"Cetak Cepat",description:"Stiker Ritrama outdoor kualitas stabil.",unit:"/m",sort_order:23,show_in_front:true,active:true},
+  {id:1001,name:"Spanduk Ulang Tahun",price:null,modal_price:0,category:"Spanduk & Outdoor",description:"Spanduk ucapan ulang tahun siap pasang.",unit:"/m",sort_order:1,show_in_front:true,active:true},
+  {id:1002,name:"Stiker Chromo + Cutting Bulat",price:null,modal_price:0,category:"Stiker",description:"Stiker chromo dipotong bulat rapi.",unit:"/pcs",sort_order:2,show_in_front:true,active:true},
+  {id:1003,name:"Stiker Outdoor",price:null,modal_price:0,category:"Stiker",description:"Stiker tahan cuaca. Per meter.",unit:"/m",sort_order:3,show_in_front:true,active:true},
+  {id:1004,name:"Stiker Indoor",price:null,modal_price:0,category:"Stiker",description:"Stiker indoor halus. Per meter.",unit:"/m",sort_order:4,show_in_front:true,active:true},
+  {id:1005,name:"Stiker Indoor + Cut",price:null,modal_price:0,category:"Stiker",description:"Stiker indoor + cutting bentuk.",unit:"/m",sort_order:5,show_in_front:true,active:true},
+  {id:1006,name:"Backlite",price:null,modal_price:0,category:"Spanduk & Outdoor",description:"Media tembus cahaya untuk neonbox.",unit:"/m",sort_order:6,show_in_front:true,active:true},
+  {id:1007,name:"Spanduk",price:null,modal_price:0,category:"Spanduk & Outdoor",description:"Spanduk standar.",unit:"/m",sort_order:7,show_in_front:true,active:true},
+  {id:1008,name:"Stiker Chromo A3",price:null,modal_price:0,category:"Stiker",description:"Stiker Chromo A3.",unit:"/lbr",sort_order:9,show_in_front:true,active:true},
+  {id:1009,name:"Undangan Full Color",price:null,modal_price:0,category:"Undangan & Cetak",description:"Undangan full color 11.75x16 cm.",unit:"/lbr",sort_order:15,show_in_front:true,active:true},
+  {id:1010,name:"Neonbox Petak",price:null,modal_price:0,category:"Neonbox",description:"Neonbox petak.",unit:"",sort_order:19,show_in_front:true,active:true},
+  {id:1011,name:"Cetak Cepat - ST Ritrama Outdoor",price:null,modal_price:0,category:"Cetak Cepat",description:"Stiker Ritrama outdoor kualitas stabil.",unit:"/m",sort_order:23,show_in_front:true,active:true},
   {id:1012,name:"Konten Beres - Paket Hemat",price:300000,modal_price:0,category:"Konten Beres",description:"Paket mulai konsisten untuk UMKM dan desa.",unit:"/bulan",sort_order:25,show_in_front:true,active:true},
   {id:1013,name:"Konten Beres - Paket Sultan",price:800000,modal_price:0,category:"Konten Beres",description:"Paket paling lengkap untuk brand yang mau gaspol.",unit:"/bulan",sort_order:26,show_in_front:true,active:true}
 ];
@@ -1249,7 +1252,6 @@ let reelsLoaded=false;
 function goAcc(){goPage(U?"dashboard":"login")}
 function goPage(name){
   if(name==="dashboard"&&!U)name="login";
-  // hide semua page
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   const page=$(("page-"+name));
   if(!page){console.warn("Page not found:",name);return}
@@ -1258,7 +1260,6 @@ function goPage(name){
   document.body.classList.toggle("in-dash",name==="dashboard");
   if(name==="dashboard")renderDash();
 
-  // Update nav links
   document.querySelectorAll(".nav-link").forEach(a=>{
     a.classList.toggle("on",a.dataset.page===name);
   });
@@ -1266,28 +1267,22 @@ function goPage(name){
     a.classList.toggle("on",a.dataset.page===name);
   });
 
-  // Header visibility
   const noHeader=["login","dashboard"];
   $("main-header").style.display=noHeader.includes(name)?"none":"";
   $("wa-float").style.display=noHeader.includes(name)?"none":"";
   $("bottom-nav").style.display=noHeader.includes(name)?"none":"";
 
-  // Scroll top
   window.scrollTo({top:0,behavior:"smooth"});
 
-  // Lazy load reels
   document.body.classList.toggle("in-reels",name==="reels");
   if(name!=="reels")stopReels();else if(reelsLoaded)resumeReels();
   if(name==="reels"&&!reelsLoaded){loadReels()}
 
-  // Render feed 2 jika layanan
   if(name==="layanan"&&$("feed2").innerHTML.includes("Memuat")){renderFeed2()}
 
-  // Update hash
   history.pushState(null,"","#"+name);
 }
 
-// Handle back button
 window.addEventListener("popstate",()=>{
   const h=location.hash.replace("#","");
   const valid=["beranda","layanan","konten-beres","pesan","afiliasi","reels","login","dashboard"];
@@ -1297,11 +1292,14 @@ window.addEventListener("popstate",()=>{
 // ===== RENDER CARDS =====
 function card(p,i){
   const c=C[p.id]||{};
-  const pr=U&&["direktur","wakil_direktur","manajer"].includes(U.role)?"Rp "+fmt(p.price):"Rp XXXX";
-  const bg=p.image_url?`url('${encodeURI(p.image_url.replace(SB_URL,"/api/supabase"))}') center/cover`:GR[i%GR.length];
+  const canSeePrice=U&&["direktur","wakil_direktur","manajer"].includes(U.role)&&p.price!=null;
+  const pr=canSeePrice?"Rp "+fmt(p.price):"Rp XXXX";
+  const safeImg=p.image_url?String(p.image_url).replace(SB_URL,"/api/supabase").replace(/['"()\]/g,""):"";
+  const bg=safeImg?`url('${encodeURI(safeImg)}') center/cover`:GR[i%GR.length];
   const u=p.unit||"";
   const ic=IC[p.category]||"🏷️";
   const lk=c.like||0;const cm=c.comment||0;
+  const pidNum=Number(p.id)||0;
   return`<article class="card">
   <div class="card-head">
     <img src="logo-artrisa.png" alt="ARTRISA" onerror="this.style.display='none'">
@@ -1316,43 +1314,60 @@ function card(p,i){
   <div class="card-body">
     <div class="card-price"><small>HARGA</small><b>${pr}${u?" <span style='font-size:9px;font-weight:400;color:#888'>"+esc(u)+"</span>":""}</b></div>
     <div class="card-actions">
-      <button onclick="interact(${p.id},'like')">❤️ ${lk}</button>
-      <button onclick="interact(${p.id},'comment')">💬 ${cm}</button>
+      <button onclick="interact(${pidNum},'like')">❤️ ${lk}</button>
+      <button onclick="interact(${pidNum},'comment')">💬 ${cm}</button>
       <span>Klik untuk interaksi</span>
     </div>
     <div class="card-cta">
-      <button class="btn-wa" onclick="waOrder(${p.id})">💬 WhatsApp</button>
-      <button class="btn-order" onclick="goPage('pesan');setTimeout(()=>{const s=$('ps');for(let o of s.options)if(o.value=='${p.id}'){s.value='${p.id}';break}},200)">📦 Pesan</button>
+      <button class="btn-wa" onclick="waOrder(${pidNum})">💬 WhatsApp</button>
+      <button class="btn-order" onclick="pickAndOrder(${pidNum})">📦 Pesan</button>
     </div>
   </div>
 </article>`;
+}
+
+function pickAndOrder(pid){
+  goPage('pesan');
+  setTimeout(()=>{
+    const s=$('ps');
+    if(!s)return;
+    for(let o of s.options)if(o.value==String(pid)){s.value=String(pid);break}
+  },150);
+}
+
+function renderPills(containerId){
+  const el=$(containerId);
+  if(!el)return;
+  el.innerHTML="";
+  CATS.forEach(c=>{
+    const b=document.createElement("button");
+    b.className="pill-btn"+(c===FILTER?" on":"");
+    b.textContent=c;
+    b.onclick=()=>setF(c);
+    el.appendChild(b);
+  });
 }
 
 function render(){
   const q=v("q").toLowerCase();
   const list=P.filter(p=>(FILTER==="Semua"||p.category===FILTER)&&(p.name||"").toLowerCase().includes(q)&&p.show_in_front!==false&&p.active!==false);
 
-  // Render pills beranda
-  if($("pl"))$("pl").innerHTML=CATS.map(c=>`<button class="pill-btn ${c===FILTER?"on":""}" onclick="setF('${c.replace(/'/g,"\\'")}',this.closest('.pills').id)">${c}</button>`).join("");
+  renderPills("pl");
   if($("feed"))$("feed").innerHTML=list.length?list.map(card).join(""):"<p class='muted'>Produk tidak ditemukan.</p>";
 
-  // Update select pesan
   if($("ps"))$("ps").innerHTML='<option value="">— Pilih produk —</option>'+P.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("");
   if($("np"))$("np").textContent=P.length;
   if($("feed2")&&!$("feed2").innerHTML.includes("Memuat"))renderFeed2();
 }
 
 function renderFeed2(){
-  if($("pl2"))$("pl2").innerHTML=CATS.map(c=>`<button class="pill-btn ${c===FILTER?"on":""}" onclick="setF('${c.replace(/'/g,"\\'")}','pl2')">${c}</button>`).join("");
+  renderPills("pl2");
   const list=P.filter(p=>(FILTER==="Semua"||p.category===FILTER)&&p.show_in_front!==false&&p.active!==false);
   if($("feed2"))$("feed2").innerHTML=list.length?list.map(card).join(""):"<p class='muted'>Produk tidak ditemukan.</p>";
 }
 
-function setF(f,pillsId){
+function setF(f){
   FILTER=f;render();
-  // Update pills di halaman layanan juga
-  if($("pl2"))$("pl2").querySelectorAll(".pill-btn").forEach(b=>b.classList.toggle("on",b.textContent===f));
-  if($("pl"))$("pl").querySelectorAll(".pill-btn").forEach(b=>b.classList.toggle("on",b.textContent===f));
   if(CURRENT_PAGE==="layanan")renderFeed2();
 }
 
@@ -1385,7 +1400,7 @@ async function ixSend(){
   if(!IX)return;
   const n=v("ix-name"),w=v("ix-wa"),c=v("ix-cm"),st=$("ix-st");
   if(!n){st.textContent="Isi nama dulu.";return}
-  if(!/^[0-9+\s-]{9,16}$/.test(w)){st.textContent="Nomor HP tidak valid.";return}
+  if(!validWa(w)){st.textContent="Nomor HP tidak valid.";return}
   if(IX.kind==="comment"&&!c){st.textContent="Tulis komentarnya dulu.";return}
   const{id,kind}=IX;
   try{localStorage.setItem("artrisa_guest",JSON.stringify({n,w}))}catch(e){}
@@ -1394,13 +1409,13 @@ async function ixSend(){
   ixClose();
   if(sb){
     const r=await sb.from("interactions").insert([{target_type:"product",target_id:id,kind,customer_name:n,whatsapp:w,comment_text:c}]);
-    if(r.error)await sb.from("interactions").insert([{target_type:"product",target_id:id,kind,customer_name:n+" ("+w+")",comment_text:c}]);
+    if(r.error)await sb.from("interactions").insert([{target_type:"product",target_id:id,kind,customer_name:n,comment_text:c}]);
   }
 }
 
 function waOrder(id){
   const p=P.find(x=>x.id==id);
-  window.open("https://wa.me/"+WA+"?text="+encodeURIComponent("Halo ARTRISA, saya ingin tanya/order "+(p?p.name:"produk")+" 🙏"),"_blank");
+  window.open("https://wa.me/"+WA+"?text="+encodeURIComponent("Halo ARTRISA, saya ingin tanya/order "+(p?p.name:"produk")+" 🙏"),"_blank","noopener");
 }
 
 // ===== LOAD DATA =====
@@ -1411,12 +1426,14 @@ async function load(){
     if(error)throw error;
     P=data||[];
     const{data:ix}=await sb.from("interactions").select("target_id,kind");
+    C={};
     (ix||[]).forEach(r=>{C[r.target_id]=C[r.target_id]||{};C[r.target_id][r.kind]=(C[r.target_id][r.kind]||0)+1});
+    const al=$("al");if(al)al.classList.add("hidden");
     render();
   }catch(e){
     P=FALLBACK.slice();render();
     const al=$("al");
-    if(al){al.classList.remove("hidden");al.innerHTML="⚠️ Supabase belum tersambung ("+esc(e.message)+"). Katalog cadangan tampil. Pastikan SQL sudah di-RUN, lalu <a href='#' onclick='location.reload();return false'><b>refresh</b></a>."}
+    if(al){al.classList.remove("hidden");al.innerHTML="⚠️ Koneksi database sedang dalam mode cadangan ("+esc(e.message)+"). <a href='#' onclick='location.reload();return false'><b>Refresh</b></a>"}
   }
 }
 
@@ -1430,7 +1447,7 @@ async function loadReels(){
     const{data}=await sb.from("reels").select("*").eq("active",true);
     RL=data||[];
     rl.innerHTML=RL.length?RL.map((r,i)=>{
-      const f=reelInfo(r.video_url),th=r.cover_url?String(r.cover_url).replace(SB_URL,"/api/supabase"):(f.thumb||"");
+      const f=reelInfo(r.video_url),th=r.cover_url?String(r.cover_url).replace(SB_URL,"/api/supabase").replace(/['"()\]/g,""):(f.thumb||"");
       const bg=th?`background:#111 url('${encodeURI(th)}') center/cover no-repeat`:"background:linear-gradient(135deg,#0B3D91,#061a4a)";
       return`<div class="reel-card" id="reel-${i}" onclick="toggleReel(${i})">
         <div class="reel-video-wrap" id="rw-${i}" style="${bg}">${f.embed?"":`<video preload="none" playsinline loop id="rv-${i}" ${th?`poster="${esc(th)}"`:""}><source src="${esc(f.src)}" type="video/mp4"></video>`}</div>
@@ -1446,7 +1463,6 @@ async function loadReels(){
 }
 
 let RL=[];
-// Kenali link / kode embed: YouTube, Instagram, TikTok, Facebook, Google Drive, Vimeo, atau mp4 langsung
 function reelInfo(raw){
   let u=String(raw||"").trim();const m0=u.match(/<iframe[^>]*\ssrc=["']([^"']+)["']/i);if(m0)u=m0[1].replace(/&amp;/g,"&");
   let m;
@@ -1503,28 +1519,38 @@ function toggleReel(i){
   if(v.paused){v.play();c.classList.add("playing")}else{v.pause();c.classList.remove("playing")}
 }
 
-// ===== LOGIN =====
+// ===== LOGIN (SERVER-SIDE AUTH ENDPOINT) =====
 async function doLogin(){
   const ls=$("ls"),u=v("lu"),p=$("lp")?$("lp").value:"";
   if(!u||!p){ls.textContent="Isi username dan password.";ls.className="login-status err";return}
   ls.textContent="Memeriksa…";ls.className="login-status";
   try{
-    const h=await sha256(p);
-    const{data,error}=await sb.from("users").select("*").eq("username",u).eq("password_hash",h).eq("active",true).single();
-    if(error||!data){ls.textContent="Username atau password salah.";ls.className="login-status err";return}
-    delete data.password_hash;
-    U=data;if($("lp"))$("lp").value="";
-    try{sessionStorage.setItem("artrisa_u",JSON.stringify(U))}catch(e){}
-    sb.from("users").update({last_login:new Date().toISOString()}).eq("id",data.id).then(()=>{},()=>{});
-    ls.textContent="✅ Login berhasil — "+data.name;ls.className="login-status ok";
-    updateUserUI();render();
-    setTimeout(()=>goPage("dashboard"),500);
-  }catch(e){ls.textContent="Gagal: "+e.message;ls.className="login-status err"}
+    const res=await fetch("/api/auth",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({username:u,password:p})
+    });
+    const out=await res.json().catch(()=>({}));
+    if(!res.ok||!out.user||!out.token){
+      ls.textContent=out.error||"Username atau password salah.";
+      ls.className="login-status err";
+      return;
+    }
+    U=out.user;
+    TOKEN=out.token;
+    if($("lp"))$("lp").value="";
+    try{sessionStorage.setItem("artrisa_u",JSON.stringify({user:U,token:TOKEN}))}catch(e){}
+    ls.textContent="✅ Login berhasil — "+U.name;ls.className="login-status ok";
+    updateUserUI();
+    await load();
+    setTimeout(()=>goPage("dashboard"),400);
+  }catch(e){ls.textContent="Gagal terhubung ke server login.";ls.className="login-status err"}
 }
 
 function logout(){
-  U=null;try{sessionStorage.removeItem("artrisa_u")}catch(e){}
-  updateUserUI();render();goPage("beranda");
+  U=null;TOKEN="";
+  try{sessionStorage.removeItem("artrisa_u")}catch(e){}
+  updateUserUI();load();goPage("beranda");
 }
 
 function updateUserUI(){
@@ -1538,12 +1564,13 @@ async function order(){
   const os=$("os");os.textContent="Mengirim…";
   const n=v("cn"),w=v("cw"),pid=$("ps")?$("ps").value:"";
   if(!n||!w){os.textContent="⚠️ Isi nama dan WhatsApp dulu.";return}
+  if(!validWa(w)){os.textContent="⚠️ Nomor WhatsApp tidak valid.";return}
   if(!pid){os.textContent="⚠️ Pilih produk dulu.";return}
   const p=P.find(x=>x.id==pid);
   try{
-    if(sb)await sb.from("orders").insert([{customer_name:n,whatsapp:w,product:p?p.name:"",detail:v("dt"),size_text:v("sz"),unit_text:v("un"),total:p?p.price:0,status:"Baru"}]);
+    if(sb)await sb.from("orders").insert([{customer_name:n,whatsapp:w,product:p?p.name:"",detail:v("dt"),size_text:v("sz"),unit_text:v("un"),total:p&&p.price?p.price:0,status:"Baru"}]);
     os.textContent="✅ Pesanan terkirim! Membuka WhatsApp…";
-    window.open("https://wa.me/"+WA+"?text="+encodeURIComponent("Halo ARTRISA, saya "+n+" mau pesan "+(p?p.name:"")+" ukuran "+v("sz")+" "+v("un")+". Detail: "+v("dt")),"_blank");
+    window.open("https://wa.me/"+WA+"?text="+encodeURIComponent("Halo ARTRISA, saya "+n+" mau pesan "+(p?p.name:"")+" ukuran "+v("sz")+" "+v("un")+". Detail: "+v("dt")),"_blank","noopener");
   }catch(e){os.textContent="Gagal: "+e.message}
 }
 
@@ -1552,13 +1579,13 @@ async function daftarAff(){
   const n=v("an1"),w=v("aw1");
   const as=$("as");
   if(!n||!w){as.textContent="⚠️ Isi nama dan WhatsApp.";return}
+  if(!validWa(w)){as.textContent="⚠️ Nomor WhatsApp tidak valid.";return}
   const code="ARTRISA-"+n.toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6)+"-"+Math.floor(100+Math.random()*900);
   try{
     if(sb)await sb.from("affiliates").insert([{name:n,whatsapp:w,referral_code:code}]);
     as.innerHTML="✅ Berhasil! Kode referral kamu: <b>"+esc(code)+"</b><br><small style='color:#6b7280'>Bagikan kode ini ke calon klien ARTRISA.</small>";
   }catch(e){as.textContent="Gagal: "+e.message}
 }
-
 // ===== DASHBOARD =====
 const TABS={ringkasan:["","Ringkasan"],kasir:["","Kasir (POS)"],pesanan:["","Pesanan"],produk:["","Produk"],keuangan:["","Keuangan"],pelanggan:["","Pelanggan"],supplier:["","Supplier"],afiliasi:["","Afiliasi"],reels:["","Reels"],interaksi:["","Interaksi"],akses:["","Manajemen Akses"]};
 const ROLES={direktur:"Direktur",wakil_direktur:"Wakil Direktur",manajer:"Manajer",admin:"Admin"};
@@ -1602,7 +1629,7 @@ function renderDash(){
   $("d-nav").innerHTML=ps.map(k=>`<button class="${k===DTAB?"on":""}" onclick="dTab('${k}')">${TABS[k][1]}</button>`).join("");
   $("d-title").textContent=TABS[DTAB][1];
   $("d-body").innerHTML='<p class="muted">Memuat…</p>';
-  VIEWS[DTAB]().then(()=>mobLabels()).catch(e=>{$("d-body").innerHTML=`<div class="alert">${esc(e.message)}<br>Pastikan file <b>Supabase-UPDATE-V5.sql</b> sudah di-RUN di Supabase.</div>`});
+  VIEWS[DTAB]().then(()=>mobLabels()).catch(e=>{$("d-body").innerHTML=`<div class="alert">${esc(e.message)}<br>Pastikan skema tabel dan RLS Supabase sudah dikonfigurasi.</div>`});
 }
 function dTab(k){DTAB=k;renderDash();window.scrollTo(0,0)}
 
@@ -1659,11 +1686,11 @@ function ordersTable(l,ed){
   if(!l.length)return'<p class="muted">Belum ada pesanan.</p>';
   return`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Pelanggan</th><th>Produk</th><th>Total</th><th>Status</th>${ed?"<th></th>":""}</tr></thead><tbody>${l.map(o=>`<tr>
   <td>${dt(o.created_at)}</td>
-  <td><b>${esc(o.customer_name)}</b><br><a class="lnk" target="_blank" href="https://wa.me/${esc(waNum(o.whatsapp))}">${esc(o.whatsapp)}</a></td>
+  <td><b>${esc(o.customer_name)}</b><br><a class="lnk" target="_blank" rel="noopener" href="https://wa.me/${esc(waNum(o.whatsapp))}">${esc(o.whatsapp)}</a></td>
   <td>${esc(o.product)}<br><small>${esc([o.size_text,o.unit_text,o.detail].filter(Boolean).join(" · "))}</small></td>
   <td>${rp(o.total)}</td>
-  <td>${ed?`<select class="d-sel st-${esc(o.status)}" onchange="setStatus(${o.id},this.value)">${ST.map(s=>`<option ${s===o.status?"selected":""}>${s}</option>`).join("")}</select>`:`<span class="badge st-${esc(o.status)}">${esc(o.status)}</span>`}</td>
-  ${ed?`<td><button class="d-ic" onclick="delRow('orders',${o.id},'pesanan')">Hapus</button></td>`:""}</tr>`).join("")}</tbody></table></div>`;
+  <td>${ed?`<select class="d-sel st-${esc(o.status)}" onchange="setStatus(${Number(o.id)},this.value)">${ST.map(s=>`<option ${s===o.status?"selected":""}>${s}</option>`).join("")}</select>`:`<span class="badge st-${esc(o.status)}">${esc(o.status)}</span>`}</td>
+  ${ed?`<td><button class="d-ic" onclick="delRow('orders',${Number(o.id)},'pesanan')">Hapus</button></td>`:""}</tr>`).join("")}</tbody></table></div>`;
 }
 async function setStatus(id,s){
   const{data:o}=await sb.from("orders").select("*").eq("id",id).single();
@@ -1696,10 +1723,11 @@ VIEWS.produk=async()=>{
   $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${DP.length} produk</span><button class="btn btn-y" onclick="addProd()">+ Tambah produk</button></div>
   <div class="d-table"><table><thead><tr><th>Produk</th><th>Harga jual</th><th>Modal</th><th>Margin</th><th>Beranda</th><th>Aktif</th><th></th></tr></thead><tbody>${DP.map(p=>{
     const m=p.price?Math.round((p.price-p.modal_price)/p.price*100):0;
+    const pid=Number(p.id);
     return`<tr><td>${p.image_url?`<img class="d-thumb" loading="lazy" decoding="async" src="${esc(p.image_url.replace(SB_URL,"/api/supabase"))}" alt="">`:""}<b>${esc(p.name)}</b><br><small>${esc(p.category)} ${esc(p.unit)}</small></td><td>${rp(p.price)}</td><td>${rp(p.modal_price)}</td><td>${m}%</td>
-    <td><input type="checkbox" ${p.show_in_front?"checked":""} onchange="toggle('products',${p.id},'show_in_front',this.checked)"></td>
-    <td><input type="checkbox" ${p.active?"checked":""} onchange="toggle('products',${p.id},'active',this.checked)"></td>
-    <td><button class="d-ic" onclick="editProd(${p.id})">Edit</button><button class="d-ic" onclick="delRow('products',${p.id},'produk')">Hapus</button></td></tr>`}).join("")}</tbody></table></div>`;
+    <td><input type="checkbox" ${p.show_in_front?"checked":""} onchange="toggle('products',${pid},'show_in_front',this.checked)"></td>
+    <td><input type="checkbox" ${p.active?"checked":""} onchange="toggle('products',${pid},'active',this.checked)"></td>
+    <td><button class="d-ic" onclick="editProd(${pid})">Edit</button><button class="d-ic" onclick="delRow('products',${pid},'produk')">Hapus</button></td></tr>`}).join("")}</tbody></table></div>`;
 };
 
 // ---- KEUANGAN ----
@@ -1751,9 +1779,9 @@ VIEWS.keuangan=async()=>{
   const subs=[["kas","Arus kas"],["piutang","Piutang ("+rp(piuT)+")"],["hutang","Hutang ("+rp(hutT)+")"]];
   let body="";
   if(FSUB==="kas")body=`<div class="d-bar"><select class="form-input" style="max-width:200px" onchange="FM=this.value;renderDash()"><option>Semua</option>${months.map(m=>`<option value="${m}" ${m===FM?"selected":""}>${m}</option>`).join("")}</select><button class="btn btn-y" onclick="addFin()">+ Catat transaksi</button></div>
-  ${fl.length?`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Kategori</th><th>Keterangan</th><th>Jumlah</th><th></th></tr></thead><tbody>${fl.map(x=>`<tr><td>${dt(x.date)}</td><td><span class="badge ${x.kind==="pemasukan"?"in":"out"}">${esc(x.kind)}</span></td><td>${esc(x.category||"-")}</td><td>${esc(x.description)}</td><td>${rp(x.amount)}</td><td><button class="d-ic" onclick="delRow('finance',${x.id},'transaksi')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada transaksi.</p>'}`;
-  else if(FSUB==="piutang")body=(piu.length||pt.some(x=>x.sisa>0))?`<div class="d-table"><table><thead><tr><th>Sumber</th><th>Pelanggan</th><th>Sisa</th><th></th></tr></thead><tbody>${piu.map(s=>`<tr><td>Kasir ${esc(s.invoice_no)}</td><td>${esc(s.customer_name)}</td><td>${rp(s.total-s.paid)}</td><td><button class="d-ic" onclick="payMore(${s.id})">Lunasi</button></td></tr>`).join("")}${pt.filter(x=>x.sisa>0).map(x=>`<tr><td>Piutang lama</td><td>${esc(x.nama)}</td><td>${rp(x.sisa)}</td><td><button class="d-ic" onclick="delRow('piutang','${x.id}','piutang')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Tidak ada piutang. 🎉</p>';
-  else body=`<div class="d-bar"><span class="muted">Hutang ke supplier</span><button class="btn btn-y" onclick="addHutang()">+ Tambah hutang</button></div>${ht.length?`<div class="d-table"><table><thead><tr><th>Supplier</th><th>Total</th><th>Sisa</th><th>Jatuh tempo</th><th></th></tr></thead><tbody>${ht.map(h=>`<tr><td><b>${esc(h.supplier)}</b></td><td>${rp(h.total)}</td><td>${h.sisa>0?rp(h.sisa):'<span class="badge in">Lunas</span>'}</td><td>${dt(h.jatuh_tempo)}</td><td>${h.sisa>0?`<button class="d-ic" onclick="payHutang('${h.id}')">Bayar</button>`:""}<button class="d-ic" onclick="delRow('hutang','${h.id}','hutang')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada hutang.</p>'}`;
+  ${fl.length?`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Kategori</th><th>Keterangan</th><th>Jumlah</th><th></th></tr></thead><tbody>${fl.map(x=>`<tr><td>${dt(x.date)}</td><td><span class="badge ${x.kind==="pemasukan"?"in":"out"}">${esc(x.kind)}</span></td><td>${esc(x.category||"-")}</td><td>${esc(x.description)}</td><td>${rp(x.amount)}</td><td><button class="d-ic" onclick="delRow('finance',${Number(x.id)},'transaksi')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada transaksi.</p>'}`;
+  else if(FSUB==="piutang")body=(piu.length||pt.some(x=>x.sisa>0))?`<div class="d-table"><table><thead><tr><th>Sumber</th><th>Pelanggan</th><th>Sisa</th><th></th></tr></thead><tbody>${piu.map(s=>`<tr><td>Kasir ${esc(s.invoice_no)}</td><td>${esc(s.customer_name)}</td><td>${rp(s.total-s.paid)}</td><td><button class="d-ic" onclick="payMore(${Number(s.id)})">Lunasi</button></td></tr>`).join("")}${pt.filter(x=>x.sisa>0).map(x=>`<tr><td>Piutang lama</td><td>${esc(x.nama)}</td><td>${rp(x.sisa)}</td><td><button class="d-ic" onclick="delRow('piutang','${esc(x.id)}','piutang')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Tidak ada piutang. 🎉</p>';
+  else body=`<div class="d-bar"><span class="muted">Hutang ke supplier</span><button class="btn btn-y" onclick="addHutang()">+ Tambah hutang</button></div>${ht.length?`<div class="d-table"><table><thead><tr><th>Supplier</th><th>Total</th><th>Sisa</th><th>Jatuh tempo</th><th></th></tr></thead><tbody>${ht.map(h=>`<tr><td><b>${esc(h.supplier)}</b></td><td>${rp(h.total)}</td><td>${h.sisa>0?rp(h.sisa):'<span class="badge in">Lunas</span>'}</td><td>${dt(h.jatuh_tempo)}</td><td>${h.sisa>0?`<button class="d-ic" onclick="payHutang('${esc(h.id)}')">Bayar</button>`:""}<button class="d-ic" onclick="delRow('hutang','${esc(h.id)}','hutang')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada hutang.</p>'}`;
   $("d-body").innerHTML=`<div class="d-stats"><div class="d-stat"><small>Pemasukan${FM==="Semua"?"":" "+FM}</small><b>${rp(inc)}</b></div><div class="d-stat"><small>Pengeluaran</small><b>${rp(out)}</b></div><div class="d-stat"><small>Laba bersih</small><b>${rp(inc-out)}</b></div><div class="d-stat"><small>Saldo kas total</small><b>${rp(sum(f,"pemasukan")-sum(f,"pengeluaran"))}</b></div></div>
   <div class="pills">${subs.map(p=>`<button class="pill-btn ${p[0]===FSUB?"on":""}" onclick="FSUB='${p[0]}';renderDash()">${p[1]}</button>`).join("")}</div>${body}`;
 };
@@ -1767,7 +1795,7 @@ const saveCust=id=>async o=>{
 };
 function custFilter(q){
   q=q.toLowerCase();const l=DC.filter(c=>(c.name||"").toLowerCase().includes(q));
-  $("c-list").innerHTML=l.length?`<div class="d-table"><table><thead><tr><th>Pelanggan</th><th>Transaksi</th><th>Total nilai</th><th>Terakhir</th><th></th></tr></thead><tbody>${l.map(c=>`<tr><td><b>${esc(c.name)}</b>${c.phone?`<br><a class="lnk" target="_blank" href="https://wa.me/${esc(waNum(c.phone))}">${esc(c.phone)}</a>`:""}</td><td>${c.total_transaksi||0}x</td><td>${rp(c.total_nilai)}</td><td>${dt(c.last_transaksi)}</td><td><button class="d-ic" onclick="openForm('Edit pelanggan',CF,DC.find(x=>x.id==='${c.id}'),saveCust('${c.id}'))">Edit</button><button class="d-ic" onclick="delRow('customers','${c.id}','pelanggan')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Pelanggan tidak ditemukan.</p>';
+  $("c-list").innerHTML=l.length?`<div class="d-table"><table><thead><tr><th>Pelanggan</th><th>Transaksi</th><th>Total nilai</th><th>Terakhir</th><th></th></tr></thead><tbody>${l.map(c=>`<tr><td><b>${esc(c.name)}</b>${c.phone?`<br><a class="lnk" target="_blank" rel="noopener" href="https://wa.me/${esc(waNum(c.phone))}">${esc(c.phone)}</a>`:""}</td><td>${c.total_transaksi||0}x</td><td>${rp(c.total_nilai)}</td><td>${dt(c.last_transaksi)}</td><td><button class="d-ic" onclick="openForm('Edit pelanggan',CF,DC.find(x=>x.id==='${esc(c.id)}'),saveCust('${esc(c.id)}'))">Edit</button><button class="d-ic" onclick="delRow('customers','${esc(c.id)}','pelanggan')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Pelanggan tidak ditemukan.</p>';
   mobLabels();
 }
 VIEWS.pelanggan=async()=>{
@@ -1776,7 +1804,7 @@ VIEWS.pelanggan=async()=>{
   custFilter("");
 };
 
-// ---- SUPPLIER (harga bahan) ----
+// ---- SUPPLIER ----
 const SF=[{k:"supplier",l:"Supplier",wide:1},{k:"item",l:"Item",wide:1},{k:"harga",l:"Harga (Rp)",type:"number"},{k:"satuan",l:"Satuan"},{k:"note",l:"Catatan",wide:1}];
 const saveSup=id=>async o=>{
   if(!o.item){toast("Item wajib diisi");return false}
@@ -1784,7 +1812,7 @@ const saveSup=id=>async o=>{
 };
 function supFilter(q){
   q=q.toLowerCase();const l=DSP.filter(c=>((c.item||"")+" "+(c.supplier||"")).toLowerCase().includes(q));
-  $("s-list").innerHTML=l.length?`<div class="d-table"><table><thead><tr><th>Item</th><th>Supplier</th><th>Harga</th><th></th></tr></thead><tbody>${l.map(c=>`<tr><td><b>${esc(c.item)}</b>${c.note?`<br><small>${esc(c.note)}</small>`:""}</td><td>${esc(c.supplier)}</td><td>${rp(c.harga)} <small>/${esc(c.satuan||"")}</small></td><td><button class="d-ic" onclick="openForm('Edit harga',SF,DSP.find(x=>x.id==='${c.id}'),saveSup('${c.id}'))">Edit</button><button class="d-ic" onclick="delRow('supplier_prices','${c.id}','harga')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Tidak ditemukan.</p>';
+  $("s-list").innerHTML=l.length?`<div class="d-table"><table><thead><tr><th>Item</th><th>Supplier</th><th>Harga</th><th></th></tr></thead><tbody>${l.map(c=>`<tr><td><b>${esc(c.item)}</b>${c.note?`<br><small>${esc(c.note)}</small>`:""}</td><td>${esc(c.supplier)}</td><td>${rp(c.harga)} <small>/${esc(c.satuan||"")}</small></td><td><button class="d-ic" onclick="openForm('Edit harga',SF,DSP.find(x=>x.id==='${esc(c.id)}'),saveSup('${esc(c.id)}'))">Edit</button><button class="d-ic" onclick="delRow('supplier_prices','${esc(c.id)}','harga')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Tidak ditemukan.</p>';
   mobLabels();
 }
 VIEWS.supplier=async()=>{
@@ -1798,7 +1826,7 @@ const AF=[{k:"name",l:"Nama",wide:1},{k:"whatsapp",l:"WhatsApp"},{k:"referral_co
 const editAff=id=>openForm("Edit afiliasi",AF,DA.find(a=>a.id===id),async o=>{const ok=await run(sb.from("affiliates").update(o).eq("id",id),"Tersimpan");if(ok)renderDash();return ok});
 VIEWS.afiliasi=async()=>{
   DA=await rows("affiliates");
-  $("d-body").innerHTML=DA.length?`<div class="d-table"><table><thead><tr><th>Mitra</th><th>Kode</th><th>Klik</th><th>Komisi</th><th></th></tr></thead><tbody>${DA.map(a=>`<tr><td><b>${esc(a.name)}</b><br><a class="lnk" target="_blank" href="https://wa.me/${esc(waNum(a.whatsapp))}">${esc(a.whatsapp)}</a></td><td><b>${esc(a.referral_code)}</b></td><td>${a.total_clicks||0}</td><td>${rp(a.total_commission)}</td><td><button class="d-ic" onclick="editAff(${a.id})">Edit</button><button class="d-ic" onclick="delRow('affiliates',${a.id},'mitra')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada mitra afiliasi.</p>';
+  $("d-body").innerHTML=DA.length?`<div class="d-table"><table><thead><tr><th>Mitra</th><th>Kode</th><th>Klik</th><th>Komisi</th><th></th></tr></thead><tbody>${DA.map(a=>`<tr><td><b>${esc(a.name)}</b><br><a class="lnk" target="_blank" rel="noopener" href="https://wa.me/${esc(waNum(a.whatsapp))}">${esc(a.whatsapp)}</a></td><td><b>${esc(a.referral_code)}</b></td><td>${a.total_clicks||0}</td><td>${rp(a.total_commission)}</td><td><button class="d-ic" onclick="editAff(${Number(a.id)})">Edit</button><button class="d-ic" onclick="delRow('affiliates',${Number(a.id)},'mitra')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada mitra afiliasi.</p>';
 };
 
 // ---- REELS ----
@@ -1812,7 +1840,7 @@ const addReel=()=>openForm("Tambah reels",RF,{},saveReel(null));
 const editReel=id=>openForm("Edit reels",RF,DR.find(r=>r.id===id),saveReel(id));
 VIEWS.reels=async()=>{
   DR=await rows("reels");
-  $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${DR.length} video</span><button class="btn btn-y" onclick="addReel()">+ Tambah reels</button></div>${DR.length?`<div class="d-table"><table><thead><tr><th>Judul</th><th>Video</th><th>Tampil</th><th></th></tr></thead><tbody>${DR.map(r=>`<tr><td><b>${esc(r.title)}</b><br><small>${esc(r.description||"")}</small></td><td><a class="lnk" target="_blank" href="${esc(reelInfo(r.video_url).open)}">Buka</a></td><td><input type="checkbox" ${r.active?"checked":""} onchange="toggle('reels',${r.id},'active',this.checked);reelsLoaded=false"></td><td><button class="d-ic" onclick="editReel(${r.id})">Edit</button><button class="d-ic" onclick="delRow('reels',${r.id},'reels');reelsLoaded=false">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada reels.</p>'}`;
+  $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${DR.length} video</span><button class="btn btn-y" onclick="addReel()">+ Tambah reels</button></div>${DR.length?`<div class="d-table"><table><thead><tr><th>Judul</th><th>Video</th><th>Tampil</th><th></th></tr></thead><tbody>${DR.map(r=>`<tr><td><b>${esc(r.title)}</b><br><small>${esc(r.description||"")}</small></td><td><a class="lnk" target="_blank" rel="noopener" href="${esc(reelInfo(r.video_url).open)}">Buka</a></td><td><input type="checkbox" ${r.active?"checked":""} onchange="toggle('reels',${Number(r.id)},'active',this.checked);reelsLoaded=false"></td><td><button class="d-ic" onclick="editReel(${Number(r.id)})">Edit</button><button class="d-ic" onclick="delRow('reels',${Number(r.id)},'reels');reelsLoaded=false">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada reels.</p>'}`;
 };
 
 // ---- MANAJEMEN AKSES ----
@@ -1852,13 +1880,13 @@ function delUser(id){
 VIEWS.akses=async()=>{
   DU=await rows("users","created_at",true);
   $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${DU.length} akun · Direktur selalu punya akses penuh</span><button class="btn btn-y" onclick="addUser()">+ Tambah akun</button></div>
-  <div class="d-table"><table><thead><tr><th>Akun</th><th>Peran</th><th>Hak akses</th><th>Login terakhir</th><th>Aktif</th><th></th></tr></thead><tbody>${DU.map(u=>`<tr>
+  <div class="d-table"><table><thead><tr><th>Akun</th><th>Peran</th><th>Hak akses</th><th>Login terakhir</th><th>Aktif</th><th></th></tr></thead><tbody>${DU.map(u=>{const uidNum=Number(u.id);return`<tr>
   <td><b>${esc(u.name)}</b><br><small>@${esc(u.username)}</small></td>
   <td><span class="badge">${esc(ROLES[u.role]||u.role)}</span></td>
   <td><div class="chips">${permsOf(u).map(k=>`<span>${TABS[k][1]}</span>`).join("")}</div></td>
   <td>${dt(u.last_login)}</td>
-  <td><input type="checkbox" ${u.active?"checked":""} onchange="toggleUser(${u.id},this.checked)"></td>
-  <td><button class="d-ic" title="Atur akses" onclick="editUser(${u.id})">Edit</button><button class="d-ic" title="Reset password" onclick="resetPw(${u.id})">Reset</button><button class="d-ic" onclick="delUser(${u.id})">Hapus</button></td></tr>`).join("")}</tbody></table></div>`;
+  <td><input type="checkbox" ${u.active?"checked":""} onchange="toggleUser(${uidNum},this.checked)"></td>
+  <td><button class="d-ic" title="Atur akses" onclick="editUser(${uidNum})">Edit</button><button class="d-ic" title="Reset password" onclick="resetPw(${uidNum})">Reset</button><button class="d-ic" onclick="delUser(${uidNum})">Hapus</button></td></tr>`}).join("")}</tbody></table></div>`;
 };
 
 // ===== UTIL ANGKA & TANGGAL =====
@@ -1934,7 +1962,7 @@ VIEWS.ringkasan=async()=>{
 VIEWS.interaksi=async()=>{
   const[l,pr]=await Promise.all([rows("interactions"),rows("products","sort_order",true)]);
   const nm=id=>(pr.find(p=>p.id==id)||{}).name||"-";
-  $("d-body").innerHTML=l.length?`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Pengunjung</th><th>Produk</th><th>Jenis</th><th>Komentar</th><th></th></tr></thead><tbody>${l.map(x=>`<tr><td>${dt(x.created_at)}</td><td><b>${esc(x.customer_name)}</b>${x.whatsapp?`<br><a class="lnk" target="_blank" href="https://wa.me/${esc(waNum(x.whatsapp))}">${esc(x.whatsapp)}</a>`:""}</td><td>${esc(nm(x.target_id))}</td><td><span class="badge">${esc(x.kind)}</span></td><td>${esc(x.comment_text||"")}</td><td><button class="d-ic" onclick="delRow('interactions',${x.id},'interaksi')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada interaksi.</p>';
+  $("d-body").innerHTML=l.length?`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Pengunjung</th><th>Produk</th><th>Jenis</th><th>Komentar</th><th></th></tr></thead><tbody>${l.map(x=>`<tr><td>${dt(x.created_at)}</td><td><b>${esc(x.customer_name)}</b>${x.whatsapp?`<br><a class="lnk" target="_blank" rel="noopener" href="https://wa.me/${esc(waNum(x.whatsapp))}">${esc(x.whatsapp)}</a>`:""}</td><td>${esc(nm(x.target_id))}</td><td><span class="badge">${esc(x.kind)}</span></td><td>${esc(x.comment_text||"")}</td><td><button class="d-ic" onclick="delRow('interactions',${Number(x.id)},'interaksi')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada interaksi.</p>';
 };
 
 // ===== KASIR / POS =====
@@ -2022,7 +2050,7 @@ async function posSave(){
   await custUpsert(row.customer_name,row.whatsapp,t.total);
   DS.unshift(data);CART=[posNew()];POSD=posReset();
   $("d-modal-card").innerHTML=`<h3>Transaksi tersimpan</h3><p class="muted" style="margin-bottom:14px"><b>${esc(inv)}</b> · ${rp(t.total)} · ${st}</p>
-  <div class="d-form-act" style="justify-content:flex-start;flex-wrap:wrap"><button class="btn btn-y" onclick="salePdf(${data.id},'a4')">Unduh invoice PDF</button><button class="btn btn-ghost-d" onclick="salePdf(${data.id},'struk')">Struk 80mm</button><button class="btn btn-ghost-d" onclick="closeForm();renderDash()">Transaksi baru</button></div>`;
+  <div class="d-form-act" style="justify-content:flex-start;flex-wrap:wrap"><button class="btn btn-y" onclick="salePdf(${Number(data.id)},'a4')">Unduh invoice PDF</button><button class="btn btn-ghost-d" onclick="salePdf(${Number(data.id)},'struk')">Struk 80mm</button><button class="btn btn-ghost-d" onclick="closeForm();renderDash()">Transaksi baru</button></div>`;
   FORM=null;$("d-modal").classList.remove("hidden");
 }
 async function riwayatView(){
@@ -2035,7 +2063,7 @@ async function riwayatView(){
   const owe=DS.reduce((a,x)=>a+Math.max((+x.total||0)-(+x.paid||0),0),0);
   $("pos-body").innerHTML=`<div class="d-stats"><div class="d-stat"><small>Penjualan hari ini</small><b>${rp(sm(x=>ymd(new Date(x.created_at))===today))}</b></div><div class="d-stat"><small>Penjualan bulan ini</small><b>${rp(sm(x=>ymd(new Date(x.created_at)).slice(0,7)===mon))}</b></div><div class="d-stat"><small>Piutang (belum lunas)</small><b>${rp(owe)}</b></div></div>
   ${DS.length?`<div class="d-table"><table><thead><tr><th>Invoice</th><th>Pelanggan</th><th>Total</th><th>Status</th><th>Kasir</th><th></th></tr></thead><tbody>${DS.map(s=>`<tr><td><b>${esc(s.invoice_no)}</b><br><small>${dt(s.created_at)}</small></td><td>${esc(s.customer_name)}</td><td>${rp(s.total)}<br><small>${esc(s.method)}</small></td><td><span class="badge ${s.status==="Lunas"?"in":"out"}">${esc(s.status)}</span>${s.total>s.paid?`<br><small>Sisa ${rp(s.total-s.paid)}</small>`:""}</td><td>${esc(s.cashier_name||s.cashier||"")}</td>
-  <td><button class="d-ic" onclick="salePdf(${s.id},'a4')">Invoice</button><button class="d-ic" onclick="salePdf(${s.id},'struk')">Struk</button>${s.total>s.paid?`<button class="d-ic" onclick="payMore(${s.id})">Lunasi</button>`:""}${U.role!=="admin"?`<button class="d-ic" onclick="delRow('sales',${s.id},'transaksi')">Hapus</button>`:""}</td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada transaksi.</p>'}`;
+  <td><button class="d-ic" onclick="salePdf(${Number(s.id)},'a4')">Invoice</button><button class="d-ic" onclick="salePdf(${Number(s.id)},'struk')">Struk</button>${s.total>s.paid?`<button class="d-ic" onclick="payMore(${Number(s.id)})">Lunasi</button>`:""}${U.role!=="admin"?`<button class="d-ic" onclick="delRow('sales',${Number(s.id)},'transaksi')">Hapus</button>`:""}</td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada transaksi.</p>'}`;
 }
 function payMore(id){
   const s=DS.find(x=>x.id===id);
@@ -2113,16 +2141,24 @@ async function salePdf(id,mode){
 }
 // ===== INIT =====
 renderSV();
-try{const ss=sessionStorage.getItem("artrisa_u");if(ss){U=JSON.parse(ss);updateUserUI()}}catch(e){}
+try{
+  const ss=sessionStorage.getItem("artrisa_u");
+  if(ss){
+    const parsed=JSON.parse(ss);
+    if(parsed&&parsed.user&&parsed.token){
+      U=parsed.user;TOKEN=parsed.token;updateUserUI();
+    }else{
+      sessionStorage.removeItem("artrisa_u");
+    }
+  }
+}catch(e){}
 load();
 
-// Handle initial hash
 const initHash=location.hash.replace("#","");
 const validPages=["beranda","layanan","konten-beres","pesan","afiliasi","reels","login","dashboard"];
 if(validPages.includes(initHash)){
   goPage(initHash);
 }
-
 </script>
 </body>
 </html>
