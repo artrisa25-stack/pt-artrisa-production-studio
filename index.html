@@ -1294,7 +1294,7 @@ function card(p,i){
   const c=C[p.id]||{};
   const canSeePrice=U&&["direktur","wakil_direktur","manajer"].includes(U.role)&&p.price!=null;
   const pr=canSeePrice?"Rp "+fmt(p.price):"Rp XXXX";
-  const safeImg=p.image_url?String(p.image_url).replace(SB_URL,"/api/supabase").replace(/['"\(\)\]/g,""):"";
+  const safeImg=p.image_url?String(p.image_url).replace(SB_URL,"/api/supabase").replace(/['"]/g,""):"";
   const bg=safeImg?`url('${encodeURI(safeImg)}') center/cover`:GR[i%GR.length];
   const u=p.unit||"";
   const ic=IC[p.category]||"🏷️";
