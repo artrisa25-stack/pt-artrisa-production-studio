@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-const SB_URL = process.env.SUPABASE_URL || 'https://spqivuqidggtcivrddtm.supabase.co';
+const SB_URL = process.env.SUPABASE_URL || 'https://spqivuqidqgtcivrddtm.supabase.co';
 const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
 const AUTH_SECRET = process.env.AUTH_SECRET || '';
 
