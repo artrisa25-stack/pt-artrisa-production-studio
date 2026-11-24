@@ -1606,9 +1606,10 @@ async function upImg(inp,tid){
   try{
     const blob=await shrink(f,900,.8);
     const name=Date.now()+"-"+Math.random().toString(36).slice(2,7)+".jpg";
-    const{error}=await sb.storage.from(BUCKET).upload(name,blob,{contentType:"image/jpeg",upsert:true,cacheControl:"31536000"});
-    if(error)throw error;
-    const url="/api/supabase/storage/v1/object/public/"+BUCKET+"/"+name;
+    const up=await fetch("/api/upload",{method:"POST",headers:{"Content-Type":"image/jpeg","x-artrisa-token":TOKEN||""},body:blob});
+    const js=await up.json().catch(()=>({}));
+    if(!up.ok)throw new Error(js.error||"upload gagal");
+    const url=js.url;
     if(!await canLoad(url))throw new Error("file belum bisa dibuka lewat proxy");
     put(url);toast("Foto terunggah ✓ klik Simpan");
   }catch(e){
