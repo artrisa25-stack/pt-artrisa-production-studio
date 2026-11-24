@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ARTRISA Production Studio — Visual Kuat, Bisnis Melesat</title>
+<title>ARTRISA Production Studio — Studio Kreatif Satu Pintu</title>
 <meta name="description" content="Print, desain, advertising, dokumentasi, dan Konten Beres untuk UMKM, Desa, dan Perusahaan. Stabat, Langkat, Sumatera Utara.">
 <link rel="icon" href="logo-artrisa.png">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -718,6 +718,9 @@ body.in-dash{padding-bottom:0}
   .reel-overlay{z-index:3;pointer-events:none;padding:60px 16px 22px}
   .reel-overlay b{font-size:15px}.reel-overlay small{font-size:11px}
 }
+.btn-lg{padding:18px 30px;font-size:17px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.hero-profil{width:100%;justify-content:center;text-align:center}
+@media(min-width:640px){.hero-profil{width:auto}}
 </style>
 </head>
 <body>
@@ -757,12 +760,14 @@ body.in-dash{padding-bottom:0}
           <img src="logo-artrisa.png" style="width:16px;height:16px;object-fit:contain" onerror="this.style.display='none'">
           STABAT • LANGKAT • SUMATERA UTARA
         </div>
-        <h1>VISUAL KUAT,<br><i>BISNIS MELESAT.</i></h1>
+        <h1>STUDIO KREATIF<br><i>SATU PINTU.</i></h1>
         <p class="hero-sub">Print, desain, advertising, dokumentasi, dan pengelolaan media sosial — satu studio untuk UMKM, Desa, Kecamatan, dan Perusahaan di seluruh Indonesia.</p>
         <div class="hero-btns">
           <button class="btn btn-y" onclick="goPage('pesan')">Pesan Sekarang →</button>
-          <a class="btn btn-w" href="https://wa.me/6283851722321" target="_blank" rel="noopener">💬 Chat WhatsApp</a>
+          <a class="btn btn-w" href="https://wa.me/6283851722321" target="_blank" rel="noopener">Chat WhatsApp</a>
+          <a class="btn btn-w" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20tertarik%20Jasa%20Pembuatan%20Website%20%26%20Sistem" target="_blank" rel="noopener">Jasa Pembuatan Website &amp; Sistem</a>
           <button class="btn btn-ghost" onclick="goPage('konten-beres')">✨ Konten Beres</button>
+          <a class="btn btn-y btn-lg hero-profil" href="/company-profile.html">📄 Lihat Company Profile &amp; Unduh PDF</a>
         </div>
         <div class="hero-stats">
           <div class="hstat"><b>5+</b><span>Kategori layanan</span></div>
@@ -824,7 +829,7 @@ body.in-dash{padding-bottom:0}
             <img src="logo-artrisa-landscape.png" style="width:auto;height:28px;object-fit:contain;vertical-align:middle" onerror="this.style.display='none'">
             <span class="footer-name">ARTRISA</span>
           </div>
-          <p>Visual Kuat, Bisnis Melesat.<br>Melayani seluruh Indonesia — UMKM, Desa, Kecamatan, Perusahaan.</p>
+          <p>Studio Kreatif Satu Pintu.<br>Melayani seluruh Indonesia — UMKM, Desa, Kecamatan, Perusahaan.</p>
           <p style="margin-top:6px">📍 Stabat, Langkat, Sumatera Utara 20811</p>
         </div>
         <div>
@@ -1180,6 +1185,7 @@ async function sha256(t){
 let sb,P=[],C={},U=null,TOKEN="",FILTER="Semua";
 try{
   sb=window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:async(u,o={})=>{
+    if(o.method&&o.method!=="GET")RC.clear();
     const s=String(u).replace(SB_URL,"/api/supabase");
     const hdrs=new Headers(o.headers||{});
     if(TOKEN)hdrs.set("x-artrisa-token",TOKEN);
@@ -1567,9 +1573,13 @@ let DTAB="ringkasan",OF="Semua",DP=[],DU=[],DA=[],DR=[],FORM=null;
 const VIEWS={};
 
 function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),2800)}
+const RC=new Map();
 async function rows(t,col="created_at",asc=false){
+  const k=t+"|"+col+"|"+asc,hit=RC.get(k);
+  if(hit&&Date.now()-hit.t<30000)return hit.d;
   const{data,error}=await sb.from(t).select("*").order(col,{ascending:asc});
-  if(error)throw error;return data||[];
+  if(error)throw error;
+  RC.set(k,{t:Date.now(),d:data||[]});return data||[];
 }
 async function run(p,ok){
   const{error}=await p;
@@ -1598,13 +1608,24 @@ function dTab(k){DTAB=k;renderDash();window.scrollTo(0,0)}
 
 const BUCKET="feed";
 function shrink(file,max,qual){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const r=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*r);c.height=Math.round(im.height*r);const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);c.toBlob(b=>b?res(b):rej(new Error("gagal kompres")),"image/jpeg",qual||.85)};im.onerror=()=>rej(new Error("file bukan gambar (HEIC? ubah ke JPG)"));im.src=URL.createObjectURL(file)})}
+async function shrinkTo(file,maxBytes=100*1024){
+  let last=null;
+  for(const w of [1000,900,800,700,600,500]){
+    for(const q of [.8,.7,.6,.5,.4]){
+      last=await shrink(file,w,q);
+      if(last.size<=maxBytes)return last;
+    }
+  }
+  return last;
+}
 async function upImg(inp,tid){
   const f=inp.files[0];if(!f)return;
   const put=u=>{$(tid).value=u;const pv=$(tid.replace("f_","pv_"));if(pv){pv.src=u;pv.hidden=false}};
   const canLoad=u=>new Promise(r=>{const i=new Image();i.onload=()=>r(true);i.onerror=()=>r(false);i.src=u});
   toast("Mengunggah…");
   try{
-    const blob=await shrink(f,900,.8);
+    const blob=await shrinkTo(f,100*1024);
+    if(blob.size>100*1024)throw new Error("foto tidak bisa dikecilkan di bawah 100 KB, coba foto lain");
     const name=Date.now()+"-"+Math.random().toString(36).slice(2,7)+".jpg";
     const up=await fetch("/api/upload",{method:"POST",headers:{"Content-Type":"image/jpeg","x-artrisa-token":TOKEN||""},body:blob});
     const js=await up.json().catch(()=>({}));
@@ -1612,13 +1633,7 @@ async function upImg(inp,tid){
     const url=js.url;
     if(!await canLoad(url))throw new Error("file belum bisa dibuka lewat proxy");
     put(url);toast("Foto terunggah ✓ klik Simpan");
-  }catch(e){
-    try{
-      const b2=await shrink(f,800,.7);
-      const d=await new Promise((r,j)=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.onerror=j;fr.readAsDataURL(b2)});
-      put(d);toast("Foto disimpan langsung di database ✓ klik Simpan");
-    }catch(e2){toast("Gagal unggah: "+e2.message)}
-  }
+  }catch(e){toast("Gagal unggah: "+e.message)}
   inp.value="";
 }
 
@@ -2053,7 +2068,7 @@ async function salePdf(id,mode){
     });
     DL();LR("Subtotal",R(s.subtotal));if(s.discount)LR("Diskon","- "+R(s.discount));LR("TOTAL",R(s.total),1);LR("Bayar ("+s.method+")",R(s.paid));
     if(sisa)LR("Sisa",R(sisa),1);if(kemb)LR("Kembali",R(kemb));LR("Status",s.status);y+=2;DL();
-    C("Terima kasih",8,1);C("Visual Kuat, Bisnis Melesat.",7);
+    C("Terima kasih",8,1);C("Studio Kreatif Satu Pintu.",7);
     d.save(s.invoice_no+"-struk.pdf");return;
   }
   const d=new jsPDF({unit:"mm",format:"a4"}),W=210;
@@ -2061,7 +2076,7 @@ async function salePdf(id,mode){
   const lg=await logoData();let tx=14;
   if(lg){const h=18,w=h*lg.w/lg.h;d.addImage(lg.d,"PNG",14,8,w,h);tx=14+w+5}
   d.setTextColor(255,255,0);d.setFont("helvetica","bold");d.setFontSize(18);d.text("ARTRISA",tx,17);
-  d.setTextColor(255,255,255);d.setFontSize(8);d.setFont("helvetica","normal");d.text("Production Studio · Visual Kuat, Bisnis Melesat",tx,22);
+  d.setTextColor(255,255,255);d.setFontSize(8);d.setFont("helvetica","normal");d.text("Production Studio · Studio Kreatif Satu Pintu",tx,22);
   d.setFont("helvetica","bold");d.setFontSize(22);d.text("INVOICE",W-14,17,{align:"right"});d.setFontSize(9);d.setFont("helvetica","normal");d.text(s.invoice_no,W-14,23,{align:"right"});
   d.setTextColor(40,40,40);let y=44;
   d.setFontSize(8);d.setTextColor(110,110,110);d.text("DITAGIHKAN KEPADA",14,y);d.text("DETAIL",125,y);y+=5;
