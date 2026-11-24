@@ -1,6 +1,6 @@
 import { verifyToken } from './auth.js';
 
-const SB_URL = process.env.SUPABASE_URL || 'https://spqivuqidqgtcivrddtm.supabase.co';
+const SB_URL = process.env.SUPABASE_URL || 'https://spqivuqidggtcivrddtm.supabase.co';
 const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 // Tabel yang hanya boleh diakses oleh user yang sudah login (dashboard)

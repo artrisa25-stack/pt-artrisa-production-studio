@@ -1,20 +1,24 @@
 import crypto from 'crypto';
 
-const SB_URL = process.env.SUPABASE_URL || 'https://spqivuqidqgtcivrddtm.supabase.co';
+const SB_URL = process.env.SUPABASE_URL || 'https://spqivuqidggtcivrddtm.supabase.co';
 const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
-const AUTH_SECRET = process.env.AUTH_SECRET || 'artrisa-change-this-secret-in-vercel-env';
+const AUTH_SECRET = process.env.AUTH_SECRET || '';
 
 function signToken(payload) {
+  if (!AUTH_SECRET) throw new Error('AUTH_SECRET belum diatur di Vercel');
   const body = Buffer.from(JSON.stringify(payload)).toString('base64url');
   const sig = crypto.createHmac('sha256', AUTH_SECRET).update(body).digest('base64url');
   return `${body}.${sig}`;
 }
 
 export function verifyToken(token) {
+  if (!AUTH_SECRET) return null;
   if (!token || typeof token !== 'string' || !token.includes('.')) return null;
   const [body, sig] = token.split('.');
+  if (!body || !sig) return null;
   const expected = crypto.createHmac('sha256', AUTH_SECRET).update(body).digest('base64url');
-  if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
+  const a1 = Buffer.from(sig), a2 = Buffer.from(expected);
+  if (a1.length !== a2.length || !crypto.timingSafeEqual(a1, a2)) return null;
   try {
     const data = JSON.parse(Buffer.from(body, 'base64url').toString('utf8'));
     if (data.exp && Date.now() > data.exp) return null;
@@ -28,6 +32,7 @@ export default async function handler(req, res) {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  if (!AUTH_SECRET) return res.status(500).json({ error: 'Server belum dikonfigurasi (AUTH_SECRET).' });
 
   const { username, password } = req.body || {};
   if (!username || !password || typeof username !== 'string' || typeof password !== 'string') {
