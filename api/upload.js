@@ -5,7 +5,7 @@ export const config = { api: { bodyParser: false } };
 
 const SB_URL = process.env.SUPABASE_URL || 'https://spqivuqidqgtcivrddtm.supabase.co';
 const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-const MAX_BYTES = 2 * 1024 * 1024;
+const MAX_BYTES = 150 * 1024;
 const TYPES = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
 
 export default async function handler(req, res) {
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   let size = 0;
   for await (const chunk of req) {
     size += chunk.length;
-    if (size > MAX_BYTES) return res.status(413).json({ error: 'File terlalu besar (maks 2 MB).' });
+    if (size > MAX_BYTES) return res.status(413).json({ error: 'File terlalu besar (maks 150 KB, kompres dulu).' });
     chunks.push(chunk);
   }
   if (!size) return res.status(400).json({ error: 'File kosong.' });
