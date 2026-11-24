@@ -722,7 +722,6 @@ body.in-dash{padding-bottom:0}
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
 <header id="main-header">
   <div class="hd">
     <div class="brand" onclick="goPage('beranda')" style="cursor:pointer">
@@ -748,13 +747,8 @@ body.in-dash{padding-bottom:0}
   </nav>
 </header>
 
-<!-- ===== PAGES ===== -->
 <main>
-
-<!-- PAGE: BERANDA -->
 <div class="page active" id="page-beranda">
-
-  <!-- HERO -->
   <div class="hero">
     <div class="hero-orb o1"></div><div class="hero-orb o2"></div><div class="hero-orb o3"></div>
     <div class="hero-inner">
@@ -785,8 +779,6 @@ body.in-dash{padding-bottom:0}
   </div>
 
   <div class="wrap">
-
-    <!-- BANNER KONTEN BERES -->
     <div class="banner-kb">
       <div>
         <small>⭐ KONTEN BERES — UDAH BERES, TINGGAL POSTING.</small>
@@ -796,7 +788,6 @@ body.in-dash{padding-bottom:0}
       <button class="btn-dark" onclick="goPage('konten-beres')">Lihat Paket →</button>
     </div>
 
-    <!-- KATALOG -->
     <section class="sec" id="katalog">
       <div class="eyebrow">KATALOG • FEED PRODUK</div>
       <h2>Feed Produk Artrisa.</h2>
@@ -806,7 +797,6 @@ body.in-dash{padding-bottom:0}
       <div class="feed" id="feed"><p class="muted">Memuat katalog…</p></div>
     </section>
 
-    <!-- LAYANAN SECTION (preview di beranda) -->
     <section class="sec" id="layanan-preview">
       <div class="eyebrow">LAYANAN LENGKAP</div>
       <h2>Semua kebutuhan visual, satu tempat.</h2>
@@ -816,7 +806,6 @@ body.in-dash{padding-bottom:0}
       </div>
     </section>
 
-    <!-- LEGALITAS -->
     <div class="legal-box">
       <h3>🛡 Legalitas Terverifikasi</h3>
       <p class="muted" style="margin-top:6px;line-height:2">
@@ -828,7 +817,6 @@ body.in-dash{padding-bottom:0}
       </p>
     </div>
 
-    <!-- FOOTER -->
     <footer>
       <div class="footer-inner">
         <div>
@@ -850,11 +838,9 @@ body.in-dash{padding-bottom:0}
         <span>NIB 1811260001963 • AHU-060488.AH.01.30.Tahun 2025</span>
       </div>
     </footer>
-
   </div>
 </div>
 
-<!-- PAGE: SEMUA LAYANAN -->
 <div class="page" id="page-layanan">
   <div class="wrap">
     <section class="sec" style="padding-top:24px">
@@ -871,12 +857,10 @@ body.in-dash{padding-bottom:0}
       <div class="pills" id="pl2"></div>
       <div class="feed" id="feed2" style="margin-top:10px"><p class="muted">Memuat…</p></div>
     </section>
-
     <div style="height:28px"></div>
   </div>
 </div>
 
-<!-- PAGE: KONTEN BERES -->
 <div class="page" id="page-konten-beres">
   <div class="wrap">
     <div style="padding-top:24px">
@@ -945,13 +929,11 @@ body.in-dash{padding-bottom:0}
         <div class="kb-feat"><div class="ic">⚡</div><b>Proses Cepat</b><p>Konten siap dalam 2-3 hari kerja setelah brief diterima.</p></div>
         <div class="kb-feat"><div class="ic">🔄</div><b>Revisi Fleksibel</b><p>Tidak puas? Kami revisi sampai kamu happy.</p></div>
       </div>
-
       <div style="height:28px"></div>
     </div>
   </div>
 </div>
 
-<!-- PAGE: PESAN -->
 <div class="page" id="page-pesan">
   <div class="wrap">
     <div style="padding-top:24px">
@@ -1020,7 +1002,6 @@ body.in-dash{padding-bottom:0}
   </div>
 </div>
 
-<!-- PAGE: AFILIASI -->
 <div class="page" id="page-afiliasi">
   <div class="wrap">
     <div style="padding-top:24px">
@@ -1064,13 +1045,11 @@ body.in-dash{padding-bottom:0}
           </div>
         </div>
       </div>
-
       <div style="height:28px"></div>
     </div>
   </div>
 </div>
 
-<!-- PAGE: REELS -->
 <div class="page" id="page-reels">
   <div class="wrap">
     <div class="reels-page">
@@ -1084,7 +1063,6 @@ body.in-dash{padding-bottom:0}
   </div>
 </div>
 
-<!-- PAGE: LOGIN -->
 <div class="page" id="page-login">
   <button class="login-back" onclick="goPage('beranda')">← Kembali</button>
   <div class="login-bubbles">
@@ -1119,7 +1097,6 @@ body.in-dash{padding-bottom:0}
   </div>
 </div>
 
-<!-- PAGE: DASHBOARD (owner/admin) -->
 <div class="page" id="page-dashboard">
   <div class="dash">
     <aside class="d-side">
@@ -1138,7 +1115,6 @@ body.in-dash{padding-bottom:0}
   </div>
   <div class="d-modal hidden" id="d-modal" onclick="if(event.target===this)closeForm()"><div class="d-modal-card" id="d-modal-card"></div></div>
 </div>
-
 </main>
 
 <div class="d-modal hidden" id="ix-modal" onclick="if(event.target===this)ixClose()"><div class="d-modal-card" style="max-width:420px">
@@ -1152,7 +1128,6 @@ body.in-dash{padding-bottom:0}
 <div class="toast" id="toast"></div>
 <a class="wa-btn" href="https://wa.me/6283851722321" target="_blank" rel="noopener" aria-label="WhatsApp" id="wa-float">💬</a>
 
-<!-- BOTTOM NAV -->
 <nav class="bottom-nav" id="bottom-nav">
   <div class="bn-item on" data-page="beranda" onclick="goPage('beranda')">
     <div class="bn-icon">
@@ -1185,13 +1160,12 @@ body.in-dash{padding-bottom:0}
     <span id="bn-login-label">Login</span>
   </div>
 </nav>
+
 <script>
-// ===== CONFIG =====
 const SB_URL="https://spqivuqidqgtcivrddtm.supabase.co";
 const SB_KEY="sb_publishable_QR18b-QtSl0jUnpsPZdayQ_88ftX6m6";
 const WA="6283851722321";
 
-// ===== UTILS =====
 const $=id=>document.getElementById(id);
 const v=id=>$(id)?$(id).value.trim():"";
 const fmt=n=>(+n||0).toLocaleString("id-ID");
@@ -1203,7 +1177,6 @@ async function sha256(t){
   return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")
 }
 
-// ===== SUPABASE =====
 let sb,P=[],C={},U=null,TOKEN="",FILTER="Semua";
 try{
   sb=window.supabase.createClient(SB_URL,SB_KEY,{global:{fetch:async(u,o={})=>{
@@ -1216,7 +1189,6 @@ try{
   }}})
 }catch(e){console.error("Supabase init:",e)}
 
-// ===== FALLBACK DATA =====
 const FALLBACK=[
   {id:1001,name:"Spanduk Ulang Tahun",price:null,modal_price:0,category:"Spanduk & Outdoor",description:"Spanduk ucapan ulang tahun siap pasang.",unit:"/m",sort_order:1,show_in_front:true,active:true},
   {id:1002,name:"Stiker Chromo + Cutting Bulat",price:null,modal_price:0,category:"Stiker",description:"Stiker chromo dipotong bulat rapi.",unit:"/pcs",sort_order:2,show_in_front:true,active:true},
@@ -1245,7 +1217,6 @@ const SV=[
   ["🖨️","Cetak Cepat","Stiker & Banner","Produksi cepat 1 hari jadi untuk kebutuhan mendadak.","Order sekarang"]
 ];
 
-// ===== HALAMAN / PAGE ROUTING =====
 let CURRENT_PAGE="beranda";
 let reelsLoaded=false;
 
@@ -1289,7 +1260,6 @@ window.addEventListener("popstate",()=>{
   goPage(valid.includes(h)?h:"beranda");
 });
 
-// ===== RENDER CARDS =====
 function card(p,i){
   const c=C[p.id]||{};
   const canSeePrice=U&&["direktur","wakil_direktur","manajer"].includes(U.role)&&p.price!=null;
@@ -1371,7 +1341,6 @@ function setF(f){
   if(CURRENT_PAGE==="layanan")renderFeed2();
 }
 
-// ===== LAYANAN RENDER =====
 function renderSV(){
   const svHTML=SV.map(s=>`<div class="sv">
     <div class="sv-icon">${s[0]}</div>
@@ -1383,7 +1352,6 @@ function renderSV(){
   if($("svs-full"))$("svs-full").innerHTML=svHTML;
 }
 
-// ===== INTERAKSI =====
 let IX=null;
 function interact(id,kind){
   IX={id,kind};
@@ -1418,7 +1386,6 @@ function waOrder(id){
   window.open("https://wa.me/"+WA+"?text="+encodeURIComponent("Halo ARTRISA, saya ingin tanya/order "+(p?p.name:"produk")+" 🙏"),"_blank","noopener");
 }
 
-// ===== LOAD DATA =====
 async function load(){
   try{
     if(!sb)throw new Error("Supabase tidak tersambung");
@@ -1437,7 +1404,6 @@ async function load(){
   }
 }
 
-// ===== REELS =====
 async function loadReels(){
   reelsLoaded=true;
   const rl=$("rl");
@@ -1519,7 +1485,6 @@ function toggleReel(i){
   if(v.paused){v.play();c.classList.add("playing")}else{v.pause();c.classList.remove("playing")}
 }
 
-// ===== LOGIN (SERVER-SIDE AUTH ENDPOINT) =====
 async function doLogin(){
   const ls=$("ls"),u=v("lu"),p=$("lp")?$("lp").value:"";
   if(!u||!p){ls.textContent="Isi username dan password.";ls.className="login-status err";return}
@@ -1559,7 +1524,6 @@ function updateUserUI(){
   if(bnL)bnL.textContent=U?"Dashboard":"Login";
 }
 
-// ===== PESAN =====
 async function order(){
   const os=$("os");os.textContent="Mengirim…";
   const n=v("cn"),w=v("cw"),pid=$("ps")?$("ps").value:"";
@@ -1574,7 +1538,6 @@ async function order(){
   }catch(e){os.textContent="Gagal: "+e.message}
 }
 
-// ===== AFILIASI =====
 async function daftarAff(){
   const n=v("an1"),w=v("aw1");
   const as=$("as");
@@ -1586,7 +1549,7 @@ async function daftarAff(){
     as.innerHTML="✅ Berhasil! Kode referral kamu: <b>"+esc(code)+"</b><br><small style='color:#6b7280'>Bagikan kode ini ke calon klien ARTRISA.</small>";
   }catch(e){as.textContent="Gagal: "+e.message}
 }
-// ===== DASHBOARD =====
+
 const TABS={ringkasan:["","Ringkasan"],kasir:["","Kasir (POS)"],pesanan:["","Pesanan"],produk:["","Produk"],keuangan:["","Keuangan"],pelanggan:["","Pelanggan"],supplier:["","Supplier"],afiliasi:["","Afiliasi"],reels:["","Reels"],interaksi:["","Interaksi"],akses:["","Manajemen Akses"]};
 const ROLES={direktur:"Direktur",wakil_direktur:"Wakil Direktur",manajer:"Manajer",admin:"Admin"};
 const ROLE_TABS={direktur:Object.keys(TABS),wakil_direktur:["ringkasan","kasir","pesanan","produk","keuangan","pelanggan","supplier","afiliasi","reels","interaksi"],manajer:["ringkasan","kasir","pesanan","produk","pelanggan","supplier","reels","interaksi"],admin:["kasir","pesanan","produk"]};
@@ -1633,7 +1596,6 @@ function renderDash(){
 }
 function dTab(k){DTAB=k;renderDash();window.scrollTo(0,0)}
 
-// ---- upload foto ke Supabase Storage (lewat proxy Vercel) ----
 const BUCKET="feed";
 function shrink(file,max,qual){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>{const r=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*r);c.height=Math.round(im.height*r);const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);c.toBlob(b=>b?res(b):rej(new Error("gagal kompres")),"image/jpeg",qual||.85)};im.onerror=()=>rej(new Error("file bukan gambar (HEIC? ubah ke JPG)"));im.src=URL.createObjectURL(file)})}
 async function upImg(inp,tid){
@@ -1659,7 +1621,6 @@ async function upImg(inp,tid){
   inp.value="";
 }
 
-// ---- generic modal form ----
 function openForm(title,fields,vals,save){
   FORM={fields,save};
   $("d-modal-card").innerHTML=`<h3>${esc(title)}</h3><div class="d-form">${fields.map(f=>{
@@ -1681,7 +1642,6 @@ async function submitForm(){
   if(await FORM.save(o)!==false)closeForm();
 }
 
-// ---- PESANAN ----
 function ordersTable(l,ed){
   if(!l.length)return'<p class="muted">Belum ada pesanan.</p>';
   return`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Pelanggan</th><th>Produk</th><th>Total</th><th>Status</th>${ed?"<th></th>":""}</tr></thead><tbody>${l.map(o=>`<tr>
@@ -1709,7 +1669,6 @@ VIEWS.pesanan=async()=>{
   $("d-body").innerHTML=`<div class="pills">${["Semua",...ST].map(s=>`<button class="pill-btn ${s===OF?"on":""}" onclick="OF='${s}';renderDash()">${s} (${s==="Semua"?o.length:o.filter(x=>x.status===s).length})</button>`).join("")}</div>${ordersTable(l,true)}`;
 };
 
-// ---- PRODUK ----
 const PF=[{k:"name",l:"Nama produk",wide:1},{k:"category",l:"Kategori",opts:CATS.slice(1)},{k:"unit",l:"Satuan (mis. /m)"},{k:"price",l:"Harga jual (Rp)",type:"number"},{k:"modal_price",l:"Harga modal (Rp)",type:"number"},{k:"description",l:"Deskripsi",type:"textarea",wide:1},{k:"image_url",l:"Foto feed (upload dari galeri/PC)",type:"img",wide:1},{k:"sort_order",l:"Urutan",type:"number"},{k:"show_in_front",l:"Tampil di beranda",type:"bool"},{k:"active",l:"Produk aktif",type:"bool"}];
 const saveProd=id=>async o=>{
   if(!o.name){toast("Nama produk wajib diisi");return false}
@@ -1730,7 +1689,6 @@ VIEWS.produk=async()=>{
     <td><button class="d-ic" onclick="editProd(${pid})">Edit</button><button class="d-ic" onclick="delRow('products',${pid},'produk')">Hapus</button></td></tr>`}).join("")}</tbody></table></div>`;
 };
 
-// ---- KEUANGAN ----
 const uid=()=>"m"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 let CUL=[],HT=[],FSUB="kas",FM="Semua";
 function mobLabels(){document.querySelectorAll("#d-body .d-table table").forEach(t=>{const h=[...t.querySelectorAll("thead th")].map(x=>x.textContent);t.querySelectorAll("tbody tr").forEach(r=>[...r.children].forEach((c,i)=>{if(h[i])c.setAttribute("data-l",h[i])}))})}
@@ -1786,7 +1744,6 @@ VIEWS.keuangan=async()=>{
   <div class="pills">${subs.map(p=>`<button class="pill-btn ${p[0]===FSUB?"on":""}" onclick="FSUB='${p[0]}';renderDash()">${p[1]}</button>`).join("")}</div>${body}`;
 };
 
-// ---- PELANGGAN ----
 let DC=[],DSP=[];
 const CF=[{k:"name",l:"Nama",wide:1},{k:"phone",l:"WhatsApp",wide:1}];
 const saveCust=id=>async o=>{
@@ -1804,7 +1761,6 @@ VIEWS.pelanggan=async()=>{
   custFilter("");
 };
 
-// ---- SUPPLIER ----
 const SF=[{k:"supplier",l:"Supplier",wide:1},{k:"item",l:"Item",wide:1},{k:"harga",l:"Harga (Rp)",type:"number"},{k:"satuan",l:"Satuan"},{k:"note",l:"Catatan",wide:1}];
 const saveSup=id=>async o=>{
   if(!o.item){toast("Item wajib diisi");return false}
@@ -1821,7 +1777,6 @@ VIEWS.supplier=async()=>{
   supFilter("");
 };
 
-// ---- AFILIASI ----
 const AF=[{k:"name",l:"Nama",wide:1},{k:"whatsapp",l:"WhatsApp"},{k:"referral_code",l:"Kode referral"},{k:"total_clicks",l:"Total klik",type:"number"},{k:"total_commission",l:"Total komisi (Rp)",type:"number"}];
 const editAff=id=>openForm("Edit afiliasi",AF,DA.find(a=>a.id===id),async o=>{const ok=await run(sb.from("affiliates").update(o).eq("id",id),"Tersimpan");if(ok)renderDash();return ok});
 VIEWS.afiliasi=async()=>{
@@ -1829,7 +1784,6 @@ VIEWS.afiliasi=async()=>{
   $("d-body").innerHTML=DA.length?`<div class="d-table"><table><thead><tr><th>Mitra</th><th>Kode</th><th>Klik</th><th>Komisi</th><th></th></tr></thead><tbody>${DA.map(a=>`<tr><td><b>${esc(a.name)}</b><br><a class="lnk" target="_blank" rel="noopener" href="https://wa.me/${esc(waNum(a.whatsapp))}">${esc(a.whatsapp)}</a></td><td><b>${esc(a.referral_code)}</b></td><td>${a.total_clicks||0}</td><td>${rp(a.total_commission)}</td><td><button class="d-ic" onclick="editAff(${Number(a.id)})">Edit</button><button class="d-ic" onclick="delRow('affiliates',${Number(a.id)},'mitra')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada mitra afiliasi.</p>';
 };
 
-// ---- REELS ----
 const RF=[{k:"title",l:"Judul",wide:1},{k:"video_url",l:"Link video atau kode embed (YouTube, Instagram, TikTok, Facebook, Google Drive, Vimeo, .mp4)",type:"textarea",wide:1},{k:"cover_url",l:"Cover / preview (disarankan untuk Instagram & TikTok)",type:"img",wide:1},{k:"description",l:"Deskripsi",type:"textarea",wide:1},{k:"active",l:"Tampilkan",type:"bool"}];
 const saveReel=id=>async o=>{
   if(!o.video_url){toast("URL video wajib diisi");return false}
@@ -1843,7 +1797,6 @@ VIEWS.reels=async()=>{
   $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${DR.length} video</span><button class="btn btn-y" onclick="addReel()">+ Tambah reels</button></div>${DR.length?`<div class="d-table"><table><thead><tr><th>Judul</th><th>Video</th><th>Tampil</th><th></th></tr></thead><tbody>${DR.map(r=>`<tr><td><b>${esc(r.title)}</b><br><small>${esc(r.description||"")}</small></td><td><a class="lnk" target="_blank" rel="noopener" href="${esc(reelInfo(r.video_url).open)}">Buka</a></td><td><input type="checkbox" ${r.active?"checked":""} onchange="toggle('reels',${Number(r.id)},'active',this.checked);reelsLoaded=false"></td><td><button class="d-ic" onclick="editReel(${Number(r.id)})">Edit</button><button class="d-ic" onclick="delRow('reels',${Number(r.id)},'reels');reelsLoaded=false">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada reels.</p>'}`;
 };
 
-// ---- MANAJEMEN AKSES ----
 const permFields=()=>Object.keys(TABS).map(k=>({k:"p_"+k,l:"Akses: "+TABS[k][1],type:"bool"}));
 const userFields=add=>[{k:"name",l:"Nama lengkap",wide:1},...(add?[{k:"username",l:"Username"},{k:"password",l:"Password (min 6)",type:"password"}]:[]),{k:"role",l:"Peran",opts:Object.keys(ROLES),wide:1},...permFields()];
 const saveUser=id=>async o=>{
@@ -1889,7 +1842,6 @@ VIEWS.akses=async()=>{
   <td><button class="d-ic" title="Atur akses" onclick="editUser(${uidNum})">Edit</button><button class="d-ic" title="Reset password" onclick="resetPw(${uidNum})">Reset</button><button class="d-ic" onclick="delUser(${uidNum})">Hapus</button></td></tr>`}).join("")}</tbody></table></div>`;
 };
 
-// ===== UTIL ANGKA & TANGGAL =====
 const dec=x=>{const n=parseFloat(String(x??"").replace(",","."));return isFinite(n)?n:0};
 const money=x=>+String(x??"").replace(/\D/g,"")||0;
 const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
@@ -1897,7 +1849,6 @@ const asDate=s=>new Date(String(s).length===10?s+"T00:00:00":s);
 function weekStart(d){const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
 const shortRp=n=>n>=1e9?(n/1e9).toFixed(1)+" M":n>=1e6?(n/1e6).toFixed(1)+" jt":n>=1e3?Math.round(n/1e3)+" rb":String(Math.round(n));
 
-// ===== GRAFIK RINGKASAN =====
 let CP="bulan";
 function buckets(per){
   const now=new Date(),b=[];
@@ -1958,14 +1909,12 @@ VIEWS.ringkasan=async()=>{
   <h3 class="d-h">Pesanan web terbaru</h3>${ordersTable(o.slice(0,6),false)}`;
 };
 
-// ===== INTERAKSI (like & komentar pengunjung) =====
 VIEWS.interaksi=async()=>{
   const[l,pr]=await Promise.all([rows("interactions"),rows("products","sort_order",true)]);
   const nm=id=>(pr.find(p=>p.id==id)||{}).name||"-";
   $("d-body").innerHTML=l.length?`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Pengunjung</th><th>Produk</th><th>Jenis</th><th>Komentar</th><th></th></tr></thead><tbody>${l.map(x=>`<tr><td>${dt(x.created_at)}</td><td><b>${esc(x.customer_name)}</b>${x.whatsapp?`<br><a class="lnk" target="_blank" rel="noopener" href="https://wa.me/${esc(waNum(x.whatsapp))}">${esc(x.whatsapp)}</a>`:""}</td><td>${esc(nm(x.target_id))}</td><td><span class="badge">${esc(x.kind)}</span></td><td>${esc(x.comment_text||"")}</td><td><button class="d-ic" onclick="delRow('interactions',${Number(x.id)},'interaksi')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada interaksi.</p>';
 };
 
-// ===== KASIR / POS =====
 let CART=[],DS=[],PSUB="baru";
 const posNew=()=>({pid:"",name:"",mode:"m2",p:"",l:"",qty:"1",price:""});
 const posReset=()=>({disc:"",dtype:"Rp",paid:"",method:"Tunai",cust:"",wa:"",note:""});
@@ -2080,7 +2029,6 @@ VIEWS.kasir=async()=>{
   if(PSUB==="baru")await posView();else await riwayatView();
 };
 
-// ===== PDF INVOICE / STRUK =====
 function loadPdf(){return window.jspdf?Promise.resolve():new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";s.onload=res;s.onerror=()=>rej(new Error("Pustaka PDF gagal dimuat, cek koneksi internet"));document.head.appendChild(s)})}
 function logoData(){return new Promise(r=>{const i=new Image();i.onload=()=>{const c=document.createElement("canvas");c.width=i.width;c.height=i.height;c.getContext("2d").drawImage(i,0,0);r({d:c.toDataURL("image/png"),w:i.width,h:i.height})};i.onerror=()=>r(null);i.src="logo-artrisa.png"})}
 const A2=n=>(+n).toLocaleString("id-ID",{maximumFractionDigits:2});
@@ -2139,7 +2087,7 @@ async function salePdf(id,mode){
   d.text("Terima kasih atas kepercayaan Anda. WA 0838-5172-2321 · @artrisa.production",W/2,287,{align:"center"});
   d.save(s.invoice_no+".pdf");
 }
-// ===== INIT =====
+
 renderSV();
 try{
   const ss=sessionStorage.getItem("artrisa_u");
