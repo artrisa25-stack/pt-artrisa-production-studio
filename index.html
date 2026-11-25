@@ -1733,7 +1733,7 @@ async function shrinkTo(file,maxBytes=100*1024){
     const blob=await shrinkTo(f,100*1024);
     if(blob.size>100*1024)throw new Error("foto tidak bisa dikecilkan di bawah 100 KB, coba foto lain");
     const name=Date.now()+"-"+Math.random().toString(36).slice(2,7)+".jpg";
-    const up=await fetch("/api/upload",{method:"POST",headers:{"Content-Type":"image/jpeg","x-artrisa-token":TOKEN||""},body:blob});
+    const up=await fetch("/api/upload",{method:"POST",headers:{"Content-Type":blob.type,"x-artrisa-token":TOKEN||""},body:blob});
     const js=await up.json().catch(()=>({}));
     if(!up.ok)throw new Error(js.error||"upload gagal");
     const url=js.url;
