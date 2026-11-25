@@ -2179,37 +2179,47 @@ function chartSvg(bk,A,B,la,lb){
   return`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Grafik penjualan">${g}</svg>`;
 }
 
-let OV={per:"harian"};
-const OV_PER={harian:{n:30,nama:"Harian"},mingguan:{n:12,nama:"Mingguan"},bulanan:{n:12,nama:"Bulanan"},tahunan:{n:5,nama:"Tahunan"}};
+let OV={per:"bulanan"};
+const OV_PER={mingguan:{nama:"Mingguan",n:12,satuan:"minggu"},bulanan:{nama:"Bulanan",n:12,satuan:"bulan"},tahunan:{nama:"Tahunan",n:12,satuan:"bulan"}};
 const pd=s=>new Date(String(s).length<=10?s+"T00:00:00":s);
-function ovKey(d){
-  const y=ymd(d);
-  if(OV.per==="harian")return y;
-  if(OV.per==="bulanan")return y.slice(0,7);
-  if(OV.per==="tahunan")return y.slice(0,4);
-  const x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7));return ymd(x);
-}
-function ovKeys(){
-  const n=OV_PER[OV.per].n,now=new Date(),keys=[];
-  for(let i=n-1;i>=0;i--){
-    const d=new Date(now);
-    if(OV.per==="harian")d.setDate(d.getDate()-i);
-    else if(OV.per==="mingguan")d.setDate(d.getDate()-i*7);
-    else{d.setDate(1);if(OV.per==="bulanan")d.setMonth(d.getMonth()-i);else d.setFullYear(d.getFullYear()-i)}
-    keys.push(ovKey(d));
+let CAL=null,CLOCK_T=null;
+function ovBucket(d){
+  const y=d.getFullYear(),m=d.getMonth(),day=d.getDate(),last=new Date(y,m+1,0).getDate(),mm=String(m+1).padStart(2,"0");
+  if(OV.per==="mingguan"){
+    const s=day<=7?1:day<=14?8:day<=21?15:day<=28?22:29;
+    const e=s===29?last:s+6;
+    return {k:`${y}-${mm}-${String(s).padStart(2,"0")}`,start:new Date(y,m,s),end:new Date(y,m,e)};
   }
-  return [...new Set(keys)];
+  return {k:`${y}-${mm}`,start:new Date(y,m,1),end:new Date(y,m,last)};
 }
-function ovLabel(k){
-  if(OV.per==="harian")return new Date(k+"T00:00:00").toLocaleDateString("id-ID",{day:"2-digit",month:"short"});
-  if(OV.per==="mingguan")return "Mgg "+new Date(k+"T00:00:00").toLocaleDateString("id-ID",{day:"2-digit",month:"short"});
-  if(OV.per==="bulanan")return new Date(k+"-01T00:00:00").toLocaleDateString("id-ID",{month:"short",year:"2-digit"});
-  return k;
+function ovBuckets(){
+  const now=new Date(),out=[];
+  if(OV.per==="tahunan"){
+    for(let m=0;m<12;m++)out.push(ovBucket(new Date(now.getFullYear(),m,1)));
+    return out;
+  }
+  if(OV.per==="bulanan"){
+    for(let i=11;i>=0;i--)out.push(ovBucket(new Date(now.getFullYear(),now.getMonth()-i,1)));
+    return out;
+  }
+  const seen=new Set();
+  let d=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  while(out.length<12){
+    const b=ovBucket(d);
+    if(!seen.has(b.k)){seen.add(b.k);out.unshift(b)}
+    d=new Date(d.getFullYear(),d.getMonth(),d.getDate()-1);
+  }
+  return out;
 }
 function ovSeries(list,field,val){
-  const keys=ovKeys(),m={};keys.forEach(k=>m[k]=0);
-  list.forEach(r=>{const k=ovKey(pd(r[field]));if(k in m)m[k]+=val(r)});
-  return keys.map(k=>({k,v:m[k]}));
+  const bs=ovBuckets(),m={};bs.forEach(b=>m[b.k]=0);
+  list.forEach(r=>{const k=ovBucket(pd(r[field])).k;if(k in m)m[k]+=val(r)});
+  return bs.map(b=>({k:b.k,v:m[b.k],b}));
+}
+function ovLabel(b){
+  if(OV.per==="mingguan")return b.start.getDate()+"–"+b.end.getDate()+" "+b.start.toLocaleDateString("id-ID",{month:"short"});
+  if(OV.per==="bulanan")return b.start.toLocaleDateString("id-ID",{month:"short",year:"2-digit"});
+  return b.start.toLocaleDateString("id-ID",{month:"short"});
 }
 function ovShort(v,isRp){
   if(!isRp)return fmt(v);
@@ -2217,15 +2227,9 @@ function ovShort(v,isRp){
   if(v>=1e3)return "Rp "+Math.round(v/1e3)+" rb";
   return "Rp "+fmt(v);
 }
-function ovRange(){
-  const k=ovKeys(),a=k[0],z=k[k.length-1];
-  const lbl=x=>{
-    if(OV.per==="harian")return new Date(x+"T00:00:00").toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"});
-    if(OV.per==="mingguan")return "minggu "+new Date(x+"T00:00:00").toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"});
-    if(OV.per==="bulanan")return new Date(x+"-01T00:00:00").toLocaleDateString("id-ID",{month:"long",year:"numeric"});
-    return "tahun "+x;
-  };
-  return lbl(a)+" s/d "+lbl(z);
+function ovRange(bs){
+  const f=d=>d.toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"});
+  return f(bs[0].start)+" – "+f(bs[bs.length-1].end);
 }
 function ovPick(pid,l,v){const el=document.getElementById(pid);if(el)el.innerHTML=`<b>${l}</b> &nbsp;·&nbsp; <b>${v}</b>`}
 function ovChart(series,color,format,pid,isRp){
@@ -2233,12 +2237,37 @@ function ovChart(series,color,format,pid,isRp){
   const iw=W-L-R,ih=H-T-B,n=Math.max(1,series.length),bw=iw/n,step=Math.max(1,Math.ceil(n/8));
   const ticks=[0,max/2,max].map(t=>{const y=T+ih-(t/max)*ih;
     return `<line x1="${L}" x2="${W-R}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#e2e8f0" stroke-width="1"/><text x="${L-6}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="10" fill="#64748b">${esc(ovShort(t,isRp))}</text>`}).join("");
-  const bars=series.map((s,i)=>{const h=(s.v/max)*ih,x=L+i*bw+bw*0.15,y=T+ih-h,lab=ovLabel(s.k),val=format(s.v);
+  const bars=series.map((s,i)=>{const h=(s.v/max)*ih,x=L+i*bw+bw*0.15,y=T+ih-h,lab=ovLabel(s.b),val=format(s.v);
     return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw*0.7).toFixed(1)}" height="${Math.max(h,0).toFixed(1)}" rx="3" fill="${color}" style="cursor:pointer" onclick="ovPick('${pid}','${esc(lab)}','${esc(val)}')"><title>${esc(lab)}: ${esc(val)}</title></rect>`}).join("");
-  const xl=series.map((s,i)=>i%step===0?`<text x="${(L+i*bw+bw/2).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#64748b">${esc(ovLabel(s.k))}</text>`:"").join("");
+  const xl=series.map((s,i)=>i%step===0?`<text x="${(L+i*bw+bw/2).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#64748b">${esc(ovLabel(s.b))}</text>`:"").join("");
   return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">${ticks}${bars}${xl}</svg>`;
 }
 function ovSet(p){OV.per=p;renderDash()}
+function calNav(d){const c=CAL||new Date();CAL=new Date(c.getFullYear(),c.getMonth()+d,1);renderDash()}
+function calHTML(){
+  const base=CAL||new Date(),y=base.getFullYear(),m=base.getMonth();
+  const first=new Date(y,m,1),last=new Date(y,m+1,0).getDate(),offset=(first.getDay()+6)%7,today=new Date();
+  let cells="";
+  for(let i=0;i<offset;i++)cells+="<div></div>";
+  for(let d=1;d<=last;d++){
+    const isT=d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear();
+    cells+=`<div style="text-align:center;padding:6px 0;border-radius:8px;${isT?"background:#0b43b3;color:#fff;font-weight:800":""}">${d}</div>`;
+  }
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><button class="pill-btn" onclick="calNav(-1)">‹</button><b>${first.toLocaleDateString("id-ID",{month:"long",year:"numeric"})}</b><button class="pill-btn" onclick="calNav(1)">›</button></div>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:11px;color:#64748b;text-align:center;margin-bottom:4px">${["Sen","Sel","Rab","Kam","Jum","Sab","Min"].map(h=>`<div>${h}</div>`).join("")}</div>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:13px">${cells}</div>`;
+}
+function startClock(){
+  clearInterval(CLOCK_T);
+  const tick=()=>{
+    const el=document.getElementById("ov-clock"),dt2=document.getElementById("ov-date");
+    if(!el){clearInterval(CLOCK_T);return}
+    const now=new Date();
+    el.textContent=now.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit",timeZone:"Asia/Jakarta"})+" WIB";
+    if(dt2)dt2.textContent=now.toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:"Asia/Jakarta"});
+  };
+  tick();CLOCK_T=setInterval(tick,1000);
+}
 VIEWS.ringkasan=async()=>{
   const ps=permsOf(U),fin=ps.includes("keuangan"),pos=ps.includes("kasir"),E=p=>p.catch(()=>[]);
   const[o,f,sl,pr,ht,pt,cu,ev]=await Promise.all([rows("orders"),fin?rows("finance","date"):[],pos||fin?rows("sales"):[],rows("products","sort_order",true),fin?E(rows("hutang")):[],fin?E(rows("piutang")):[],E(rows("customers")),E(rows("events"))]);
@@ -2252,20 +2281,28 @@ VIEWS.ringkasan=async()=>{
   if(pos)S.push(["Transaksi kasir",sl.length]);
   S.push(["Pelanggan",cu.length],["Produk aktif",pr.filter(x=>x.active).length]);
   const jualKasir=ovSeries(sl,"created_at",r=>+r.total||0);
-  const jual=ovSeries(live,"created_at",r=>+r.total||0).map((x,i)=>({k:x.k,v:x.v+jualKasir[i].v}));
+  const jual=ovSeries(live,"created_at",r=>+r.total||0).map((x,i)=>({k:x.k,b:x.b,v:x.v+jualKasir[i].v}));
   const masuk=ovSeries(kd("pemasukan",f),"date",r=>+r.amount||0);
   const keluar=ovSeries(kd("pengeluaran",f),"date",r=>+r.amount||0);
   const lihat=ovSeries(ev.filter(r=>r.type==="view"),"created_at",()=>1);
   const wa=ovSeries(ev.filter(r=>r.type==="wa"),"created_at",()=>1);
-  const satuan={harian:"hari",mingguan:"minggu",bulanan:"bulan",tahunan:"tahun"}[OV.per];
   const tabs=Object.keys(OV_PER).map(p=>`<button class="pill-btn ${p===OV.per?"on":""}" onclick="ovSet('${p}')">${OV_PER[p].nama}</button>`).join("");
+  const keterangan=OV.per==="tahunan"?`12 bulan tahun ${new Date().getFullYear()}`:OV_PER[OV.per].n+" "+OV_PER[OV.per].satuan+" terakhir";
   const panel=(judul,series,warna,format,isRp)=>{const pid="pi_"+Math.random().toString(36).slice(2,8);return `<div style="background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:0 4px 16px rgba(8,42,133,.08)">
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px"><b>${judul}</b><span class="muted">total ${format(tot(series.map(x=>x.v)))}</span></div>
-    <div class="muted" style="font-size:12px;margin:2px 0 8px">${esc(ovRange())} · ${OV_PER[OV.per].n} ${satuan} · klik batang untuk lihat nilai</div>
+    <div class="muted" style="font-size:12px;margin:2px 0 8px">${esc(ovRange(series.map(x=>x.b)))} · ${keterangan} · klik batang untuk lihat nilai</div>
     <div id="${pid}" style="font-size:13px;min-height:20px;margin-bottom:6px;color:#0f172a">Klik batang untuk melihat tanggal dan nilai.</div>
     ${ovChart(series,warna,format,pid,isRp)}</div>`};
   const rpf=v=>rp(v),nf=v=>fmt(v)+" kali";
-  $("d-body").innerHTML=`<div class="pills" style="margin-bottom:12px">${tabs}</div>
+  $("d-body").innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:14px">
+    <div style="background:linear-gradient(135deg,#0b43b3,#082a85);color:#fff;border-radius:14px;padding:16px 18px">
+      <small style="opacity:.8">Sekarang</small>
+      <div id="ov-clock" style="font-size:30px;font-weight:800;letter-spacing:.5px;margin-top:4px">--:--:-- WIB</div>
+      <div id="ov-date" style="opacity:.9;margin-top:4px">&nbsp;</div>
+    </div>
+    <div style="background:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 4px 16px rgba(8,42,133,.08)">${calHTML()}</div>
+  </div>
+  <div class="pills" style="margin-bottom:12px">${tabs}</div>
   <div class="d-stats">${S.map(s=>`<div class="d-stat"><small>${s[0]}</small><b>${s[1]}</b></div>`).join("")}</div>
   ${panel("Penjualan (pesanan web + kasir)",jual,"#0b43b3",rpf,true)}
   ${fin?panel("Pemasukan",masuk,"#16a34a",rpf,true)+panel("Pengeluaran",keluar,"#dc2626",rpf,true):""}
@@ -2273,6 +2310,8 @@ VIEWS.ringkasan=async()=>{
   ${panel("Klik WhatsApp",wa,"#25d366",nf,false)}
   ${fin&&f.length?`<h3 class="d-h">Arus kas terbaru</h3><div class="d-table" style="margin-bottom:18px"><table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Keterangan</th><th>Jumlah</th></tr></thead><tbody>${f.slice(0,6).map(x=>`<tr><td>${dt(x.date)}</td><td><span class="badge ${x.kind==="pemasukan"?"in":"out"}">${esc(x.kind)}</span></td><td>${esc(x.description)}</td><td>${rp(x.amount)}</td></tr>`).join("")}</tbody></table></div>`:""}
   <h3 class="d-h">Pesanan web terbaru</h3>${ordersTable(o.slice(0,6),false)}`;
+  startClock();
+};
 };  VIEWS.interaksi=async()=>{
   const[l,pr]=await Promise.all([rows("interactions"),rows("products","sort_order",true)]);
   const nm=id=>(pr.find(p=>p.id==id)||{}).name||"-";
