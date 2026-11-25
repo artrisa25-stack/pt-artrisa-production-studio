@@ -2312,7 +2312,8 @@ VIEWS.ringkasan=async()=>{
   <h3 class="d-h">Pesanan web terbaru</h3>${ordersTable(o.slice(0,6),false)}`;
   startClock();
 };
-};  VIEWS.interaksi=async()=>{
+
+VIEWS.interaksi=async()=>{
   const[l,pr]=await Promise.all([rows("interactions"),rows("products","sort_order",true)]);
   const nm=id=>(pr.find(p=>p.id==id)||{}).name||"-";
   $("d-body").innerHTML=l.length?`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Pengunjung</th><th>Produk</th><th>Jenis</th><th>Komentar</th><th></th></tr></thead><tbody>${l.map(x=>`<tr><td>${dt(x.created_at)}</td><td><b>${esc(x.customer_name)}</b>${x.whatsapp?`<br><a class="lnk" target="_blank" rel="noopener" href="https://wa.me/${esc(waNum(x.whatsapp))}">${esc(x.whatsapp)}</a>`:""}</td><td>${esc(nm(x.target_id))}</td><td><span class="badge">${esc(x.kind)}</span></td><td>${esc(x.comment_text||"")}</td><td><button class="d-ic" onclick="delRow('interactions',${Number(x.id)},'interaksi')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada interaksi.</p>';
