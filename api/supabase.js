@@ -26,6 +26,7 @@ const PUBLIC_READ_TABLES = new Set([
   'products',
   'product_stats',
   'reels',
+  'klien',
   'interactions'
 ]);
 
