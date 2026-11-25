@@ -1369,7 +1369,7 @@ function card(p,i){
     <div class="card-text-box"><h3>${esc(p.name)}</h3><p>${esc(p.description||"")}</p></div>
   </div>
   <div class="card-body">
-<div class="card-price"><small>HARGA</small><b ${nego?`onclick="waOrder(${pidNum})" style="cursor:pointer"`:""}>
+<div class="card-price"><small>HARGA</small><b ${nego?`onclick="waOrder(${pidNum})" style="cursor:pointer"`:""}>${pr}${u?" <span style='font-size:9px;font-weight:400;color:#888'>"+esc(u)+"</span>":""}</b></div>
     <div class="card-stat">Dilihat ${st.v} kali · </div>
     <div class="card-actions">
       <button onclick="interact(${pidNum},'like')">❤️ ${lk}</button>
