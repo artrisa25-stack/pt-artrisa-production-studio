@@ -8,7 +8,13 @@
 <link rel="icon" href="logo-artrisa.png">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<style>
+.logo-slider{overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-top:14px;cursor:grab;padding:8px 2px}
+.logo-slider::-webkit-scrollbar{display:none}
+.logo-slider.drag{cursor:grabbing;scroll-snap-type:none}
+.logo-track{display:flex;gap:14px;width:max-content}
+.logo-item{flex:0 0 160px;height:100px;display:grid;place-items:center;background:rgba(255,255,255,.7);border:1px solid var(--glass-line);border-radius:18px;box-shadow:var(--glass-sh);scroll-snap-align:start;padding:12px}
+.logo-item img{max-width:100%;max-height:72px;width:auto;height:auto;object-fit:contain;pointer-events:none;user-select:none}
+  <style>
 /* ===== RESET & BASE ===== */
 :root{
   --b:#0B3D91;--b2:#0a357d;--b3:#1a4fa8;
@@ -825,6 +831,23 @@ body.pp-open>*:not(.glass-ov):not(#toast){filter:blur(8px);transition:filter .25
       <button class="btn-dark" onclick="goPage('konten-beres')">Lihat Paket →</button>
     </div>
 
+    <section class="sec" id="dipercaya">
+  <div class="eyebrow">DIPERCAYA OLEH</div>
+  <h2>Klien yang sudah bekerja sama.</h2>
+  <div class="logo-slider" id="logo-slider">
+    <div class="logo-track">
+      <div class="logo-item"><img src="klien/said-assagaf.png" alt="Kantor Hukum Said Assagaf & Rekan" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
+      <div class="logo-item"><img src="klien/mki-law-firm.png" alt="Law Firm Matahari Keadilan Indonesia" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
+      <div class="logo-item"><img src="klien/langkatalk.png" alt="Langkatalk" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
+      <div class="logo-item"><img src="klien/sejasa.png" alt="Sejasa.net" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
+      <div class="logo-item"><img src="klien/knpi-insight.png" alt="KNPI Insight" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
+      <div class="logo-item"><img src="klien/dermaga-durian.png" alt="Dermaga Durian" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
+      <div class="logo-item"><img src="klien/mutiara-baru.png" alt="Mutiara Baru Group" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
+      <div class="logo-item"><img src="klien/estetika.png" alt="Estetika" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
+      <div class="logo-item"><img src="klien/af-coffee.png" alt="AF Coffee" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
+    </div>
+  </div>
+</section>
     <section class="sec" id="katalog">
       <div class="eyebrow">KATALOG PRODUK</div>
       <h2>Pilih kategori.</h2>
@@ -2278,7 +2301,41 @@ VIEWS.statistik=async()=>{
     <div class="d-table"><table><thead><tr><th>Tanggal</th><th>Dilihat</th><th>Klik WA</th></tr></thead><tbody>${tbl(byDay,x=>x,false)}</tbody></table></div>
     <p class="muted">Klik dari akun yang sudah login tidak dihitung. Dilihat = popup produk dibuka. Klik WA = tombol WhatsApp di mana pun.</p>`;
 };
-
+(function(){
+  const s=document.getElementById('logo-slider');
+  if(!s)return;
+  let paused=false,down=false,startX=0,startLeft=0,resumeT=null;
+  const step=()=>{const it=s.querySelector('.logo-item');return it?it.offsetWidth+14:174};
+  const pause=()=>{paused=true;clearTimeout(resumeT)};
+  const resume=()=>{clearTimeout(resumeT);resumeT=setTimeout(()=>{if(!down)paused=false},2500)};
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    setInterval(()=>{
+      if(paused||down)return;
+      const max=s.scrollWidth-s.clientWidth;
+      if(s.scrollLeft>=max-4)s.scrollTo({left:0,behavior:'smooth'});
+      else s.scrollBy({left:step(),behavior:'smooth'});
+    },3000);
+  }
+  s.addEventListener('mouseenter',pause);
+  s.addEventListener('mouseleave',resume);
+  s.addEventListener('touchstart',pause,{passive:true});
+  s.addEventListener('touchend',resume);
+  s.addEventListener('pointerdown',e=>{
+    if(e.pointerType!=='mouse')return;
+    down=true;startX=e.clientX;startLeft=s.scrollLeft;pause();s.classList.add('drag');
+  });
+  window.addEventListener('pointermove',e=>{
+    if(!down)return;
+    s.scrollLeft=startLeft-(e.clientX-startX);
+  });
+  window.addEventListener('pointerup',()=>{
+    if(!down)return;
+    down=false;s.classList.remove('drag');
+    const st=step();
+    s.scrollTo({left:Math.round(s.scrollLeft/st)*st,behavior:'smooth'});
+    resume();
+  });
+})();
 load();
 
 const initHash=location.hash.replace("#","");
