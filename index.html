@@ -721,6 +721,42 @@ body.in-dash{padding-bottom:0}
 .btn-lg{padding:18px 30px;font-size:17px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 .hero-profil{width:100%;justify-content:center;text-align:center}
 @media(min-width:640px){.hero-profil{width:auto}}
+
+/* ===== revisi beranda, popup kaca, statistik ===== */
+.hero-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:24px}
+.hero-btns .btn{width:100%;min-height:52px;padding:14px 16px;font-size:15px;font-weight:800;border-radius:999px;justify-content:center;text-align:center;display:flex;align-items:center}
+.wa-logo{background:transparent!important;box-shadow:none!important;animation:waFloat 2.4s ease-in-out infinite}
+.wa-bubble{position:relative;display:flex;align-items:center;justify-content:center;width:64px;height:54px;background:#fff;border-radius:18px;box-shadow:0 10px 26px rgba(8,42,133,.35)}
+.wa-bubble:after{content:"";position:absolute;left:14px;bottom:-7px;width:16px;height:16px;background:#fff;transform:rotate(45deg);border-radius:3px}
+.wa-bubble img{width:40px;height:40px;object-fit:contain}
+@keyframes waFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.search-ic{width:44px;height:44px;border-radius:50%;border:0;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;box-shadow:0 4px 14px rgba(8,42,133,.12)}
+.search-ic svg{width:20px;height:20px}
+.kat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+@media(min-width:760px){.kat-grid{grid-template-columns:repeat(4,1fr)}}
+.kat-tile{border:0;border-radius:16px;padding:16px;background:#fff;box-shadow:0 6px 20px rgba(8,42,133,.1);text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:4px;font:inherit}
+.kat-tile b{font-size:14px;color:#0f172a}.kat-tile small{color:#64748b;font-size:12px}
+.card-stat{font-size:11px;color:#64748b;padding:0 0 8px}
+.glass-ov{position:fixed;inset:0;z-index:999;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(8,20,55,.18);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.glass-ov.show{display:flex}
+.glass{position:relative;width:min(560px,100%);max-height:88vh;overflow:auto;background:rgba(255,255,255,.8);backdrop-filter:blur(22px) saturate(140%);-webkit-backdrop-filter:blur(22px) saturate(140%);border:1px solid rgba(255,255,255,.75);border-radius:22px;box-shadow:0 30px 80px rgba(8,42,133,.35);padding:20px;color:#0f172a}
+.glass-x{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(15,23,42,.08);font-size:22px;line-height:1;cursor:pointer}
+.glass-h{margin:4px 40px 12px 0;font-size:18px}
+.sp-row{display:flex;gap:8px}
+.sp-row input{flex:1;padding:12px 14px;border-radius:12px;border:1px solid #cbd5e1;font-size:15px;background:#fff;min-width:0}
+.sp-go{width:46px;border:0;border-radius:12px;background:#0b43b3;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sp-lbl{font-size:12px;font-weight:700;color:#475569;margin:14px 0 6px;text-transform:uppercase;letter-spacing:.06em}
+body.pp-open>*:not(.glass-ov):not(#toast){filter:blur(8px);transition:filter .25s}
+.pp-img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px;background:#dbe6fb}
+.pp-noimg{display:flex;align-items:center;justify-content:center;font-weight:800;color:#0b43b3}
+.pp-cat{display:inline-block;margin-top:12px;font-size:11px;font-weight:700;color:#0b43b3;background:#e7efff;padding:4px 10px;border-radius:999px}
+.pp-title{margin:8px 0 6px;font-size:22px}
+.pp-price{display:flex;align-items:baseline;gap:6px;margin-bottom:8px}.pp-price b{font-size:20px;color:#0b43b3}.pp-price span{font-size:12px;color:#64748b}
+.pp-desc{color:#334155;font-size:14px;line-height:1.6}
+.pp-sec{font-size:13px;margin:12px 0 4px}
+.pp-list{margin:0 0 6px;padding-left:18px;font-size:14px;color:#334155;line-height:1.7}
+.pp-stat{font-size:12px;color:#64748b;margin:10px 0}
+.pp-order{width:100%;padding:15px;border:0;border-radius:999px;background:#16a34a;color:#fff;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 10px 26px rgba(22,163,74,.35)}
 </style>
 </head>
 <body>
@@ -731,10 +767,7 @@ body.in-dash{padding-bottom:0}
       <img src="logo-artrisa.png" alt="ARTRISA" onerror="this.style.display='none'">
       <span class="brand-name">ARTRISA</span>
     </div>
-    <div class="search-bar" id="search-bar-wrap">
-      <input type="text" id="q" placeholder="Cari produk…" oninput="render()">
-      <button onclick="render()">Cari</button>
-    </div>
+    <button class="search-ic" onclick="openSearch()" aria-label="Cari produk"><svg viewBox="0 0 24 24" fill="none" stroke="#0b43b3" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
     <div id="user-area"></div>
     <button class="nav-btn-login" id="login-nav-btn" onclick="goAcc()">Login</button>
   </div>
@@ -760,14 +793,14 @@ body.in-dash{padding-bottom:0}
           <img src="logo-artrisa.png" style="width:16px;height:16px;object-fit:contain" onerror="this.style.display='none'">
           STABAT • LANGKAT • SUMATERA UTARA
         </div>
-        <h1>STUDIO KREATIF<br><i>SATU PINTU.</i></h1>
+        <h1>STUDIO KREATIF<br><i>SATU PINTU</i></h1>
         <p class="hero-sub">Print, desain, advertising, dokumentasi, dan pengelolaan media sosial — satu studio untuk UMKM, Desa, Kecamatan, dan Perusahaan di seluruh Indonesia.</p>
         <div class="hero-btns">
           <button class="btn btn-y" onclick="goPage('pesan')">Pesan Sekarang →</button>
           <a class="btn btn-w" href="https://wa.me/6283851722321" target="_blank" rel="noopener">Chat WhatsApp</a>
           <a class="btn btn-w" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20tertarik%20Jasa%20Pembuatan%20Website%20%26%20Sistem" target="_blank" rel="noopener">Jasa Pembuatan Website &amp; Sistem</a>
-          <button class="btn btn-ghost" onclick="goPage('konten-beres')">✨ Konten Beres</button>
-          <a class="btn btn-y btn-lg hero-profil" href="/company-profile.html">📄 Lihat Company Profile &amp; Unduh PDF</a>
+          <button class="btn btn-ghost" onclick="goPage('konten-beres')">Konten Beres</button>
+          <a class="btn btn-y hero-profil" href="/company-profile.html">Lihat Company Profile &amp; Unduh PDF</a>
         </div>
         <div class="hero-stats">
           <div class="hstat"><b>5+</b><span>Kategori layanan</span></div>
@@ -794,9 +827,22 @@ body.in-dash{padding-bottom:0}
     </div>
 
     <section class="sec" id="katalog">
-      <div class="eyebrow">KATALOG • FEED PRODUK</div>
-      <h2>Feed Produk Artrisa.</h2>
-      <p class="muted">Harga publik tampil sebagai XXXX. Like & Komen langsung tersimpan.</p>
+      <div class="eyebrow">KATALOG PRODUK</div>
+      <h2>Pilih kategori.</h2>
+      <div class="kat-grid" id="kat-grid"></div>
+    </section>
+
+    <section class="sec" id="populer">
+      <div class="eyebrow">PALING DILIHAT</div>
+      <h2>Produk Terpopuler.</h2>
+      <p class="muted">Urutan berubah otomatis berdasarkan klik dan lihat pengunjung.</p>
+      <div class="feed" id="feed-populer"><p class="muted">Memuat…</p></div>
+    </section>
+
+    <section class="sec" id="semua">
+      <div class="eyebrow">FEED PRODUK</div>
+      <h2>Semua Produk Artrisa.</h2>
+      <p class="muted">Harga publik tampil sebagai XXXX. Klik produk untuk melihat detail.</p>
       <div class="pills" id="pl"></div>
       <div class="alert hidden" id="al"></div>
       <div class="feed" id="feed"><p class="muted">Memuat katalog…</p></div>
@@ -1131,7 +1177,7 @@ body.in-dash{padding-bottom:0}
   <div class="d-form-act"><button class="btn btn-ghost-d" onclick="ixClose()">Batal</button><button class="btn btn-y" onclick="ixSend()">Kirim</button></div>
 </div></div>
 <div class="toast" id="toast"></div>
-<a class="wa-btn" href="https://wa.me/6283851722321" target="_blank" rel="noopener" aria-label="WhatsApp" id="wa-float">💬</a>
+<a class="wa-btn wa-logo" href="https://wa.me/6283851722321" target="_blank" rel="noopener" aria-label="Chat WhatsApp ARTRISA" id="wa-float"><span class="wa-bubble"><img src="logo-artrisa.png" alt="ARTRISA" onerror="this.style.display='none'"></span></a>
 
 <nav class="bottom-nav" id="bottom-nav">
   <div class="bn-item on" data-page="beranda" onclick="goPage('beranda')">
@@ -1166,6 +1212,23 @@ body.in-dash{padding-bottom:0}
   </div>
 </nav>
 
+<div class="glass-ov" id="sp-ov" onclick="if(event.target===this)closeSearch()">
+  <div class="glass">
+    <button class="glass-x" onclick="closeSearch()" aria-label="Tutup">×</button>
+    <h3 class="glass-h">Cari produk</h3>
+    <div class="sp-row"><input type="search" id="q" placeholder="Nama, kategori, atau kata kunci…" oninput="render()" autocomplete="off"><button class="sp-go" onclick="render()" aria-label="Cari"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button></div>
+    <div class="sp-lbl">Kategori</div>
+    <div class="pills" id="sp-pl"></div>
+    <div class="sp-lbl">Harga</div>
+    <select id="pf" onchange="render()" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid #cbd5e1;font-size:15px;background:#fff">
+      <option value="">Semua harga</option>
+      <option value="0-99999">Di bawah Rp 100.000</option>
+      <option value="100000-500000">Rp 100.000 – 500.000</option>
+      <option value="500001-999999999">Di atas Rp 500.000</option>
+    </select>
+  </div>
+</div>
+<div class="glass-ov" id="pp-ov" onclick="if(event.target===this)closeProduct()"><div class="glass" id="pp-body"></div></div>
 <script>
 const SB_URL="https://spqivuqidqgtcivrddtm.supabase.co";
 const SB_KEY="sb_publishable_QR18b-QtSl0jUnpsPZdayQ_88ftX6m6";
@@ -1211,9 +1274,9 @@ const FALLBACK=[
   {id:1013,name:"Konten Beres - Paket Sultan",price:800000,modal_price:0,category:"Konten Beres",description:"Paket paling lengkap untuk brand yang mau gaspol.",unit:"/bulan",sort_order:26,show_in_front:true,active:true}
 ];
 
-const CATS=["Semua","Spanduk & Outdoor","Stiker","Cetak & Kertas","Undangan & Cetak","Brosur & Faktur","Neonbox","Cetak Cepat","Konten Beres"];
+const CATS=["Semua","Jasa Pembuatan Website","Spanduk & Outdoor","Stiker","Cetak & Kertas","Undangan & Cetak","Brosur & Faktur","Neonbox","Cetak Cepat","Konten Beres"];
 const GR=["linear-gradient(135deg,#2a5fd0,#0B3D91)","linear-gradient(135deg,#ffb300,#ff7a00)","linear-gradient(135deg,#0aa5c0,#0b5fa8)","linear-gradient(135deg,#7b3fe4,#3a1fa0)","linear-gradient(135deg,#3b3bb3,#c0507a)","linear-gradient(135deg,#d9a400,#1a3d8f)","linear-gradient(135deg,#e8782a,#5b3a8f)","linear-gradient(135deg,#2aa876,#0b6aa8)"];
-const IC={"Spanduk & Outdoor":"🚩","Stiker":"🏷️","Cetak & Kertas":"📄","Undangan & Cetak":"💌","Brosur & Faktur":"📑","Neonbox":"💡","Cetak Cepat":"⚡","Konten Beres":"📸"};
+const IC={"Jasa Pembuatan Website":"💻","Spanduk & Outdoor":"🚩","Stiker":"🏷️","Cetak & Kertas":"📄","Undangan & Cetak":"💌","Brosur & Faktur":"📑","Neonbox":"💡","Cetak Cepat":"⚡","Konten Beres":"📸"};
 const SV=[
   ["📄","Print & Finishing","Produksi cepat","Undangan, spanduk, banner, baliho, stiker, ID card, buku, dan kalender.","Mulai sesuai ukuran"],
   ["🎨","Desain Kreatif","Identitas brand","Logo, feed Instagram, dan kemasan UMKM yang siap naik kelas.","Konsultasi gratis"],
@@ -1268,35 +1331,36 @@ window.addEventListener("popstate",()=>{
 
 function card(p,i){
   const c=C[p.id]||{};
-  const canSeePrice=U&&["direktur","wakil_direktur","manajer"].includes(U.role)&&p.price!=null;
-  const pr=canSeePrice?"Rp "+fmt(p.price):"Rp XXXX";
+  const pr="Rp XXXX";
   const safeImg=p.image_url?String(p.image_url).replace(SB_URL,"/api/supabase").replace(/['"]/g,""):"";
   const bg=safeImg?`url('${encodeURI(safeImg)}') center/cover`:GR[i%GR.length];
   const u=p.unit||"";
   const ic=IC[p.category]||"🏷️";
   const lk=c.like||0;const cm=c.comment||0;
   const pidNum=Number(p.id)||0;
+  const st=statOf(p.id);
   return`<article class="card">
   <div class="card-head">
     <img src="logo-artrisa.png" alt="ARTRISA" onerror="this.style.display='none'">
     <div class="card-head-info"><b>${esc(p.name)}</b><small>${esc(p.category)}</small></div>
     <span class="card-badge">ARTRISA</span>
   </div>
-  <div class="card-cover" style="background:${bg}">
+  <div class="card-cover" onclick="openProduct(${pidNum})" style="background:${bg};cursor:pointer">
     <span class="card-label">${esc(p.category)}</span>
     <span class="card-emoji">${ic}</span>
     <div class="card-text-box"><h3>${esc(p.name)}</h3><p>${esc(p.description||"")}</p></div>
   </div>
   <div class="card-body">
     <div class="card-price"><small>HARGA</small><b>${pr}${u?" <span style='font-size:9px;font-weight:400;color:#888'>"+esc(u)+"</span>":""}</b></div>
+    <div class="card-stat">Dilihat ${st.v} kali · Klik WhatsApp ${st.k} kali</div>
     <div class="card-actions">
       <button onclick="interact(${pidNum},'like')">❤️ ${lk}</button>
       <button onclick="interact(${pidNum},'comment')">💬 ${cm}</button>
       <span>Klik untuk interaksi</span>
     </div>
     <div class="card-cta">
-      <button class="btn-wa" onclick="waOrder(${pidNum})">💬 WhatsApp</button>
-      <button class="btn-order" onclick="pickAndOrder(${pidNum})">📦 Pesan</button>
+      <button class="btn-wa" onclick="waOrder(${pidNum})">WhatsApp</button>
+      <button class="btn-order" onclick="openProduct(${pidNum})">Lihat detail</button>
     </div>
   </div>
 </article>`;
@@ -1326,11 +1390,20 @@ function renderPills(containerId){
 
 function render(){
   const q=v("q").toLowerCase();
-  const list=P.filter(p=>(FILTER==="Semua"||p.category===FILTER)&&(p.name||"").toLowerCase().includes(q)&&p.show_in_front!==false&&p.active!==false);
-
-  renderPills("pl");
+  const words=q.split(/\s+/).filter(Boolean);
+  const pf=v("pf");
+  const pMin=pf?Number(pf.split("-")[0]):0, pMax=pf?Number(pf.split("-")[1]):Infinity;
+  const hay=p=>(String(p.name||"")+" "+String(p.category||"")+" "+String(p.description||"")).toLowerCase();
+  const list=P.filter(p=>{
+    if(!(FILTER==="Semua"||p.category===FILTER))return false;
+    if(p.show_in_front===false||p.active===false)return false;
+    if(pf){const x=Number(p.price)||0;if(x<pMin||x>pMax)return false}
+    const h=hay(p);
+    return words.every(w=>h.includes(w));
+  });
+  renderPills("pl");renderPills("sp-pl");
   if($("feed"))$("feed").innerHTML=list.length?list.map(card).join(""):"<p class='muted'>Produk tidak ditemukan.</p>";
-
+  renderPopular();renderKat();
   if($("ps"))$("ps").innerHTML='<option value="">— Pilih produk —</option>'+P.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("");
   if($("np"))$("np").textContent=P.length;
   if($("feed2")&&!$("feed2").innerHTML.includes("Memuat"))renderFeed2();
@@ -1388,6 +1461,7 @@ async function ixSend(){
 }
 
 function waOrder(id){
+  track("wa",id);
   const p=P.find(x=>x.id==id);
   window.open("https://wa.me/"+WA+"?text="+encodeURIComponent("Halo ARTRISA, saya ingin tanya/order "+(p?p.name:"produk")+" 🙏"),"_blank","noopener");
 }
@@ -1402,6 +1476,7 @@ async function load(){
     C={};
     (ix||[]).forEach(r=>{C[r.target_id]=C[r.target_id]||{};C[r.target_id][r.kind]=(C[r.target_id][r.kind]||0)+1});
     const al=$("al");if(al)al.classList.add("hidden");
+    await loadStats();
     render();
   }catch(e){
     P=FALLBACK.slice();render();
@@ -1556,9 +1631,9 @@ async function daftarAff(){
   }catch(e){as.textContent="Gagal: "+e.message}
 }
 
-const TABS={ringkasan:["","Ringkasan"],kasir:["","Kasir (POS)"],pesanan:["","Pesanan"],produk:["","Produk"],keuangan:["","Keuangan"],pelanggan:["","Pelanggan"],supplier:["","Supplier"],afiliasi:["","Afiliasi"],reels:["","Reels"],interaksi:["","Interaksi"],akses:["","Manajemen Akses"]};
+const TABS={ringkasan:["","Ringkasan"],kasir:["","Kasir (POS)"],pesanan:["","Pesanan"],produk:["","Produk"],keuangan:["","Keuangan"],pelanggan:["","Pelanggan"],supplier:["","Supplier"],afiliasi:["","Afiliasi"],reels:["","Reels"],interaksi:["","Interaksi"],statistik:["","Statistik"],akses:["","Manajemen Akses"]};
 const ROLES={direktur:"Direktur",wakil_direktur:"Wakil Direktur",manajer:"Manajer",admin:"Admin"};
-const ROLE_TABS={direktur:Object.keys(TABS),wakil_direktur:["ringkasan","kasir","pesanan","produk","keuangan","pelanggan","supplier","afiliasi","reels","interaksi"],manajer:["ringkasan","kasir","pesanan","produk","pelanggan","supplier","reels","interaksi"],admin:["kasir","pesanan","produk"]};
+const ROLE_TABS={direktur:Object.keys(TABS),wakil_direktur:["ringkasan","kasir","pesanan","produk","keuangan","pelanggan","supplier","afiliasi","reels","interaksi","statistik"],manajer:["ringkasan","kasir","pesanan","produk","pelanggan","supplier","reels","interaksi"],admin:["kasir","pesanan","produk"]};
 const ST=["Baru","Diproses","Selesai","Batal"];
 const rp=n=>"Rp "+fmt(n);
 const dt=s=>s?new Date(s).toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"}):"-";
@@ -1685,7 +1760,7 @@ VIEWS.pesanan=async()=>{
   $("d-body").innerHTML=`<div class="pills">${["Semua",...ST].map(s=>`<button class="pill-btn ${s===OF?"on":""}" onclick="OF='${s}';renderDash()">${s} (${s==="Semua"?o.length:o.filter(x=>x.status===s).length})</button>`).join("")}</div>${ordersTable(l,true)}`;
 };
 
-const PF=[{k:"name",l:"Nama produk",wide:1},{k:"category",l:"Kategori",opts:CATS.slice(1)},{k:"unit",l:"Satuan (mis. /m)"},{k:"price",l:"Harga jual (Rp)",type:"number"},{k:"modal_price",l:"Harga modal (Rp)",type:"number"},{k:"description",l:"Deskripsi",type:"textarea",wide:1},{k:"image_url",l:"Foto feed (upload dari galeri/PC)",type:"img",wide:1},{k:"sort_order",l:"Urutan",type:"number"},{k:"show_in_front",l:"Tampil di beranda",type:"bool"},{k:"active",l:"Produk aktif",type:"bool"}];
+const PF=[{k:"name",l:"Nama produk",wide:1},{k:"category",l:"Kategori",opts:CATS.slice(1)},{k:"unit",l:"Satuan (mis. /m)"},{k:"price",l:"Harga jual (Rp)",type:"number"},{k:"modal_price",l:"Harga modal (Rp)",type:"number"},{k:"description",l:"Deskripsi",type:"textarea",wide:1},{k:"image_url",l:"Foto feed (upload dari galeri/PC)",type:"img",wide:1},{k:"size_info",l:"Ukuran (satu baris per pilihan)",type:"textarea",wide:1},{k:"specs",l:"Spesifikasi (satu baris per poin)",type:"textarea",wide:1},{k:"sort_order",l:"Urutan",type:"number"},{k:"show_in_front",l:"Tampil di beranda",type:"bool"},{k:"active",l:"Produk aktif",type:"bool"}];
 const saveProd=id=>async o=>{
   if(!o.name){toast("Nama produk wajib diisi");return false}
   const ok=await run(id?sb.from("products").update(o).eq("id",id):sb.from("products").insert([o]),"Produk disimpan");
@@ -2116,6 +2191,95 @@ try{
     }
   }
 }catch(e){}
+// ===== statistik, popup produk, pencarian =====
+let STATS={},STAT_DAYS=30;
+const SRC=(()=>{try{const u=new URLSearchParams(location.search);return{source:(u.get("utm_source")||"").slice(0,40),campaign:(u.get("utm_campaign")||"").slice(0,60)}}catch(e){return{source:"",campaign:""}}})();
+function track(type,pid){
+  if(TOKEN)return; // klik dari akun yang login tidak dihitung
+  const body=JSON.stringify({type,pid:pid==null?null:String(pid),source:SRC.source,campaign:SRC.campaign});
+  try{fetch("/api/track",{method:"POST",headers:{"Content-Type":"application/json"},body,keepalive:true}).catch(()=>{})}catch(e){}
+}
+async function loadStats(){
+  try{
+    const{data}=await sb.from("product_stats").select("*");
+    STATS={};(data||[]).forEach(r=>{STATS[String(r.product_id)]={v:+r.views||0,k:+r.clicks||0}});
+  }catch(e){STATS={}}
+}
+const statOf=id=>STATS[String(id)]||{v:0,k:0};
+document.addEventListener("click",e=>{
+  const a=e.target.closest&&e.target.closest('a[href*="wa.me"]');
+  if(a)track("wa",a.dataset.pid||null);
+},true);
+function renderPopular(){
+  const el=$("feed-populer");if(!el)return;
+  const list=P.filter(p=>p.show_in_front!==false&&p.active!==false)
+    .map(p=>({p,s:statOf(p.id)}))
+    .sort((a,b)=>(b.s.k-a.s.k)||(b.s.v-a.s.v))
+    .slice(0,6).map(x=>x.p);
+  el.innerHTML=list.length?list.map(card).join(""):"<p class='muted'>Belum ada produk.</p>";
+}
+function renderKat(){
+  const el=$("kat-grid");if(!el)return;
+  el.innerHTML='<button class="kat-tile" data-c="Semua" onclick="katGo(this.dataset.c)"><b>Semua Produk</b><small>'+P.length+' produk</small></button>'+
+    CATS.slice(1).map(c=>`<button class="kat-tile" data-c="${esc(c)}" onclick="katGo(this.dataset.c)"><b>${esc(c)}</b><small>${P.filter(p=>p.category===c).length} produk</small></button>`).join("");
+}
+function katGo(c){setF(c);const t=$("semua");if(t)t.scrollIntoView({behavior:"smooth"})}
+function openProduct(id){
+  const p=P.find(x=>String(x.id)===String(id));
+  if(!p)return;
+  const pr=p.price!=null?"Rp "+fmt(p.price):"Harga hubungi kami";
+  const st=statOf(p.id);
+  const img=p.image_url?String(p.image_url).replace(SB_URL,"/api/supabase").replace(/['"]/g,""):"";
+  const lines=t=>String(t||"").split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  const sizes=lines(p.size_info),specs=lines(p.specs);
+  $("pp-body").innerHTML=`
+    <button class="glass-x" onclick="closeProduct()" aria-label="Tutup">×</button>
+    ${img?`<img class="pp-img" src="${encodeURI(img)}" alt="${esc(p.name)}">`:`<div class="pp-img pp-noimg">${esc(p.category)}</div>`}
+    <span class="pp-cat">${esc(p.category)}</span>
+    <h2 class="pp-title">${esc(p.name)}</h2>
+    <div class="pp-price"><b>${pr}</b>${p.unit?`<span>${esc(p.unit)}</span>`:""}</div>
+    <p class="pp-desc">${esc(p.description||"")}</p>
+    ${sizes.length?`<h4 class="pp-sec">Ukuran</h4><ul class="pp-list">${sizes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+    ${specs.length?`<h4 class="pp-sec">Spesifikasi</h4><ul class="pp-list">${specs.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+    <p class="pp-stat">Dilihat ${st.v} kali · Klik WhatsApp ${st.k} kali</p>
+    <button class="pp-order" onclick="waOrder(${Number(p.id)||0})">Pesan Sekarang</button>`;
+  $("pp-ov").classList.add("show");document.body.classList.add("pp-open");
+  track("view",p.id);
+}
+function closeProduct(){$("pp-ov").classList.remove("show");if(!$("sp-ov").classList.contains("show"))document.body.classList.remove("pp-open")}
+function openSearch(){$("sp-ov").classList.add("show");document.body.classList.add("pp-open");setTimeout(()=>{const q=$("q");if(q)q.focus()},60)}
+function closeSearch(){$("sp-ov").classList.remove("show");if(!$("pp-ov").classList.contains("show"))document.body.classList.remove("pp-open")}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeProduct();closeSearch()}});
+
+VIEWS.statistik=async()=>{
+  const since=new Date(Date.now()-STAT_DAYS*86400000).toISOString();
+  const{data,error}=await sb.from("events").select("type,product_id,source,campaign,created_at").gte("created_at",since).order("created_at",{ascending:false}).limit(20000);
+  if(error)throw error;
+  const E=data||[];
+  const views=E.filter(x=>x.type==="view").length,clicks=E.filter(x=>x.type==="wa").length;
+  const ctr=views?((clicks/views)*100).toFixed(1):"0.0";
+  const grp=fn=>{const m={};E.forEach(x=>{const k=fn(x);m[k]=m[k]||{v:0,k:0};if(x.type==="view")m[k].v++;else m[k].k++});return m};
+  const bySrc=grp(x=>(x.source||"langsung")+" · "+(x.campaign||"-"));
+  const byPid=grp(x=>x.product_id||"-");
+  const byDay=grp(x=>new Date(x.created_at).toLocaleDateString("sv-SE",{timeZone:"Asia/Jakarta"}));
+  const nameOf=id=>{const p=P.find(x=>String(x.id)===String(id));return p?p.name:"(produk "+id+")"};
+  const tbl=(obj,lab,sortDesc=true)=>Object.entries(obj).sort((a,b)=>sortDesc?(b[1].v+b[1].k)-(a[1].v+a[1].k):(a[0]<b[0]?1:-1)).map(([k,o])=>`<tr><td>${esc(lab(k))}</td><td>${o.v}</td><td>${o.k}</td></tr>`).join("")||`<tr><td colspan="3" class="muted">Belum ada data.</td></tr>`;
+  $("d-body").innerHTML=`
+    <div class="pills">${[7,30,90].map(d=>`<button class="pill-btn ${d===STAT_DAYS?"on":""}" onclick="STAT_DAYS=${d};renderDash()">${d} hari</button>`).join("")}</div>
+    <div class="d-stats">
+      <div class="d-stat"><small>Dilihat (popup)</small><b>${views}</b></div>
+      <div class="d-stat"><small>Klik WhatsApp</small><b>${clicks}</b></div>
+      <div class="d-stat"><small>Persentase klik</small><b>${ctr}%</b></div>
+    </div>
+    <h4>Per iklan / sumber</h4>
+    <div class="d-table"><table><thead><tr><th>Sumber · kampanye</th><th>Dilihat</th><th>Klik WA</th></tr></thead><tbody>${tbl(bySrc,x=>x)}</tbody></table></div>
+    <h4>Per produk</h4>
+    <div class="d-table"><table><thead><tr><th>Produk</th><th>Dilihat</th><th>Klik WA</th></tr></thead><tbody>${tbl(byPid,nameOf)}</tbody></table></div>
+    <h4>Per hari</h4>
+    <div class="d-table"><table><thead><tr><th>Tanggal</th><th>Dilihat</th><th>Klik WA</th></tr></thead><tbody>${tbl(byDay,x=>x,false)}</tbody></table></div>
+    <p class="muted">Klik dari akun yang sudah login tidak dihitung. Dilihat = popup produk dibuka. Klik WA = tombol WhatsApp di mana pun.</p>`;
+};
+
 load();
 
 const initHash=location.hash.replace("#","");
