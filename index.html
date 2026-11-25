@@ -1725,6 +1725,7 @@ async function shrinkTo(file,maxBytes=100*1024){
   }
   return best;
 }
+async function upImg(inp,tid){
   const f=inp.files[0];if(!f)return;
   const put=u=>{$(tid).value=u;const pv=$(tid.replace("f_","pv_"));if(pv){pv.src=u;pv.hidden=false}};
   const canLoad=u=>new Promise(r=>{const i=new Image();i.onload=()=>r(true);i.onerror=()=>r(false);i.src=u});
