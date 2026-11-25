@@ -2179,14 +2179,52 @@ function chartSvg(bk,A,B,la,lb){
   return`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Grafik penjualan">${g}</svg>`;
 }
 
+let OV={per:"harian"};
+const OV_PER={harian:{n:30,nama:"Harian"},mingguan:{n:12,nama:"Mingguan"},bulanan:{n:12,nama:"Bulanan"},tahunan:{n:5,nama:"Tahunan"}};
+const pd=s=>new Date(String(s).length<=10?s+"T00:00:00":s);
+function ovKey(d){
+  const y=ymd(d);
+  if(OV.per==="harian")return y;
+  if(OV.per==="bulanan")return y.slice(0,7);
+  if(OV.per==="tahunan")return y.slice(0,4);
+  const x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7));return ymd(x);
+}
+function ovKeys(){
+  const n=OV_PER[OV.per].n,now=new Date(),keys=[];
+  for(let i=n-1;i>=0;i--){
+    const d=new Date(now);
+    if(OV.per==="harian")d.setDate(d.getDate()-i);
+    else if(OV.per==="mingguan")d.setDate(d.getDate()-i*7);
+    else{d.setDate(1);if(OV.per==="bulanan")d.setMonth(d.getMonth()-i);else d.setFullYear(d.getFullYear()-i)}
+    keys.push(ovKey(d));
+  }
+  return [...new Set(keys)];
+}
+function ovLabel(k){
+  if(OV.per==="harian")return new Date(k+"T00:00:00").toLocaleDateString("id-ID",{day:"2-digit",month:"short"});
+  if(OV.per==="mingguan")return "Mgg "+new Date(k+"T00:00:00").toLocaleDateString("id-ID",{day:"2-digit",month:"short"});
+  if(OV.per==="bulanan")return new Date(k+"-01T00:00:00").toLocaleDateString("id-ID",{month:"short",year:"2-digit"});
+  return k;
+}
+function ovSeries(list,field,val){
+  const keys=ovKeys(),m={};keys.forEach(k=>m[k]=0);
+  list.forEach(r=>{const k=ovKey(pd(r[field]));if(k in m)m[k]+=val(r)});
+  return keys.map(k=>({k,v:m[k]}));
+}
+function ovChart(series,color,format){
+  const W=600,H=170,P=26,max=Math.max(1,...series.map(s=>s.v)),bw=(W-P*2)/Math.max(1,series.length);
+  const step=Math.ceil(series.length/8);
+  const bars=series.map((s,i)=>{const h=(s.v/max)*(H-P*2),x=P+i*bw+bw*0.18,y=H-P-h;
+    return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${(bw*0.64).toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${color}"><title>${esc(ovLabel(s.k))}: ${esc(format(s.v))}</title></rect>`}).join("");
+  const labels=series.map((s,i)=>i%step===0?`<text x="${(P+i*bw+bw/2).toFixed(1)}" y="${H-6}" text-anchor="middle" font-size="10" fill="#64748b">${esc(ovLabel(s.k))}</text>`:"").join("");
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">${bars}${labels}</svg>`;
+}
+function ovSet(p){OV.per=p;renderDash()}
 VIEWS.ringkasan=async()=>{
   const ps=permsOf(U),fin=ps.includes("keuangan"),pos=ps.includes("kasir"),E=p=>p.catch(()=>[]);
-  const[o,f,sl,pr,ht,pt,cu]=await Promise.all([rows("orders"),fin?rows("finance","date"):[],pos||fin?rows("sales"):[],rows("products","sort_order",true),fin?E(rows("hutang")):[],fin?E(rows("piutang")):[],E(rows("customers"))]);
-  const bk=buckets(CP),live=o.filter(x=>x.status!=="Batal"),tot=a=>a.reduce((x,y)=>x+y,0),mon=ymd(new Date()).slice(0,7);
+  const[o,f,sl,pr,ht,pt,cu,ev]=await Promise.all([rows("orders"),fin?rows("finance","date"):[],pos||fin?rows("sales"):[],rows("products","sort_order",true),fin?E(rows("hutang")):[],fin?E(rows("piutang")):[],E(rows("customers")),E(rows("events"))]);
+  const live=o.filter(x=>x.status!=="Batal"),tot=a=>a.reduce((x,y)=>x+y,0),mon=ymd(new Date()).slice(0,7);
   const kd=(k,l)=>l.filter(x=>x.kind===k),sm=(l,k)=>tot(l.map(x=>+x[k]||0));
-  let A,B=null;
-  if(fin){A=sumBy(CP,bk,kd("pemasukan",f),"date","amount");B=sumBy(CP,bk,kd("pengeluaran",f),"date","amount")}
-  else{const a1=sumBy(CP,bk,live,"created_at","total"),a2=sumBy(CP,bk,sl,"created_at","total");A=a1.map((x,i)=>x+a2[i])}
   const fm=f.filter(x=>String(x.date).slice(0,7)===mon),inc=sm(kd("pemasukan",fm),"amount"),out=sm(kd("pengeluaran",fm),"amount");
   const piuT=tot(sl.filter(s=>s.total>s.paid).map(s=>s.total-s.paid))+sm(pt,"sisa");
   const S=[];
@@ -2194,19 +2232,27 @@ VIEWS.ringkasan=async()=>{
   S.push(["Pesanan baru",o.filter(x=>x.status==="Baru").length],["Total pesanan web",o.length]);
   if(pos)S.push(["Transaksi kasir",sl.length]);
   S.push(["Pelanggan",cu.length],["Produk aktif",pr.filter(x=>x.active).length]);
-  const per={minggu:"minggu terakhir",bulan:"bulan terakhir",tahun:"5 tahun terakhir"}[CP],n=bk.length;
-  $("d-body").innerHTML=`<div class="d-stats">${S.map(s=>`<div class="d-stat"><small>${s[0]}</small><b>${s[1]}</b></div>`).join("")}</div>
-  <div class="pos-card" style="margin-bottom:20px">
-    <div class="d-bar"><div><h3 class="d-h" style="margin:0">${fin?"Grafik keuangan":"Grafik penjualan"}</h3><span class="muted">${CP==="tahun"?per:n+" "+per}</span></div>
-    <div class="pills" style="margin:0">${[["minggu","Minggu"],["bulan","Bulan"],["tahun","Tahun"]].map(p=>`<button class="pill-btn ${p[0]===CP?"on":""}" onclick="CP='${p[0]}';renderDash()">${p[1]}</button>`).join("")}</div></div>
-    ${chartSvg(bk,A,B,fin?"Pemasukan":"Penjualan","Pengeluaran")}
-    <div class="legend"><span><i style="background:#0B3D91"></i>${fin?"Pemasukan (kasir + pesanan + manual)":"Penjualan (pesanan web + kasir)"}: <b>${rp(tot(A))}</b></span>${B?`<span><i style="background:#FFC800"></i>Pengeluaran: <b>${rp(tot(B))}</b></span>`:""}</div>
-  </div>
+  const jualKasir=ovSeries(sl,"created_at",r=>+r.total||0);
+  const jual=ovSeries(live,"created_at",r=>+r.total||0).map((x,i)=>({k:x.k,v:x.v+jualKasir[i].v}));
+  const masuk=ovSeries(kd("pemasukan",f),"date",r=>+r.amount||0);
+  const keluar=ovSeries(kd("pengeluaran",f),"date",r=>+r.amount||0);
+  const lihat=ovSeries(ev.filter(r=>r.type==="view"),"created_at",()=>1);
+  const wa=ovSeries(ev.filter(r=>r.type==="wa"),"created_at",()=>1);
+  const satuan={harian:"hari",mingguan:"minggu",bulanan:"bulan",tahunan:"tahun"}[OV.per];
+  const tabs=Object.keys(OV_PER).map(p=>`<button class="pill-btn ${p===OV.per?"on":""}" onclick="ovSet('${p}')">${OV_PER[p].nama}</button>`).join("");
+  const panel=(judul,series,warna,format)=>`<div style="background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:0 4px 16px rgba(8,42,133,.08)">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:8px"><b>${judul}</b><span class="muted">${OV_PER[OV.per].n} ${satuan} terakhir · total ${format(tot(series.map(x=>x.v)))}</span></div>
+    ${ovChart(series,warna,format)}</div>`;
+  const rpf=v=>rp(v),nf=v=>fmt(v)+" kali";
+  $("d-body").innerHTML=`<div class="pills" style="margin-bottom:12px">${tabs}</div>
+  <div class="d-stats">${S.map(s=>`<div class="d-stat"><small>${s[0]}</small><b>${s[1]}</b></div>`).join("")}</div>
+  ${panel("Penjualan (pesanan web + kasir)",jual,"#0b43b3",rpf)}
+  ${fin?panel("Pemasukan",masuk,"#16a34a",rpf)+panel("Pengeluaran",keluar,"#dc2626",rpf):""}
+  ${panel("Pengunjung (dilihat)",lihat,"#ffc800",nf)}
+  ${panel("Klik WhatsApp",wa,"#25d366",nf)}
   ${fin&&f.length?`<h3 class="d-h">Arus kas terbaru</h3><div class="d-table" style="margin-bottom:18px"><table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Keterangan</th><th>Jumlah</th></tr></thead><tbody>${f.slice(0,6).map(x=>`<tr><td>${dt(x.date)}</td><td><span class="badge ${x.kind==="pemasukan"?"in":"out"}">${esc(x.kind)}</span></td><td>${esc(x.description)}</td><td>${rp(x.amount)}</td></tr>`).join("")}</tbody></table></div>`:""}
   <h3 class="d-h">Pesanan web terbaru</h3>${ordersTable(o.slice(0,6),false)}`;
-};
-
-VIEWS.interaksi=async()=>{
+};VIEWS.interaksi=async()=>{
   const[l,pr]=await Promise.all([rows("interactions"),rows("products","sort_order",true)]);
   const nm=id=>(pr.find(p=>p.id==id)||{}).name||"-";
   $("d-body").innerHTML=l.length?`<div class="d-table"><table><thead><tr><th>Tanggal</th><th>Pengunjung</th><th>Produk</th><th>Jenis</th><th>Komentar</th><th></th></tr></thead><tbody>${l.map(x=>`<tr><td>${dt(x.created_at)}</td><td><b>${esc(x.customer_name)}</b>${x.whatsapp?`<br><a class="lnk" target="_blank" rel="noopener" href="https://wa.me/${esc(waNum(x.whatsapp))}">${esc(x.whatsapp)}</a>`:""}</td><td>${esc(nm(x.target_id))}</td><td><span class="badge">${esc(x.kind)}</span></td><td>${esc(x.comment_text||"")}</td><td><button class="d-ic" onclick="delRow('interactions',${Number(x.id)},'interaksi')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<p class="muted">Belum ada interaksi.</p>';
