@@ -1369,8 +1369,8 @@ function card(p,i){
     <div class="card-text-box"><h3>${esc(p.name)}</h3><p>${esc(p.description||"")}</p></div>
   </div>
   <div class="card-body">
-<div class="card-price"><small>HARGA</small><b ${nego?`onclick="waOrder(${pidNum})" style="cursor:pointer;text-decoration:underline"`:""}>
-    <div class="card-stat">Dilihat ${st.v} kali · Klik WhatsApp ${st.k} kali</div>
+<div class="card-price"><small>HARGA</small><b ${nego?`onclick="waOrder(${pidNum})" style="cursor:pointer"`:""}>
+    <div class="card-stat">Dilihat ${st.v} kali · </div>
     <div class="card-actions">
       <button onclick="interact(${pidNum},'like')">❤️ ${lk}</button>
       <button onclick="interact(${pidNum},'comment')">💬 ${cm}</button>
@@ -2428,11 +2428,11 @@ function openProduct(id){
     ${img?`<img class="pp-img" src="${encodeURI(img)}" alt="${esc(p.name)}">`:`<div class="pp-img pp-noimg">${esc(p.category)}</div>`}
     <span class="pp-cat">${esc(p.category)}</span>
     <h2 class="pp-title">${esc(p.name)}</h2>
-    <div class="pp-price"><b ${nego?`onclick="waOrder(${Number(p.id)||0})" style="cursor:pointer;text-decoration:underline"`:""}>${pr}</b>
+    <div class="pp-price"><b ${nego?`onclick="waOrder(${Number(p.id)||0})" style="cursor:pointer"`:""}>${pr}</b>
     <p class="pp-desc">${esc(p.description||"")}</p>
     ${sizes.length?`<h4 class="pp-sec">Ukuran</h4><ul class="pp-list">${sizes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
     ${specs.length?`<h4 class="pp-sec">Spesifikasi</h4><ul class="pp-list">${specs.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
-    <p class="pp-stat">Dilihat ${st.v} kali · Klik WhatsApp ${st.k} kali</p>
+    <p class="pp-stat">Dilihat ${st.v} kali · </p>
     <button class="pp-order" onclick="waOrder(${Number(p.id)||0})">Pesan Sekarang</button>`;
   $("pp-ov").classList.add("show");document.body.classList.add("pp-open");
   track("view",p.id);
