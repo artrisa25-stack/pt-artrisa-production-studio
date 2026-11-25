@@ -34,7 +34,11 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
 
   const rawPath = String(req.query.path || '').replace(/^\/+/, '');
-  const table = rawPath.split('/')[0].split('?')[0];
+  // Hanya nama tabel sederhana. Mencegah path seperti "orders/../users".
+  if (!/^[a-z][a-z0-9_]*$/.test(rawPath)) {
+    return res.status(400).json({ error: 'Invalid endpoint path' });
+  }
+  const table = rawPath;
 
   if (!table) {
     return res.status(400).json({ error: 'Invalid endpoint path' });
