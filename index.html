@@ -1848,6 +1848,7 @@ VIEWS.produk=async()=>{
       <option value="za" ${PQ.sort==="za"?"selected":""}>Nama Z–A</option>
       <option value="baru" ${PQ.sort==="baru"?"selected":""}>Terakhir diedit</option>
     </select>
+    <button class="btn btn-ghost-d" onclick="openPriceTool()">Ubah harga</button>
     <button class="btn btn-y" onclick="addProd()">+ Tambah produk</button>
   </div>
   <div class="muted" id="p-count" style="margin:8px 0"></div>
@@ -1856,7 +1857,59 @@ VIEWS.produk=async()=>{
   pRefresh();
 };
 
-const uid=()=>"m"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+let PT={mode:"persen",pct:"",round:1000,rows:[]};
+function ptRound(n,r){return Math.round(n/r)*r}
+function ptNew(r){
+  if(PT.mode==="persen"){return ptRound(r.old*(1+dec(PT.pct)/100),PT.round)}
+  return r.manual===""?r.old:money(r.manual);
+}
+function openPriceTool(){
+  PT.rows=DP.map(p=>({id:p.id,name:p.name,old:+p.price||0,ok:(+p.price||0)>0,manual:""}));
+  ptDraw();
+  $("d-modal").classList.remove("hidden");
+}
+function ptDraw(){
+  const rows=PT.rows,dipilih=rows.filter(r=>r.ok).length;
+  $("d-modal-card").innerHTML=`<h3>Ubah harga massal</h3>
+  <div class="d-form">
+    <div class="form-group"><label>Cara</label>
+      <select class="form-input" onchange="PT.mode=this.value;ptDraw()">
+        <option value="persen" ${PT.mode==="persen"?"selected":""}>Persen (naik/turun)</option>
+        <option value="manual" ${PT.mode==="manual"?"selected":""}>Manual per produk</option>
+      </select></div>
+    <div class="form-group"><label>Pembulatan</label>
+      <select class="form-input" onchange="PT.round=+this.value;ptDraw()">
+        ${[100,500,1000].map(v=>`<option value="${v}" ${PT.round===v?"selected":""}>ke Rp ${v}</option>`).join("")}
+      </select></div>
+    ${PT.mode==="persen"?`<div class="form-group wide"><label>Persen (contoh 10 = naik 10%, -5 = turun 5%)</label>
+      <input class="form-input" inputmode="decimal" value="${esc(PT.pct)}" oninput="PT.pct=this.value;ptPreview()"></div>`:""}
+  </div>
+  <p class="muted" style="margin:8px 0">Centang produk yang mau berubah. ${dipilih} dari ${rows.length} dipilih.</p>
+  <div class="d-table" style="max-height:340px;overflow:auto"><table><thead><tr><th></th><th>Produk</th><th>Harga lama</th><th>Harga baru</th></tr></thead><tbody>
+  ${rows.map((r,i)=>`<tr><td><input type="checkbox" ${r.ok?"checked":""} onchange="PT.rows[${i}].ok=this.checked;ptPreview()"></td>
+    <td>${esc(r.name)}</td><td>${rp(r.old)}</td>
+    <td>${PT.mode==="manual"?`<input class="form-input" style="max-width:130px;padding:6px 8px" inputmode="numeric" value="${esc(r.manual===""?r.old:r.manual)}" oninput="PT.rows[${i}].manual=this.value;ptPreview()">`:`<b id="np_${i}">${rp(ptNew(r))}</b>`}</td></tr>`).join("")}
+  </tbody></table></div>
+  <div class="d-form-act"><button class="btn btn-ghost-d" onclick="closeForm()">Batal</button><button class="btn btn-y" onclick="ptApply()">Konfirmasi &amp; simpan</button></div>`;
+}
+function ptPreview(){
+  PT.rows.forEach((r,i)=>{const el=$("np_"+i);if(el)el.textContent=rp(ptNew(r))});
+}
+async function ptApply(){
+  const sel=PT.rows.filter(r=>r.ok).map(r=>({id:r.id,price:ptNew(r)})).filter(x=>x.price>0);
+  if(!sel.length){toast("Tidak ada produk yang dipilih");return}
+  if(!confirm("Ubah harga "+sel.length+" produk sekarang?"))return;
+  let gagal=0;
+  for(const x of sel){
+    const{error}=await sb.from("products").update({price:x.price}).eq("id",x.id);
+    if(error)gagal++;
+  }
+  RC.clear();
+  closeForm();
+  toast(gagal?("Selesai, "+gagal+" produk gagal"):"Harga diperbarui");
+  renderDash();
+}
+  const uid=()=>"m"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 let CUL=[],HT=[],FSUB="kas",FM="Semua";
 function mobLabels(){document.querySelectorAll("#d-body .d-table table").forEach(t=>{const h=[...t.querySelectorAll("thead th")].map(x=>x.textContent);t.querySelectorAll("tbody tr").forEach(r=>[...r.children].forEach((c,i)=>{if(h[i])c.setAttribute("data-l",h[i])}))})}
 const finRow=(kind,amount,description,ref_type,ref_id,category,method,customer_name)=>({date:ymd(new Date()),kind,amount,description,category:category||null,method:method||null,customer_name:customer_name||null,ref_type,ref_id:ref_id==null?null:String(ref_id)});
