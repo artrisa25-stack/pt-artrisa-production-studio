@@ -1794,16 +1794,60 @@ const saveProd=id=>async o=>{
 };
 const addProd=()=>openForm("Tambah produk",PF,{category:CATS[1],sort_order:DP.length+1,price:0,modal_price:0},saveProd(null));
 const editProd=id=>openForm("Edit produk",PF,DP.find(p=>p.id===id),saveProd(id));
-VIEWS.produk=async()=>{
-  DP=await rows("products","sort_order",true);
-  $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${DP.length} produk</span><button class="btn btn-y" onclick="addProd()">+ Tambah produk</button></div>
-  <div class="d-table"><table><thead><tr><th>Produk</th><th>Harga jual</th><th>Modal</th><th>Margin</th><th>Beranda</th><th>Aktif</th><th></th></tr></thead><tbody>${DP.map(p=>{
-    const m=p.price?Math.round((p.price-p.modal_price)/p.price*100):0;
-    const pid=Number(p.id);
-    return`<tr><td>${p.image_url?`<img class="d-thumb" loading="lazy" decoding="async" src="${esc(p.image_url.replace(SB_URL,"/api/supabase"))}" alt="">`:""}<b>${esc(p.name)}</b><br><small>${esc(p.category)} ${esc(p.unit)}</small></td><td>${rp(p.price)}</td><td>${rp(p.modal_price)}</td><td>${m}%</td>
+let PQ={q:"",cat:"Semua",sort:"urut",page:1};
+const PER=10;
+function pFilter(){
+  const q=PQ.q.trim().toLowerCase();
+  let l=DP.filter(p=>(PQ.cat==="Semua"||p.category===PQ.cat)&&(!q||(String(p.name)+" "+String(p.category)+" "+String(p.description||"")).toLowerCase().includes(q)));
+  if(PQ.sort==="az")l.sort((a,b)=>String(a.name).localeCompare(String(b.name),"id"));
+  else if(PQ.sort==="za")l.sort((a,b)=>String(b.name).localeCompare(String(a.name),"id"));
+  else if(PQ.sort==="baru")l.sort((a,b)=>String(b.updated_at||"").localeCompare(String(a.updated_at||"")));
+  return l;
+}
+function pagerHTML(n){
+  const btn=(p,t,on)=>`<button class="pill-btn ${on?"on":""}" onclick="PQ.page=${p};pRefresh()">${t}</button>`;
+  let h="";
+  if(PQ.page>1)h+=btn(PQ.page-1,"‹ Sebelumnya",false);
+  const from=Math.max(1,PQ.page-2),to=Math.min(n,from+4);
+  for(let i=from;i<=to;i++)h+=btn(i,i,i===PQ.page);
+  if(PQ.page<n)h+=btn(PQ.page+1,"Berikutnya ›",false);
+  return h;
+}
+function pTable(l){
+  return `<div class="d-table"><table><thead><tr><th>Produk</th><th>Harga jual</th><th>Modal</th><th>Margin</th><th>Beranda</th><th>Aktif</th><th></th></tr></thead><tbody>${l.map(p=>{
+    const m=p.price?Math.round((p.price-p.modal_price)/p.price*100):0,pid=Number(p.id);
+    return `<tr><td>${p.image_url?`<img class="d-thumb" loading="lazy" decoding="async" src="${esc(p.image_url.replace(SB_URL,"/api/supabase"))}" alt="">`:""}<b>${esc(p.name)}</b><br><small>${esc(p.category)} ${esc(p.unit)}</small></td><td>${rp(p.price)}</td><td>${rp(p.modal_price)}</td><td>${m}%</td>
     <td><input type="checkbox" ${p.show_in_front?"checked":""} onchange="toggle('products',${pid},'show_in_front',this.checked)"></td>
     <td><input type="checkbox" ${p.active?"checked":""} onchange="toggle('products',${pid},'active',this.checked)"></td>
-    <td><button class="d-ic" onclick="editProd(${pid})">Edit</button><button class="d-ic" onclick="delRow('products',${pid},'produk')">Hapus</button></td></tr>`}).join("")}</tbody></table></div>`;
+    <td><button class="d-ic" onclick="editProd(${pid})">Edit</button><button class="d-ic" onclick="delRow('products',${pid},'produk')">Hapus</button></td></tr>`;
+  }).join("")}</tbody></table></div>`;
+}
+function pRefresh(){
+  const list=pFilter(),n=Math.max(1,Math.ceil(list.length/PER));
+  if(PQ.page>n)PQ.page=n;
+  const s=list.slice((PQ.page-1)*PER,PQ.page*PER);
+  $("p-count").textContent=list.length+" produk · halaman "+PQ.page+" dari "+n;
+  $("p-list").innerHTML=s.length?pTable(s):'<p class="muted">Tidak ada produk.</p>';
+  $("p-pager").innerHTML=pagerHTML(n);
+  mobLabels();
+}
+VIEWS.produk=async()=>{
+  DP=await rows("products","sort_order",true);
+  $("d-body").innerHTML=`<div class="d-bar" style="flex-wrap:wrap;gap:8px">
+    <input class="form-input" style="max-width:260px" placeholder="Cari nama produk…" value="${esc(PQ.q)}" oninput="PQ.q=this.value;PQ.page=1;pRefresh()">
+    <select class="form-input" style="max-width:200px" onchange="PQ.cat=this.value;PQ.page=1;pRefresh()">${CATS.map(c=>`<option ${c===PQ.cat?"selected":""}>${esc(c)}</option>`).join("")}</select>
+    <select class="form-input" style="max-width:180px" onchange="PQ.sort=this.value;PQ.page=1;pRefresh()">
+      <option value="urut" ${PQ.sort==="urut"?"selected":""}>Urutan tampil</option>
+      <option value="az" ${PQ.sort==="az"?"selected":""}>Nama A–Z</option>
+      <option value="za" ${PQ.sort==="za"?"selected":""}>Nama Z–A</option>
+      <option value="baru" ${PQ.sort==="baru"?"selected":""}>Terakhir diedit</option>
+    </select>
+    <button class="btn btn-y" onclick="addProd()">+ Tambah produk</button>
+  </div>
+  <div class="muted" id="p-count" style="margin:8px 0"></div>
+  <div id="p-list"></div>
+  <div class="pills" id="p-pager" style="margin-top:10px"></div>`;
+  pRefresh();
 };
 
 const uid=()=>"m"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
