@@ -1357,7 +1357,8 @@ window.addEventListener("popstate",()=>{
 
 function card(p,i){
   const c=C[p.id]||{};
-  const pr="Rp XXXX";
+  const nego=p.category==="Jasa Pembuatan Website";
+  const pr=nego?"NEGOSIASI":"Rp XXXX";
   const safeImg=p.image_url?String(p.image_url).replace(SB_URL,"/api/supabase").replace(/['"]/g,""):"";
   const bg=GR[i%GR.length];
   const u=p.unit||"";
@@ -1377,7 +1378,7 @@ function card(p,i){
     <div class="card-text-box"><h3>${esc(p.name)}</h3><p>${esc(p.description||"")}</p></div>
   </div>
   <div class="card-body">
-    <div class="card-price"><small>HARGA</small><b>${pr}${u?" <span style='font-size:9px;font-weight:400;color:#888'>"+esc(u)+"</span>":""}</b></div>
+<div class="card-price"><small>HARGA</small><b ${nego?`onclick="waOrder(${pidNum})" style="cursor:pointer;text-decoration:underline"`:""}>
     <div class="card-stat">Dilihat ${st.v} kali · Klik WhatsApp ${st.k} kali</div>
     <div class="card-actions">
       <button onclick="interact(${pidNum},'like')">❤️ ${lk}</button>
@@ -1489,7 +1490,9 @@ async function ixSend(){
 function waOrder(id){
   track("wa",id);
   const p=P.find(x=>x.id==id);
-  window.open("https://wa.me/"+WA+"?text="+encodeURIComponent("Halo ARTRISA, saya ingin tanya/order "+(p?p.name:"produk")+" 🙏"),"_blank","noopener");
+  const jasa=p&&p.category==="Jasa Pembuatan Website";
+  const no=jasa?"6282261275447":WA;
+  window.open("https://wa.me/"+no+"?text="+encodeURIComponent("Halo ARTRISA, saya ingin tanya/order "+(p?p.name:"produk")+" 🙏"),"_blank","noopener");
 }
 
 async function load(){
@@ -2356,7 +2359,8 @@ function katGo(c){setF(c);const t=$("semua");if(t)t.scrollIntoView({behavior:"sm
 function openProduct(id){
   const p=P.find(x=>String(x.id)===String(id));
   if(!p)return;
-  const pr=p.price!=null?"Rp "+fmt(p.price):"Harga hubungi kami";
+  const nego=p.category==="Jasa Pembuatan Website";
+  const pr=nego?"NEGOSIASI":(p.price!=null?"Rp "+fmt(p.price):"Harga hubungi kami");
   const st=statOf(p.id);
   const img=p.image_url?String(p.image_url).replace(SB_URL,"/api/supabase").replace(/['"]/g,""):"";
   const lines=t=>String(t||"").split(/\n+/).map(x=>x.trim()).filter(Boolean);
@@ -2366,7 +2370,7 @@ function openProduct(id){
     ${img?`<img class="pp-img" src="${encodeURI(img)}" alt="${esc(p.name)}">`:`<div class="pp-img pp-noimg">${esc(p.category)}</div>`}
     <span class="pp-cat">${esc(p.category)}</span>
     <h2 class="pp-title">${esc(p.name)}</h2>
-    <div class="pp-price"><b>${pr}</b>${p.unit?`<span>${esc(p.unit)}</span>`:""}</div>
+    <div class="pp-price"><b ${nego?`onclick="waOrder(${Number(p.id)||0})" style="cursor:pointer;text-decoration:underline"`:""}>${pr}</b>
     <p class="pp-desc">${esc(p.description||"")}</p>
     ${sizes.length?`<h4 class="pp-sec">Ukuran</h4><ul class="pp-list">${sizes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
     ${specs.length?`<h4 class="pp-sec">Spesifikasi</h4><ul class="pp-list">${specs.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
