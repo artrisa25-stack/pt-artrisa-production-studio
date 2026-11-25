@@ -24,6 +24,7 @@ const PUBLIC_INSERT_TABLES = new Set([
 // Tabel yang boleh di-SELECT oleh publik (dengan penyaringan kolom sensitif)
 const PUBLIC_READ_TABLES = new Set([
   'products',
+  'product_stats',
   'reels',
   'interactions'
 ]);
@@ -72,7 +73,7 @@ export default async function handler(req, res) {
     if (table === 'interactions') {
       qs.set('select', 'id,target_type,target_id,kind,customer_name,comment_text,created_at');
     } else if (table === 'products') {
-      qs.set('select', 'id,name,category,description,unit,image_url,sort_order,show_in_front,active');
+      qs.set('select', 'id,name,category,description,unit,image_url,price,size_info,specs,sort_order,show_in_front,active');
     }
   }
 
@@ -105,7 +106,6 @@ export default async function handler(req, res) {
             delete copy.phone;
             delete copy.password_hash;
             delete copy.modal_price;
-            if (table === 'products') copy.price = null;
             return copy;
           });
           return res.status(r.status).json(cleaned);
