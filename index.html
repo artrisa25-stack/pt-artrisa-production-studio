@@ -838,18 +838,8 @@ body.pp-open>*:not(.glass-ov):not(#toast){filter:blur(8px);transition:filter .25
   <div class="eyebrow">DIPERCAYA OLEH</div>
   <h2>Klien yang sudah bekerja sama.</h2>
   <div class="logo-slider" id="logo-slider">
-    <div class="logo-track">
-      <div class="logo-item"><img src="klien/KANTOR%20BG%20SAID%203D.png" alt="Kantor Hukum Said Assagaf & Rekan" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
-      <div class="logo-item"><img src="klien/LOGO%20LAW%20FIRM%20MKI.png" alt="Law Firm Matahari Keadilan Indonesia" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
-      <div class="logo-item"><img src="klien/LOGO.png" alt="Langkatalk" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
-      <div class="logo-item"><img src="klien/LOGO%20SEJASA%20NET.png" alt="Sejasa.net" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
-      <div class="logo-item"><img src="klien/KNPI%20INSIGHT.png" alt="KNPI Insight" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
-      <div class="logo-item"><img src="klien/DERMAGA%20DURIAN%20LOGO.png" alt="Dermaga Durian" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
-      <div class="logo-item"><img src="klien/MUTIARA%20BARU%20GROUP%20LOGO.png" alt="Mutiara Baru Group" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
-      <div class="logo-item"><img src="klien/ESTETIKA%20LOGO.png" alt="Estetika" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
-      <div class="logo-item"><img src="klien/AF%20COFFEE%20LOGO%20WHITE.png" alt="AF Coffee" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
-      <div class="logo-item"><img src="klien/MOIZ%201%20PROFILE%20PICTURE.png" alt="Moiz Coffee & Roastery" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
-      <div class="logo-item"><img src="klien/AXIALNEWS%20LOGO.webp" alt="AXIALNEWS.ID" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
+    <div class="logo-track" id="logo-track">
+
     </div>
   </div>
 </section>
@@ -1661,7 +1651,7 @@ async function daftarAff(){
   }catch(e){as.textContent="Gagal: "+e.message}
 }
 
-const TABS={ringkasan:["","Ringkasan"],kasir:["","Kasir (POS)"],pesanan:["","Pesanan"],produk:["","Produk"],keuangan:["","Keuangan"],pelanggan:["","Pelanggan"],supplier:["","Supplier"],afiliasi:["","Afiliasi"],reels:["","Reels"],interaksi:["","Interaksi"],statistik:["","Statistik"],akses:["","Manajemen Akses"]};
+const TABS={ringkasan:["","Ringkasan"],kasir:["","Kasir (POS)"],pesanan:["","Pesanan"],produk:["","Produk"],keuangan:["","Keuangan"],pelanggan:["","Pelanggan"],supplier:["","Supplier"],afiliasi:["","Afiliasi"],reels:["","Reels"],interaksi:["","Interaksi"],statistik:["","Statistik"],klien:["","Klien"],akses:["","Manajemen Akses"]};
 const ROLES={direktur:"Direktur",wakil_direktur:"Wakil Direktur",manajer:"Manajer",admin:"Admin"};
 const ROLE_TABS={direktur:Object.keys(TABS),wakil_direktur:["ringkasan","kasir","pesanan","produk","keuangan","pelanggan","supplier","afiliasi","reels","interaksi","statistik"],manajer:["ringkasan","kasir","pesanan","produk","pelanggan","supplier","reels","interaksi"],admin:["kasir","pesanan","produk"]};
 const ST=["Baru","Diproses","Selesai","Batal"];
@@ -1913,6 +1903,73 @@ async function ptApply(){
   toast(gagal?("Selesai, "+gagal+" produk gagal"):"Harga diperbarui");
   renderDash();
 }
+  function klienForm(v){
+  const fields=[{k:"name"},{k:"logo_url"},{k:"sort_order",type:"number"},{k:"active",type:"bool"}];
+  FORM={fields,save:saveKlien(v&&v.id)};
+  const pv=v&&v.logo_url?`<img id="pv_logo_url" src="${esc(v.logo_url)}" style="height:60px;margin-top:6px">`:`<img id="pv_logo_url" hidden style="height:60px;margin-top:6px">`;
+  $("d-modal-card").innerHTML=`<h3>${v&&v.id?"Edit klien":"Tambah klien"}</h3><div class="d-form">
+    <div class="form-group"><label>Nama klien</label><input id="f_name" class="form-input" value="${esc(v?v.name:"")}" autocomplete="off"></div>
+    <div class="form-group wide"><label>Logo (otomatis dikecilkan ke WebP di bawah 50 KB)</label>
+      <input id="f_logo_url" class="form-input" value="${esc(v?v.logo_url||"":"")}" placeholder="URL logo, atau pilih file di bawah" autocomplete="off">
+      <input type="file" accept="image/*" class="form-input" style="margin-top:6px" onchange="upLogo(this)">${pv}</div>
+    <div class="form-group"><label>Urutan (angka kecil tampil dulu)</label><input id="f_sort_order" class="form-input" type="number" value="${v?Number(v.sort_order)||0:0}"></div>
+    <div class="form-group"><label>Tampil di beranda</label><label class="d-chk"><input type="checkbox" id="f_active" ${v&&v.active===false?"":"checked"}> Ya</label></div>
+  </div>
+  <div class="d-form-act"><button class="btn btn-ghost-d" onclick="closeForm()">Batal</button><button class="btn btn-y" onclick="submitForm()">Simpan</button></div>`;
+  $("d-modal").classList.remove("hidden");
+}
+function saveKlien(id){
+  return async o=>{
+    if(!o.name){toast("Nama klien wajib diisi");return false}
+    const row={name:o.name,logo_url:o.logo_url||"",sort_order:Number(o.sort_order)||0,active:!!o.active};
+    const q=id?sb.from("klien").update(row).eq("id",id):sb.from("klien").insert(row);
+    if(await run(q,"Klien disimpan")){RC.clear();renderDash();return true}
+    return false;
+  };
+}
+async function upLogo(inp){
+  const f=inp.files[0];if(!f)return;
+  toast("Mengecilkan logo…");
+  try{
+    const blob=await shrinkTo(f,50*1024);
+    if(blob.size>50*1024)throw new Error("logo tidak bisa dikecilkan di bawah 50 KB, coba gambar yang lebih sederhana");
+    const up=await fetch("/api/upload",{method:"POST",headers:{"Content-Type":blob.type,"x-artrisa-token":TOKEN||""},body:blob});
+    const js=await up.json().catch(()=>({}));
+    if(!up.ok)throw new Error(js.error||"upload gagal");
+    $("f_logo_url").value=js.url;
+    const pv=$("pv_logo_url");if(pv){pv.src=js.url;pv.hidden=false}
+    toast("Logo siap, klik Simpan");
+  }catch(e){toast("Gagal: "+e.message)}
+  inp.value="";
+}
+function addKlien(){klienForm(null)}
+async function editKlien(id){
+  const l=await rows("klien","sort_order",true);
+  klienForm(l.find(k=>Number(k.id)===Number(id)));
+}
+VIEWS.klien=async()=>{
+  const l=await rows("klien","sort_order",true);
+  $("d-body").innerHTML=`<div class="d-bar"><span class="muted">${l.length} klien</span><button class="btn btn-y" onclick="addKlien()">+ Tambah klien</button></div>
+  <div class="d-table"><table><thead><tr><th>Logo</th><th>Nama</th><th>Urutan</th><th>Tampil</th><th></th></tr></thead><tbody>${
+    l.length?l.map(k=>`<tr>
+      <td>${k.logo_url?`<img src="${esc(k.logo_url)}" alt="" style="height:40px;max-width:90px;object-fit:contain">`:""}</td>
+      <td><b>${esc(k.name)}</b></td><td>${Number(k.sort_order)||0}</td>
+      <td><input type="checkbox" ${k.active?"checked":""} onchange="toggle('klien',${Number(k.id)},'active',this.checked)"></td>
+      <td><button class="d-ic" onclick="editKlien(${Number(k.id)})">Edit</button><button class="d-ic" onclick="delRow('klien',${Number(k.id)},'klien')">Hapus</button></td>
+    </tr>`).join(""):'<tr><td colspan="5" class="muted">Belum ada klien.</td></tr>'
+  }</tbody></table></div>`;
+};
+async function loadKlien(){
+  const tr=document.getElementById("logo-track");
+  if(!tr)return;
+  try{
+    const r=await fetch("/api/supabase/rest/v1/klien?select=name,logo_url,sort_order,active&active=eq.true&order=sort_order.asc");
+    const l=await r.json();
+    if(!Array.isArray(l))return;
+    tr.innerHTML=l.filter(k=>k.logo_url).map(k=>`<div class="logo-item"><img src="${esc(k.logo_url)}" alt="${esc(k.name)}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`).join("");
+  }catch(e){}
+}
+document.addEventListener("DOMContentLoaded",loadKlien);
   const uid=()=>"m"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 let CUL=[],HT=[],FSUB="kas",FM="Semua";
 function mobLabels(){document.querySelectorAll("#d-body .d-table table").forEach(t=>{const h=[...t.querySelectorAll("thead th")].map(x=>x.textContent);t.querySelectorAll("tbody tr").forEach(r=>[...r.children].forEach((c,i)=>{if(h[i])c.setAttribute("data-l",h[i])}))})}
