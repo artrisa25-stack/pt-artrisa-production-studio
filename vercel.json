@@ -10,6 +10,7 @@
       ]
     }
   ],
+  "regions": ["syd1"],
   "rewrites": [
     {
       "source": "/api/supabase/storage/v1/:path*",
