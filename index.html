@@ -824,7 +824,7 @@ body.pp-open>*:not(.glass-ov):not(#toast){filter:blur(8px);transition:filter .25
        const words=['Print','Design','Website','Konten','Sosmed'];
         <div class="hero-btns">
           <button class="btn btn-y" onclick="goPage('pesan')">Pesan Sekarang →</button>
-          <a class="btn btn-w" href="https://wa.me/6283851722321" target="_blank" rel="noopener">Chat WhatsApp</a>
+          <a class="btn btn-w hero-wa" href="https://wa.me/6283851722321"
           <a class="btn btn-w" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20tertarik%20Jasa%20Pembuatan%20Website%20%26%20Sistem" target="_blank" rel="noopener">Jasa Pembuatan Website &amp; Sistem</a>
           <button class="btn btn-ghost" onclick="goPage('konten-beres')">Konten Beres</button>
           <a class="btn btn-y hero-profil" href="/company-profile.html">Lihat Company Profile &amp; Unduh PDF</a>
@@ -2654,6 +2654,29 @@ const validPages=["beranda","layanan","konten-beres","pesan","afiliasi","reels",
 if(validPages.includes(initHash)){
   goPage(initHash);
 }
+function countUp(el,to){
+  if(!el)return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=to;return}
+  const dur=900,t0=performance.now();
+  const step=t=>{const p=Math.min(1,(t-t0)/dur),v=Math.round(to*(1-Math.pow(1-p,3)));el.textContent=v;if(p<1)requestAnimationFrame(step)};
+  requestAnimationFrame(step);
+}
+(function(){
+  const el=document.getElementById('hrot');
+  if(!el||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const words=['Print','Design','Website','Konten','Sosmed'];
+  let i=0;
+  setInterval(()=>{el.classList.add('out');setTimeout(()=>{i=(i+1)%words.length;el.textContent=words[i];el.classList.remove('out')},350)},2600);
+})();
+(function(){
+  const card=document.querySelector('.hero-photo-card');
+  if(!card||matchMedia('(prefers-reduced-motion: reduce)').matches||!matchMedia('(pointer:fine)').matches)return;
+  card.addEventListener('pointermove',e=>{
+    const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`perspective(900px) rotateX(${(-y*6).toFixed(2)}deg) rotateY(${(x*8).toFixed(2)}deg)`;
+  });
+  card.addEventListener('pointerleave',()=>{card.style.transform=''});
+})();
 </script>
 </body>
 </html>
