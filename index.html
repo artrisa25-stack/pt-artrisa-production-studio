@@ -784,6 +784,13 @@ body.pp-open>*:not(.glass-ov):not(#toast){filter:blur(8px);transition:filter .25
   .hero-photo-card{transform:none!important}
   .hero-rot{transition:none}
 }
+/* === Foto Fakhri hidup === */
+.hero-photo-card .hero-photo{animation:photoBreathe 9s ease-in-out infinite alternate;transform-origin:50% 30%}
+@keyframes photoBreathe{from{transform:scale(1)}to{transform:scale(1.04)}}
+.hero-photo-card::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.22) 50%,transparent 65%);transform:translateX(-120%);animation:photoSweep 6s ease-in-out infinite}
+@keyframes photoSweep{0%,55%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+@media (max-width:768px){.hero-photo-card .hero-photo,.hero-photo-card::after{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.hero-photo-card .hero-photo,.hero-photo-card::after{animation:none!important}}
   </style>
 </head>
 <body>
