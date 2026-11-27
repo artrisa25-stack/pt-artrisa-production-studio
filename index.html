@@ -9,6 +9,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 
+  /* === Hero hidup (sedang) === */
+@keyframes heroIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.hero-left,.hero-photo-card{animation:heroIn .8s cubic-bezier(.2,.7,.2,1) backwards}
+.hero-photo-card{animation-delay:.15s;transition:transform .25s ease;will-change:transform}
+.hero-orb.o1{animation:orbA 16s ease-in-out infinite alternate}
+.hero-orb.o2{animation:orbB 18s ease-in-out infinite alternate}
+.hero-orb.o3{animation:orbC 14s ease-in-out infinite alternate}
+@keyframes orbA{to{transform:translate(40px,30px) scale(1.08)}}
+@keyframes orbB{to{transform:translate(-50px,-30px) scale(1.06)}}
+@keyframes orbC{to{transform:translate(30px,-40px) scale(.94)}}
+.hero-rot{display:inline-block;min-width:11ch;transition:opacity .35s ease,transform .35s ease}
+.hero-rot.out{opacity:0;transform:translateY(-6px)}
+.hero-wa{animation:waPulse 2.8s ease-in-out infinite}
+@keyframes waPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.45)}60%{box-shadow:0 0 0 12px rgba(255,255,255,0)}}
+@media (prefers-reduced-motion:reduce){
+  .hero-left,.hero-photo-card,.hero-orb,.hero-wa{animation:none!important}
+  .hero-photo-card{transform:none!important}
+  .hero-rot{transition:none}
+}
   <style>
 /* ===== RESET & BASE ===== */
 :root{
