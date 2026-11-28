@@ -2715,7 +2715,47 @@ VIEWS.statistik=async()=>{
   });
 })();
 load();
-
+VIEWS.statistik=async()=>{
+  const since=new Date(Date.now()-STAT_DAYS*86400000).toISOString();
+  const{data,error}=await sb.from("events").select("type,product_id,source,campaign,created_at").gte("created_at",since).order("created_at",{ascending:false}).limit(20000);
+  if(error)throw error;
+  const ALL=data||[];
+  const E=ALL.filter(x=>x.type==="view"||x.type==="wa");
+  const PR=ALL.filter(x=>x.type==="promo"||x.type==="promo_page");
+  const views=E.filter(x=>x.type==="view").length,clicks=E.filter(x=>x.type==="wa").length;
+  const ctr=views?((clicks/views)*100).toFixed(1):"0.0";
+  const klikPromo=PR.filter(x=>x.type==="promo").length,kunjPromo=PR.filter(x=>x.type==="promo_page").length;
+  const grp=fn=>{const m={};E.forEach(x=>{const k=fn(x);m[k]=m[k]||{v:0,k:0};if(x.type==="view")m[k].v++;else m[k].k++});return m};
+  const bySrc=grp(x=>(x.source||"langsung")+" · "+(x.campaign||"-"));
+  const byPid=grp(x=>x.product_id||"-");
+  const byDay=grp(x=>new Date(x.created_at).toLocaleDateString("sv-SE",{timeZone:"Asia/Jakarta"}));
+  const pk=fn=>{const m={};PR.forEach(x=>{const k=fn(x);m[k]=m[k]||{kl:0,kn:0};if(x.type==="promo")m[k].kl++;else m[k].kn++});return m};
+  const pSrc=pk(x=>(x.source||"langsung")+" · "+(x.campaign||"-"));
+  const pDay=pk(x=>new Date(x.created_at).toLocaleDateString("sv-SE",{timeZone:"Asia/Jakarta"}));
+  const nameOf=id=>{const p=P.find(x=>String(x.id)===String(id));return p?p.name:"(produk "+id+")"};
+  const tbl=(obj,lab,sortDesc=true)=>Object.entries(obj).sort((a,b)=>sortDesc?(b[1].v+b[1].k)-(a[1].v+a[1].k):(a[0]<b[0]?1:-1)).map(([k,o])=>`<tr><td>${esc(lab(k))}</td><td>${o.v}</td><td>${o.k}</td></tr>`).join("")||`<tr><td colspan="3" class="muted">Belum ada data.</td></tr>`;
+  const tblP=(obj,lab,sortDesc=true)=>Object.entries(obj).sort((a,b)=>sortDesc?(b[1].kl+b[1].kn)-(a[1].kl+a[1].kn):(a[0]<b[0]?1:-1)).map(([k,o])=>`<tr><td>${esc(lab(k))}</td><td>${o.kl}</td><td>${o.kn}</td></tr>`).join("")||`<tr><td colspan="3" class="muted">Belum ada data.</td></tr>`;
+  $("d-body").innerHTML=`
+    <div class="pills">${[7,30,90].map(d=>`<button class="pill-btn ${d===STAT_DAYS?"on":""}" onclick="STAT_DAYS=${d};renderDash()">${d} hari</button>`).join("")}</div>
+    <div class="d-stats">
+      <div class="d-stat"><small>Dilihat (popup)</small><b>${views}</b></div>
+      <div class="d-stat"><small>Klik WhatsApp</small><b>${clicks}</b></div>
+      <div class="d-stat"><small>Persentase klik</small><b>${ctr}%</b></div>
+      <div class="d-stat"><small>Klik Ambil Promo</small><b>${klikPromo}</b></div>
+      <div class="d-stat"><small>Kunjungan halaman promo</small><b>${kunjPromo}</b></div>
+    </div>
+    <h4>Promo (Meta Ads) per sumber</h4>
+    <div class="d-table"><table><thead><tr><th>Sumber · kampanye</th><th>Klik tombol promo</th><th>Kunjungan halaman promo</th></tr></thead><tbody>${tblP(pSrc,x=>x)}</tbody></table></div>
+    <h4>Promo per hari</h4>
+    <div class="d-table"><table><thead><tr><th>Tanggal</th><th>Klik tombol promo</th><th>Kunjungan halaman promo</th></tr></thead><tbody>${tblP(pDay,x=>x,false)}</tbody></table></div>
+    <h4>Per iklan / sumber</h4>
+    <div class="d-table"><table><thead><tr><th>Sumber · kampanye</th><th>Dilihat</th><th>Klik WA</th></tr></thead><tbody>${tbl(bySrc,x=>x)}</tbody></table></div>
+    <h4>Per produk</h4>
+    <div class="d-table"><table><thead><tr><th>Produk</th><th>Dilihat</th><th>Klik WA</th></tr></thead><tbody>${tbl(byPid,nameOf)}</tbody></table></div>
+    <h4>Per hari</h4>
+    <div class="d-table"><table><thead><tr><th>Tanggal</th><th>Dilihat</th><th>Klik WA</th></tr></thead><tbody>${tbl(byDay,x=>x,false)}</tbody></table></div>
+    <p class="muted">Klik dari akun yang sudah login tidak dihitung. Kunjungan halaman promo = membuka promo.html. Klik tombol promo = tombol Ambil Promo Website di beranda.</p>`;
+};
 const initHash=location.hash.replace("#","");
 const validPages=["beranda","layanan","konten-beres","pesan","afiliasi","reels","promo","login","dashboard"];
 if(validPages.includes(initHash)){
