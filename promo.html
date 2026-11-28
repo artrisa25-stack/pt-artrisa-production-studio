@@ -22,10 +22,12 @@ img{max-width:100%;display:block}
 /* header */
 header{position:sticky;top:0;z-index:50;background:rgba(11,61,145,.82);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:0 2px 14px rgba(0,0,0,.2)}
 .hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0}
+.hd-left{display:flex;align-items:center;gap:12px}
 .brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
 .brand img{width:32px;height:32px;object-fit:contain}
 .brand-name{color:var(--y);font-weight:900;font-size:13px;letter-spacing:5px;border-left:1px solid rgba(255,255,255,.25);padding-left:10px}
-.back{color:#fff;font-size:12px;font-weight:700;border:1px solid rgba(255,255,255,.35);padding:7px 13px;border-radius:99px;white-space:nowrap}
+.home-pill{color:#fff;font-size:12px;font-weight:800;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);padding:7px 13px;border-radius:99px;white-space:nowrap}
+.home-pill:hover{background:rgba(255,255,255,.24)}
 
 /* hero */
 .hero{background:linear-gradient(135deg,var(--b2) 0%,var(--b) 48%,var(--b3) 100%);color:#fff;border-radius:0 0 34px 34px;padding:48px 0 64px;text-align:center;position:relative;overflow:hidden;isolation:isolate}
@@ -49,6 +51,8 @@ header{position:sticky;top:0;z-index:50;background:rgba(11,61,145,.82);-webkit-b
 @keyframes cta{50%{box-shadow:0 10px 26px rgba(37,211,102,.38),0 0 0 10px rgba(37,211,102,.12)}}
 .btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35)}
 .btn-ghost:hover{background:rgba(255,255,255,.2)}
+.btn-biru{background:linear-gradient(135deg,#0B3D91,#1255c0);color:#fff;box-shadow:0 12px 30px rgba(11,61,145,.35);border:1px solid rgba(255,255,255,.25)}
+.btn-biru:hover{background:linear-gradient(135deg,#061a4a,#0B3D91);transform:translateY(-2px)}
 
 /* sections */
 section{padding:44px 0}
@@ -132,6 +136,10 @@ h3.sec{font-size:clamp(22px,4vw,30px);font-weight:900;letter-spacing:-.6px;margi
 /* alur */
 .step{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
 
+/* tombol jelajah */
+.jelajah{text-align:center;padding:8px 0 0}
+.jelajah .btn-biru{font-size:16px;padding:16px 30px;min-height:56px}
+
 /* reveal */
 .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
 .rv.in{opacity:1;transform:none}
@@ -174,13 +182,14 @@ footer{text-align:center;font-size:12px;color:var(--m);padding:8px 0 30px;line-h
   .grid4{grid-template-columns:1fr}
   .btns{flex-direction:column;align-items:stretch}
   .btn{width:100%}
-  .back{font-size:11px;padding:6px 10px}
+  .home-pill{font-size:11px;padding:6px 10px}
   .brand{letter-spacing:2.5px;font-size:12px}
   .pkt{padding:20px}
   .app{grid-template-columns:1fr}
   .mock-body{grid-template-columns:1fr 1fr}
   .modal{padding:16px;border-radius:20px}
   .show-body h4{font-size:20px}
+  .jelajah .btn-biru{font-size:15px;padding:14px 20px}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
@@ -189,8 +198,10 @@ footer{text-align:center;font-size:12px;color:var(--m);padding:8px 0 30px;line-h
 
 <header>
   <div class="wrap hd">
-    <a class="brand" href="/"><img src="logo-artrisa.png" alt="ARTRISA" onerror="this.style.display='none'"><span class="brand-name">ARTRISA</span></a>
-    <a class="back" href="/">← Beranda</a>
+    <div class="hd-left">
+      <a class="brand" href="https://www.artrisa.my.id/"><img src="logo-artrisa.png" alt="ARTRISA" onerror="this.style.display='none'"><span class="brand-name">ARTRISA</span></a>
+      <a class="home-pill" href="https://www.artrisa.my.id/">🏠 Home</a>
+    </div>
   </div>
 </header>
 
@@ -318,6 +329,10 @@ footer{text-align:center;font-size:12px;color:var(--m);padding:8px 0 30px;line-h
   </div>
 </section>
 
+<div class="wrap jelajah rv">
+  <a class="btn btn-biru" href="https://www.artrisa.my.id/" target="_blank" rel="noopener">Yuk main-main ke website resmi ARTRISA</a>
+</div>
+
 <section id="alur">
   <div class="wrap">
     <div class="label rv">ALUR PENGERJAAN</div>
@@ -383,6 +398,9 @@ footer{text-align:center;font-size:12px;color:var(--m);padding:8px 0 30px;line-h
     <div class="btns">
       <a class="btn btn-wa" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20mau%20ambil%20Promo%20Website%20akhir%20tahun%202026" target="_blank" rel="noopener">Hubungi via WhatsApp</a>
     </div>
+  </div>
+  <div class="jelajah rv" style="margin:-20px 0 30px">
+    <a class="btn btn-biru" href="https://www.artrisa.my.id/" target="_blank" rel="noopener">Yuk main-main ke website resmi ARTRISA</a>
   </div>
   <footer>ARTRISA Production Studio · Stabat, Langkat, Sumatera Utara<br>0838-5172-2321 · artrisa25@gmail.com</footer>
 </div>
