@@ -791,6 +791,8 @@ body.pp-open>*:not(.glass-ov):not(#toast){filter:blur(8px);transition:filter .25
 @keyframes photoSweep{0%,55%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
 @media (max-width:768px){.hero-photo-card .hero-photo,.hero-photo-card::after{animation:none!important}}
 @media (prefers-reduced-motion:reduce){.hero-photo-card .hero-photo,.hero-photo-card::after{animation:none!important}}
+.btn-glass-green{background:rgba(37,211,102,.28);color:#fff;border:1px solid rgba(255,255,255,.42);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);box-shadow:0 8px 26px rgba(16,160,80,.28),inset 0 1px 0 rgba(255,255,255,.45)}
+.btn-glass-green:hover{background:rgba(37,211,102,.4)}
   </style>
 </head>
 <body>
@@ -835,6 +837,7 @@ body.pp-open>*:not(.glass-ov):not(#toast){filter:blur(8px);transition:filter .25
           <a class="btn btn-w hero-wa" href="https://wa.me/6283851722321" target="_blank" rel="noopener">Chat WhatsApp</a>
           <a class="btn btn-w" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20tertarik%20Jasa%20Pembuatan%20Website%20%26%20Sistem" target="_blank" rel="noopener">Jasa Pembuatan Website &amp; Sistem</a>
           <button class="btn btn-ghost" onclick="goPage('konten-beres')">Konten Beres</button>
+          <a class="btn btn-glass-green" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20mau%20ambil%20Promo%20Website" target="_blank" rel="noopener" onclick="track('promo',null)">Ambil Promo Website</a>
           <a class="btn btn-y hero-profil" href="/company-profile.html">Lihat Company Profile &amp; Unduh PDF</a>
         </div>
         <div class="hero-stats">
