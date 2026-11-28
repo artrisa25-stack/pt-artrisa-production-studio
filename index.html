@@ -793,6 +793,8 @@ body.pp-open>*:not(.glass-ov):not(#toast){filter:blur(8px);transition:filter .25
 @media (prefers-reduced-motion:reduce){.hero-photo-card .hero-photo,.hero-photo-card::after{animation:none!important}}
 .btn-glass-green{background:rgba(37,211,102,.28);color:#fff;border:1px solid rgba(255,255,255,.42);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);box-shadow:0 8px 26px rgba(16,160,80,.28),inset 0 1px 0 rgba(255,255,255,.45)}
 .btn-glass-green:hover{background:rgba(37,211,102,.4)}
+.btn-glass-green{background:rgba(37,211,102,.28);color:#fff;border:1px solid rgba(255,255,255,.42);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);box-shadow:0 8px 26px rgba(16,160,80,.28),inset 0 1px 0 rgba(255,255,255,.45)}
+.btn-glass-green:hover{background:rgba(37,211,102,.4)}
   </style>
 </head>
 <body>
@@ -837,6 +839,7 @@ body.pp-open>*:not(.glass-ov):not(#toast){filter:blur(8px);transition:filter .25
           <a class="btn btn-w hero-wa" href="https://wa.me/6283851722321" target="_blank" rel="noopener">Chat WhatsApp</a>
           <a class="btn btn-w" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20tertarik%20Jasa%20Pembuatan%20Website%20%26%20Sistem" target="_blank" rel="noopener">Jasa Pembuatan Website &amp; Sistem</a>
           <button class="btn btn-ghost" onclick="goPage('konten-beres')">Konten Beres</button>
+          <button class="btn btn-glass-green" onclick="track('promo',null);goPage('promo')">Ambil Promo Website</button>
           <a class="btn btn-glass-green" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20mau%20ambil%20Promo%20Website" target="_blank" rel="noopener" onclick="track('promo',null)">Ambil Promo Website</a>
           <a class="btn btn-y hero-profil" href="/company-profile.html">Lihat Company Profile &amp; Unduh PDF</a>
         </div>
@@ -1213,6 +1216,57 @@ body.pp-open>*:not(.glass-ov):not(#toast){filter:blur(8px);transition:filter .25
   </div>
   <div class="d-modal hidden" id="d-modal" onclick="if(event.target===this)closeForm()"><div class="d-modal-card" id="d-modal-card"></div></div>
 </div>
+<div class="page" id="page-promo">
+  <div class="wrap">
+    <div style="padding-top:24px">
+      <div class="kb-hero">
+        <div class="eyebrow" style="color:var(--y);margin-bottom:8px">PROMO AKHIR TAHUN 2026</div>
+        <h1>Satu Pintu,<br><i>Semua Beres.</i></h1>
+        <p>Website usaha Anda dibuat oleh satu tim. Biaya jelas. Tayang dalam hitungan hari kerja.</p>
+        <a class="btn btn-y btn-lg" style="margin-top:18px" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20mau%20konsultasi%20Promo%20Website" target="_blank" rel="noopener">Konsultasi Gratis via WhatsApp</a>
+      </div>
+
+      <div class="paket-card featured" style="max-width:520px;margin:24px auto">
+        <div class="paket-head">
+          <div class="paket-badge">PROMO</div>
+          <div class="eyebrow" style="color:var(--y);margin-bottom:4px">LAYANAN HALAMAN TUNGGAL</div>
+          <h3>Website Siap Pakai</h3>
+          <p>Profil usaha, layanan, foto, lokasi, dan tombol WhatsApp dalam satu halaman.</p>
+          <div class="paket-price">Rp599.000 <span>/ tahun</span></div>
+        </div>
+        <div class="paket-body">
+          <ul class="paket-list">
+            <li>Sudah termasuk server dan domain .web.id</li>
+            <li>Tampilan rapi di HP dan komputer</li>
+            <li>Peta lokasi Google Maps</li>
+            <li>Tombol WhatsApp di halaman</li>
+            <li>Berlaku sampai 31 Desember 2026</li>
+          </ul>
+          <a class="btn-submit" style="display:block;text-align:center;text-decoration:none" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20pilih%20Website%20Siap%20Pakai" target="_blank" rel="noopener">Pilih Paket Ini</a>
+        </div>
+      </div>
+
+      <div class="eyebrow">ALUR PENGERJAAN</div>
+      <h2 style="margin:4px 0 16px">Tujuh langkah, tanpa ribet.</h2>
+      <div class="kb-features">
+        <div class="kb-feat"><div class="ic">1</div><b>Diskusi</b><p>Hubungi kami lewat WhatsApp dan sampaikan kebutuhan usaha Anda.</p></div>
+        <div class="kb-feat"><div class="ic">2</div><b>Serahkan aset</b><p>Logo, foto usaha, alamat lokasi, jam buka, dan nomor WhatsApp.</p></div>
+        <div class="kb-feat"><div class="ic">3</div><b>Pengerjaan</b><p>Desain dan website kami kerjakan sesuai kesepakatan.</p></div>
+        <div class="kb-feat"><div class="ic">4</div><b>Pengiriman</b><p>Hasil kami kirim untuk Anda periksa.</p></div>
+        <div class="kb-feat"><div class="ic">5</div><b>Revisi</b><p>Perubahan diproses sesuai kesepakatan yang disetujui.</p></div>
+        <div class="kb-feat"><div class="ic">6</div><b>Persetujuan</b><p>Anda menyatakan setuju. Kami siapkan proses tayang.</p></div>
+        <div class="kb-feat"><div class="ic">7</div><b>Tayang</b><p>Website aktif di alamat domain baru Anda, berakhiran .web.id.</p></div>
+      </div>
+
+      <div class="kb-hero" style="margin-top:24px">
+        <h1 style="font-size:clamp(24px,4vw,36px)">Mulai dari Rp599.000 per tahun.</h1>
+        <p>Hubungi kami sekarang. Konsultasi gratis, tanpa kewajiban.</p>
+        <a class="btn btn-y btn-lg" style="margin-top:18px" href="https://wa.me/6282261275447?text=Halo%20ARTRISA%2C%20saya%20mau%20ambil%20Promo%20Website" target="_blank" rel="noopener">Hubungi via WhatsApp</a>
+      </div>
+      <div style="height:28px"></div>
+    </div>
+  </div>
+</div>
 </main>
 
 <div class="d-modal hidden" id="ix-modal" onclick="if(event.target===this)ixClose()"><div class="d-modal-card" style="max-width:420px">
@@ -1372,7 +1426,7 @@ function goPage(name){
 
 window.addEventListener("popstate",()=>{
   const h=location.hash.replace("#","");
-  const valid=["beranda","layanan","konten-beres","pesan","afiliasi","reels","login","dashboard"];
+  const valid=["beranda","layanan","konten-beres","pesan","afiliasi","reels","promo","login","dashboard"];
   goPage(valid.includes(h)?h:"beranda");
 });
 
@@ -2661,7 +2715,7 @@ VIEWS.statistik=async()=>{
 load();
 
 const initHash=location.hash.replace("#","");
-const validPages=["beranda","layanan","konten-beres","pesan","afiliasi","reels","login","dashboard"];
+const validPages=["beranda","layanan","konten-beres","pesan","afiliasi","reels","promo","login","dashboard"];
 if(validPages.includes(initHash)){
   goPage(initHash);
 }
