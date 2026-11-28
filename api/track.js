@@ -1,8 +1,11 @@
-// Pencatatan "dilihat" (popup produk dibuka) dan "klik WhatsApp".
+// Pencatatan "dilihat", "klik WhatsApp", "klik promo", dan "kunjungan promo".
 // Dipanggil dari browser pengunjung. Penulisan memakai service role di sisi server.
 
 const SB_URL = process.env.SUPABASE_URL || 'https://spqivuqidqgtcivrddtm.supabase.co';
 const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+
+// Jenis catatan yang diizinkan
+const ALLOWED_TYPES = ['view', 'wa', 'promo', 'promo_page'];
 
 // Batas sederhana per IP: 60 permintaan per menit
 const WINDOW_MS = 60 * 1000;
@@ -39,7 +42,7 @@ export default async function handler(req, res) {
   }
   body = body || {};
 
-  const type = body.type === 'view' || body.type === 'wa' ? body.type : null;
+  const type = ALLOWED_TYPES.includes(body.type) ? body.type : null;
   if (!type) return res.status(400).json({ error: 'type tidak valid' });
 
   const pidRaw = String(body.pid ?? '');
